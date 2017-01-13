@@ -1,0 +1,843 @@
+/*
+ * Base structure
+ */
+
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+
+body {
+    padding-top: 50px;
+    font-family: "Arial","Microsoft YaHei","黑体","宋体",sans-serif;
+}
+
+
+/*
+ * Global add-ons
+ */
+
+.sub-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+
+/*
+ * 顶部导航栏
+ * Hide default border to remove 1px line.
+ */
+
+.navbar-fixed-top {
+    border: 0;
+}
+
+
+/*
+ * 顶部导航栏左侧的图标链接
+ */
+
+.navbar-header > a > img {
+    float: left;
+    width: 30px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+
+/* ：用户下拉列表 */
+
+.nav-ul {
+    float: right;
+}
+
+
+/*
+ * 左侧导航栏
+ */
+
+
+/* Hide for mobile, show later */
+
+.sidebar {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 51px;
+        bottom: 0;
+        left: 0;
+        z-index: 50;
+        display: block;
+        padding: 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        /* Scrollable contents if viewport is shorter than content. */
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+    }
+}
+
+
+/* 侧边导航 */
+
+.nav-sidebar {
+    margin-right: -21px;
+    /* 20px padding + 1px border */
+    margin-bottom: 20px;
+    margin-left: -20px;
+}
+
+@media (max-width: 768px) {
+    .nav-sidebar li {
+        /* 小尺寸时，单倍行间距(字体尺寸一倍) */
+        line-height: 1;
+    }
+}
+
+.nav-sidebar > li > a {
+    padding-right: 20px;
+    padding-left: 40px;
+}
+
+
+/* 链接分类--大类目 */
+
+.sidebar > li {
+    margin-right: -21px;
+    margin-left: -20px;
+    padding-left: 20px;
+    list-style-type: none;
+    color: rgba(0, 0, 0, 0.3);
+}
+
+
+/*.nav-sidebar > li > a:hover {
+    color: #fff;
+    background-color: #428bca;
+}*/
+
+
+/* 以下部分用来定义导航栏左侧滚动条样式 */
+
+
+/* 滚动条整体部分，其中的属性有width,height,background,border（就和一个块级元素一样）等。 */
+
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+    background-color: white;
+    display: auto;
+}
+
+
+/*滚动条里面可以拖动的那部分*/
+
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: rgb(188, 188, 188);
+}
+
+.img_bar::-webkit-scrollbar {
+    width: 8px;
+    background-color: white;
+    display: auto;
+}
+
+.img_bar::-webkit-scrollbar-thumb {
+    background-color: rgb(188, 188, 188);
+}
+
+
+/* .img_button {
+    background: #E0EEEE;
+}
+
+.img_button:focus {
+    background-color: #00B2EE;
+}
+
+.img_button:active {
+    background-color: #00B2EE;
+} */
+
+#alert-container {
+    position: fixed;
+    top: 70px;
+    right: 40px;
+    float: right;
+    width: 300px;
+    z-index: 1100;
+}
+
+
+/*
+ * 内容显示区域
+ */
+
+.setHeight {
+    height: 528px;
+}
+
+.main {
+    padding: 0 20px 70px 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+    .main {
+        padding-right: 40px;
+        padding-left: 40px;
+    }
+}
+
+.main .desc {
+    width: 100%;
+    height: 45px;
+    line-height: 20px;
+    text-align: left;
+    padding-top: 10px;
+    /*font-weight: bolder;*/
+    font-size: 20px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+
+/* 字体图标离右边字体的间距 */
+
+i {
+    margin-right: 5px;
+}
+
+
+/* 设置禁止点击链接的样式 */
+
+
+/* css适用最佳匹配原则 */
+
+
+/*
+*  <li><a class="link1">字体颜色</a></li>
+*  a {
+        color: red;
+    } 
+    li a {
+        color: blue;
+    }
+    在这种情况下，“字体颜色会是蓝色(blue)”
+*/
+
+.dropdown-menu li a[disabled] {
+    cursor: default;
+    color: rgba(0, 0, 0, 0.5);
+    text-decoration: none;
+}
+
+.dropdown-menu li a[disabled]:hover {
+    cursor: pointer;
+}
+
+
+/* 首页 -- 概览*/
+
+.echart-dsp {
+    height: 200px;
+}
+
+#resSize tr td:nth-child(1) {
+    width: 20%;
+    padding-left: 20px;
+}
+
+#resSize tr td:nth-child(2) {
+    width: 20%;
+}
+
+#resSize tr td:nth-child(2) > div {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+
+/* 计算 -- 实例 */
+
+.form-btn {
+    float: right;
+}
+
+
+/*　启动云主机：详情　*/
+
+#start-host .modal-dialog {
+    width: 650px
+}
+
+#create-net .modal-dialog {
+    width: 500px
+}
+
+#create-subnet .modal-dialog {
+    width: 600px
+}
+
+#add-subnet .modal-dialog {
+    width: 600px
+}
+
+#bind_floatingIP .modal-dialog {
+    width: 600px
+}
+
+#instance_security .modal-dialog {
+    width: 600px
+}
+
+#start-host table {
+    border: 1px dashed #eee
+}
+
+#myModal_toupu .modal-dialog {
+    width: 600px
+}
+
+
+/*　启动云主机：访问　＆　安全　*/
+
+#security-access select {
+    width: 80%;
+    display: inline;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+#security-access button {
+    margin-left: -5px;
+    margin-bottom: 2px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+#security-access ul li {
+    list-style: none;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+#security-access ul li input {
+    margin-right: 3px;
+}
+
+
+/*　启动云主机：网路*/
+
+.net-item {
+    margin-bottom: 5px;
+    padding-left: 10px;
+    padding-bottom: 3px;
+    border: 1px solid #eee;
+    background-color: white;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.net-item .shadow-span {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.net-item button {
+    float: right;
+    margin-right: 3px;
+}
+
+
+/* 密钥对 */
+
+#btn-group-right {
+    float: right;
+    margin-right: 10px;
+}
+
+#li-center {
+    height: 3em;
+    line-height: 3em;
+    overflow: hidden;
+    margin-right: 10px
+}
+
+#novalid,
+#area-novalid {
+    color: rgb(160, 0, 0);
+    font-weight: lighter;
+    font-size: 12px;
+}
+
+
+/* 网络与安全 */
+
+
+/* 网络与安全 -- 虚拟网卡 */
+
+.vertical-align-bottom {
+    position: relative;
+    bottom: -5px;
+    padding: 0;
+}
+
+
+/* :网络 :网络详情页面 子网*/
+
+.col-btn {
+    float: right;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    padding-left: 60px;
+}
+
+.col-bottom {
+    margin-bottom: 10px;
+}
+
+
+/* 网络与安全 -- 网络 -- 端口详情页面 */
+
+.td-divider {
+    width: 2px;
+    border: 1px solid #eee;
+}
+
+
+/* 网络与安全 -- 路由器页面 -- 新建 -- 模态框 */
+
+
+/* :左侧 -- 表单 */
+
+.modal-body .form-item {
+    padding: 25px;
+}
+
+
+/* :左侧 -- 表单 */
+
+.modal-body .form-left {
+    padding-left: 15px;
+}
+
+
+/* :右侧 -- 表格 */
+
+.modal-body .table-title {
+    padding-top: 5px;
+    padding-bottom: 15px;
+    border-top: 0;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    font-weight: bolder;
+}
+
+.modal-body .table-td-left,
+.modal-body .table-td-right {
+    border-top: 0;
+    padding: 5px;
+    font-size: 14px;
+}
+
+.modal-body .table-td-right {
+    text-align: left;
+    /*font-weight: bold;*/
+}
+
+.modal-body .table .table-button {
+    text-align: center;
+}
+
+.table .table-button .table-btn {
+    margin-top: 10px;
+}
+
+.modal-body .table-td-right .td-text {
+    color: orange;
+}
+
+
+/* 网络与安全 -- 安全组 -- 模态框 -- 下拉列表 */
+
+.modal-body .btn-group .rule-select-area {
+    position: absolute;
+    margin-left: 15px;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ddd;
+    width: 550px;
+}
+
+.rule-select-area .rule-protocols dt,
+.rule-select-area .protocols-up dt,
+.rule-select-area .protocols-up dd span {
+    font-weight: normal;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.rule-protocols dd,
+.rule-select-area .protocols-up dd {
+    float: left;
+    margin-top: 5px;
+    margin-left: 5px;
+    padding: 5px 20px;
+    border: 1px solid #eee;
+    font-size: 14px;
+}
+
+.rule-protocols dd a:hover,
+.protocols-up dd a:hover {
+    text-decoration: none;
+}
+
+.protocols-up dt {
+    margin-top: 10px;
+}
+
+.protocols-up dd {
+    width: 47%;
+}
+
+.protocols-up dd span {
+    font-size: 13px;
+}
+
+.text-warning {
+    color: red !important;
+}
+
+
+/* 网络与安全　-- 浮动IP页面 -- 模态框 -- "*" 颜色 */
+
+.span-stand {
+    color: orange;
+}
+
+.modal-body .span-left {
+    margin-left: -25px;
+}
+
+#relIPModal .modal-dialog {
+    width: 500px;
+}
+
+.text-red {
+    color: red !important;
+}
+
+
+/* 网络与安全 -- 网络页面 -- "搜索"字体图标在输入框右侧内部 */
+
+.input-addon {
+    margin-left: -25px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+td .span-sub {
+    margin-right: 5px;
+    font-weight: bolder;
+}
+
+tfoot .tfoot-dsp {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+
+/* 实例监控页面 */
+
+#loading_monitor {
+    position: absolute;
+    width: 300px;
+    top: 150px;
+    left: 50%;
+    margin-left: -150px;
+    text-align: center;
+    padding: 7px 0 0 0;
+    font: bold 11px Arial, Helvetica, sans-serif;
+}
+
+#loading_monitor1 {
+    position: absolute;
+    width: 300px;
+    top: 150px;
+    left: 50%;
+    margin-left: -150px;
+    text-align: center;
+    padding: 7px 0 0 0;
+    font: bold 11px Arial, Helvetica, sans-serif;
+}
+
+#background_monitor {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    filter: alpha(opacity=100);
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+}
+
+.info_tip {
+    position: absolute;
+    width: 300px;
+    top: 170px;
+    left: 50%;
+    margin-left: -150px;
+    text-align: center;
+    padding: 7px 0 0 0;
+    font: bold 11px Arial, Helvetica, sans-serif;
+    z-index: 9000;
+}
+
+#background_monitor1 {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    filter: alpha(opacity=100);
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+}
+
+
+/* ：单个图表的高度 */
+
+#loading {
+    position: absolute;
+    width: 300px;
+    top: 150px;
+    left: 50%;
+    margin-left: -150px;
+    text-align: center;
+    padding: 7px 0 0 0;
+    font: bold 11px Arial, Helvetica, sans-serif;
+}
+
+.background {
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: 0.1;
+    filter: alpha(opacity=100);
+    background: black;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+}
+
+.monitor-chart {
+    height: 300px;
+    /*background-color: #333*/
+}
+
+
+/* ：设备多选列表 */
+
+.main .desc .select_device {
+    margin-left: 25%;
+    font-size: 18px;
+    display: inline;
+}
+
+
+.main .desc .monitor-device {
+    margin-top: -15px;
+    width: 8%;
+    display: inline;
+}
+
+
+/* 网络与安全 -- 防火墙 -- 首页右侧按钮列表 */
+
+.li-btn {
+    margin-top: 5px;
+    margin-right: 15px;
+    margin-bottom: 5px;
+    float: right;
+    /*display: block;*/
+    list-style-type: none;
+}
+
+.li-btn-bottom {
+    margin-bottom: -10px
+}
+
+
+/* 网络与安全 -- 防火墙 -- 防火墙详情 */
+
+.tr-text th {
+    vertical-align: top;
+}
+
+.tr-text li {
+    list-style-type: none;
+}
+
+
+/* 网络与安全  -- 防火墙 -- 模态框 -- 添加防火墙*/
+
+.modal-size {
+    width: 500px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.modal-input {
+    /*width: 100%;*/
+}
+
+.modal-span {
+    padding: 5px;
+    display: inline-block;
+    margin-top: 3px;
+    margin-bottom: 5px;
+}
+
+.modal-tab {
+    height: 300px;
+}
+
+.btn-tooltip {
+    padding: 0 1px 0 1px
+}
+
+.info-circle {
+    margin-right: 0
+}
+
+.modal-body div p {
+    font-size: 12px;
+}
+
+
+/* 网络 密钥 模态框 */
+
+
+/* 模态框标题居中 -- 模态框公共属性*/
+
+.modal-center {
+    text-align: center;
+}
+
+.modal-right {
+    float: right;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+
+/* ：文本域 */
+
+.modal-body .form-textarea {
+    width: 35%;
+    margin-left: 15px;
+}
+
+
+/* ：下拉列表 */
+
+.modal-body .form-select {
+    margin-left: 15px;
+}
+
+
+/* 信息 -- 修改密码 */
+
+#curPasswd,
+#newPasswd,
+#confirmPasswd {
+    display: inline-block;
+    width: 95%;
+}
+
+.icon-btn {
+    display: inline;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+    margin-left: -25px;
+}
+
+
+/*模态框可拖动, 隐藏右侧滚动条*/
+
+.modal {
+    overflow: hidden;
+}
+
+.login_up_Div {
+    position: absolute;
+    top: 0;
+    height: 50%;
+    width: 100%;
+    background: #404040;
+    z-index: 1
+}
+
+.login_down_Div {
+    position: absolute;
+    top: 50%;
+    height: 50%;
+    width: 100%;
+    background: #EAEAEA;
+    z-index: 1
+}
+
+.login_logInfoDiv {
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+    /*
+top: -43px; */
+    text-align: center;
+}
+
+.login_img {
+    position: relative;
+    width: 35%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.login_logtext {
+    margin: 0px;
+    padding: 0px;
+    display: block;
+    font-family: Microsoft YaHei, arial, sans-serif;
+    font-weight: bold;
+    text-shadow: -1px -1px white, 1px 1px #333;
+    text-decoration: none
+}
+
+.login_formDiv {
+    background: #DBDBDB;
+    position: absolute;
+    top: 20%;
+    width: 26%;
+    margin-left: 37%;
+    border: 5px solid #DBDBDB;
+    border-radius: 7px;
+    -webkit-box-shadow: #000 0px 0px 15px;
+    -moz-box-shadow: #000 0px 0px 15px;
+    box-shadow: #000 0px 0px 15px;
+    z-index: 9999;
+}
+
+.login_input_text {
+    background: #EAEAEA
+}
+
+.login_form {
+    position: relative;
+    margin-top: 0px;
+}
+
+.login_out_show:hover {
+    cursor: pointer
+}

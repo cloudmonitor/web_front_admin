@@ -1,0 +1,56 @@
+<!-- 首页 -->
+<!DOCTYPE html>
+<html ng-app="myApp" ng-controller="myCtrl">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 使网页能在移动端正常显示 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="icon/cloud_monitor_small.png">
+    <title>首页-概况</title>
+    <!-- bootstrap的核心css库 -->
+    <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+    <!-- 引入自定义的css库 -->
+    <link rel="stylesheet" type="text/css" href="css/openstack.css">
+    <!-- Font Awesome 字体图标库 -->
+    <!-- example:蓝牙图标<i class="fa fa-bluetooth"></i> -->
+    <link rel="stylesheet" type="text/css" href="css/lib/font_awesome/css/font-awesome.min.css">
+</head>
+
+<body>
+    <header>
+        <!-- 顶部导航栏 -->
+        <ng-include src="'nav/nav-header.html'"></ng-include>
+    </header>
+    <div class="container-fluid ">
+        <div class="row">
+            <!-- 左侧导航栏 -->
+            <ng-include src="'nav/nav-sidebar.html'"></ng-include>
+            <!-- 内容显示界面 -->
+            <div ng-view></div>
+        </div>
+    </div>
+    <!-- jquery库 -->
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/lib/moment.min.js"></script>
+    <script src="js/tools/tool.js"></script>
+    <!-- 引入显示警告框的自定义js库 -->
+    <script src="js/tools/show-alert.js"></script>
+    <!-- 引入angular js库 -->
+    <script src="js/lib/angular.min.js"></script>
+    <!-- 引入angular js 消息提示库 -->
+    <script src="js/lib/angular-messages.js"></script>
+    <!-- 引入angular 路由库 -->
+    <script src="js/lib/angular-route.js"></script>
+    <!-- 引入 angular js 自定义库 -->
+    <script src="js/angularApp.js"></script>
+    <script src="js/abstract/abstractCtrl.js"></script>
+    <script src="js/identity/projectsCtrl.js"></script>
+    <script src="js/identity/userInfo.js"></script>
+    <!-- bootsrap的核心js库 -->
+    <script src="js/lib/bootstrap.min.js"></script>
+</body>
+
+</html>

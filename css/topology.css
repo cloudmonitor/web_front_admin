@@ -1,0 +1,193 @@
+/**
+ *reset
+ */
+/* html, body, ul, ol, li, dl, dt, dd, p, h1, h2, h3, h4, h5, h6, a, img, th, td, form, fieldset, iframe, object, pre, code, legend, blockquote,canvas,table {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+}
+body,button,input,select,textarea {
+	font:12px/1.5 tahoma,arial,'microsoft yahei',sans-serif；
+}
+h1,h2,h3,h4,h5,h6 {
+	font-size:100%;
+} 
+ol,ul {
+	list-style:none;
+}
+a {
+	text-decoration:none;    
+}
+a:link {color: #000;}		
+a:visited {color: #000;}	
+a:hover {color: #000;}	
+a:active {color: #000;} */
+
+.tree-node-selected {
+	background-color: #bfbfbf;
+}
+.over {
+    border: 1px solid orange;
+}
+.loadLayer { 
+	width: 800px; 
+	height: 800px; 
+	line-height: 30px; 
+	left: 25%; 
+	top: 25%; 
+	color:#fff; 
+	z-index: 4; 
+	position: absolute; 
+	text-align:center; 
+}
+.region-north {
+	/*height:140px;*/
+	width: 100%;
+	background:#57585c;
+	overflow:hidden;
+}
+.region-north img {
+	margin-top: 20px;
+}
+.menuTop{
+	background:#828282;
+	/*margin-top: 20px;*/
+	height: 36px;
+	font-size: 14px;
+	line-height: 40px;
+	overflow:hidden;
+	color: #fff;
+}
+.menuTop a {
+	font-size: 14px;
+	color: #fff;
+	padding-right: 10px;
+}
+.menuTop a:hover {
+	color: #000;
+}
+a.l-btn-disabled{
+	opacity: 0.3;
+}
+a:hover.l-btn-disabled {
+    background: none;
+    border: 1px #828282 solid;
+    color: #fff;
+}
+
+#content{
+	/*height: 540px;*/
+	height: 94%;
+}
+#footer{
+	height: 80px;
+	text-align:center;
+	padding-top:1px;
+	text-align: center;
+	background-color: #828282;
+}
+#innerFooter{
+	padding: 20px;
+	border-top: #fff 1px solid;
+	color: #fff;
+}
+/*.pro .progressbar-value{
+	background-color: #dedede;
+}*/
+#infoDialog{
+	width: 400px;
+	height: 300px;
+}
+#infoDialog .basicOp {
+	margin: 0 auto;
+	text-align: center;
+}
+#infoDialog .basicOp a {
+    background-color:#f5f5f5;
+    border:1px solid #dedede;
+    font-size:12px;
+    line-height:130%;
+    color:#565656;
+    cursor:pointer;
+    padding: 5px;
+    margin: 15px;
+}
+#infoDialog .basicOp a:hover {
+    background-color:#dff4ff;
+    border:1px solid #c2e1ef;
+    color:#336699;
+}
+fieldset {
+	/*width: 90%;*/
+	padding: 10px;
+	margin: 10px;
+	/*border: 1px solid #B0C4DE;*/
+	border-bottom: 1px solid #B0C4DE;
+	border-left: 1px solid #B0C4DE;
+	border-right: 1px solid #B0C4DE;
+	border-top: 1px solid #B0C4DE;
+}
+fieldset legend {
+	color: #778899;
+	font-weight: bold;
+	padding: 5px 20px;
+	/*border: 1px solid #B0C4DE;*/
+	border-bottom: 1px solid #B0C4DE;
+	border-left: 1px solid #B0C4DE;
+	border-right: 1px solid #B0C4DE;
+	border-top: 1px solid #B0C4DE;
+}
+.basicInfoTable{
+	width: 100%;
+	vertical-align: middle;
+	border: 0;
+	border-collapse: collapse;
+}
+.basicInfoTable th {
+	letter-spacing: 1px;
+	padding-right: 10px;
+	text-align: right;
+}
+.basicInfoTable td {
+	font-size: 12px;
+	padding-left: 10px;
+	text-align: left;
+	height: 22px;
+	color: #000;
+}
+
+
+/* 实验指导书的样式 
+*/
+.center{
+	margin: 0 auto;
+    padding:20px auto;
+    background-color: #fff;
+} 
+.center h2{
+    font-family: "Microsoft Yahei";
+    font-size:20px;
+    color:#437D4E;
+    margin: 10px 0 10px 20px;
+}
+.center h3{
+    font-family: "Microsoft Yahei";
+    font-size:18px;
+    color:#177cb0;
+    margin: 10px 0 10px 20px;
+}
+.center h4{
+    font-family: "Microsoft Yahei";
+    font-size:16px;
+    margin: 10px 0 10px 20px;
+}
+.center p{
+    font-family: "宋体";
+    font-size:14px;
+    margin: 10px 0 10px 20px;
+}
+.selected-img{
+    display:block;
+   	margin:20px auto;
+}
