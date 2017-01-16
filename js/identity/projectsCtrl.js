@@ -8,7 +8,7 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
         $route.reload();
     }
     $("head title").text("项目");
-
+    $scope.qiandaoInfos = [["test", "test", "test", "test", "test"], ["test", "test", "test", "test", "test"]];
 
 
 });
