@@ -1,6 +1,6 @@
-var myApp = angular.module('myApp', ['ngRoute', 'abstractCtrl', 'projectsCtrl']);
+var myApp = angular.module('myApp', ['ngRoute', 'abstractCtrl', 'projectsCtrl', 'angularUtils.directives.dirPagination']);
 
-// 路由跳转
+// 路由跳转 
 var router_all;
 myApp.config(function($routeProvider) {
     $routeProvider
@@ -13,10 +13,18 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/identity/projects.html',
             controller: 'projectsController'
         })
-        // .when('/identity/userInfo', {
-        //     templateUrl: 'pages/identity/userInfo.html',
-        //     controller: 'userInfoController'
-        // })
+        .when('/cloud-hosts', {
+            templateUrl: 'pages/identity/cloud_hosts.html',
+            controller: 'CloudHostsCtrl'
+        })
+        .when('/cloud-hosts-detail', {
+            templateUrl: 'pages/identity/cloud_hosts_detail.html',
+            controller: 'CloudHostsDetailCtrl'
+        })
+        .when('/tenant/resource', {
+            templateUrl: 'pages/identity/tenant_resource.html',
+            controller: 'TenantResourceCtrl'
+        })
         .otherwise({
             redirectTo: '/'
         });

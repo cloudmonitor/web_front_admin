@@ -1,0 +1,85 @@
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <div class="desc">云主机详情</div>
+    <div>
+        <br>
+        <!-- information 表格 -->
+        <table class="table table-hover" style="width: 50%">
+            &nbsp;<strong>基础信息</strong>
+            <br>
+            <br>
+            <tr>
+                <th>名称</th>
+                <td><span id="server_Name"></span></td>
+            </tr>
+            <tr>
+                <th>ID</th>
+                <td><span id="server_ID"></span></td>
+            </tr>
+            <tr>
+                <th>状态</th>
+                <td><span id="server_Status"></span></td>
+            </tr>
+            <tr>
+                <th>可用域</th>
+                <td><span id="server_AvailabilityZone"></span></td>
+            </tr>
+            <tr>
+                <th>创建时间</th>
+                <td><span id="server_Created"></span></td>
+            </tr>
+            <tr>
+                <th>从创建以来</th>
+                <td><span id="server_Timesincecreated"></span></td>
+            </tr>
+        </table>
+        <br>
+        <!-- Specs 表格 -->
+        <table class="table table-hover" style="width: 50%">
+            &nbsp;<strong>规格</strong>
+            <br>
+            <br>
+            <tr>
+                <th>云主机类型</th>
+                <td><span id="server_Specs"></span></td>
+            </tr>
+            <tr>
+                <th>实例类型ID</th>
+                <td><span id="server_FlavorID"></span></td>
+            </tr>
+            <tr>
+                <th>内存</th>
+                <td><span id="server_RAM"></span></td>
+            </tr>
+            <tr>
+                <th>虚拟内存</th>
+                <td><span id="server_VCPUs"></span></td>
+            </tr>
+            <tr>
+                <th>磁盘</th>
+                <td><span id="server_Disk"></span></td>
+            </tr>
+        </table>
+        <!-- Ip Addresses 表格 -->
+        <table class="table table-hover" style="width: 50%">
+            &nbsp;<strong>IP 地址</strong>
+            <br>
+            <br>
+            <tr>
+                <td><span id="server_IPAddresses"></span></td>
+            </tr>
+        </table>
+        <!-- Security Groups 表格 -->
+        <table class="table table-hover" style="width: 50%">
+            &nbsp;<strong>镜像名称</strong>
+            <br>
+            <br>
+            <tr>
+                <!--                   <th>default</th> -->
+                <td>
+                    <span id="server_default"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
