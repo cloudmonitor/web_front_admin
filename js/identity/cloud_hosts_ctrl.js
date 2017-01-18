@@ -82,8 +82,8 @@ angular.module('myApp')
                     for (variable in data[i].addresses) {   
                         var ip = {
                             name: variable,
-                            fixedIP: '',
-                            floatingIP: ''
+                            fixedIP: ' - ',
+                            floatingIP: ' - '
                         };
 
                         var ipLen = data[i].addresses[variable].length;
