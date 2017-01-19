@@ -1,5 +1,5 @@
 #不上传js/config.js文件
-js/config.js
+#js/config.js
 
 *.py[cod]
 
