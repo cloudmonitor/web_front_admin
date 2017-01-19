@@ -17,7 +17,7 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
     $scope.allData = null; //所有待显示的条目数据
     $scope.allDataTemp = null;
     $scope.qiandaoInfos = []; //每页的显示的条目数据
-    $scope.singlePageNum = 3; //每页显示的条目数量
+    $scope.singlePageNum = 6; //每页显示的条目数量
     $scope.AllPageNum = 0; //总页数
     $scope.pageNumArray = []; //每页的条目
     $scope.curr_page = 1; //当前页码

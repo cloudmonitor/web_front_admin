@@ -23,13 +23,16 @@ userCtrl.controller('userInfoController', function($scope, $http, $route) {
     $scope.pageBarShow = false;
     $scope.projectName = '';
     $scope.projectDesc = '';
-    $scope.updataOrCreate = false;
+    $scope.updataOrCreate = true;
     $scope.tenant_id = 0;
     $scope.userName = '';
     $scope.userEmail = '';
     $scope.userPassword = '';
     $scope.userPasswordAgain = '';
-    $scope.projects = [{ "id": "1", "name": "项目" }, { "id": "1", "name": "项目" }];
+    $scope.projects = [];
+    $scope.userId = "";
+    $scope.updatePassword = true;
+    $scope.disabledUser = true;
     //确定是更新还是创建
     $scope.getProject = function() {
         $.ajax({
@@ -49,7 +52,44 @@ userCtrl.controller('userInfoController', function($scope, $http, $route) {
         });
     }();
     $scope.setFlag = function() {
-        $scope.updataOrCreate = false;
+        $scope.updataOrCreate = true;
+        $scope.updatePassword = true;
+    };
+    $scope.disabledUser = function(info) {
+        // console.log(">>", info);
+        var user = {
+            "user": {
+                "enabled": !info.enabled
+            }
+        };
+        var login = function() {
+            var url = "/v1.0/admin/update/user/" + info.id;
+            var req = {
+                method: 'POST',
+                url: config["host"] + url + "?token=" + window.localStorage.token,
+                ContentType: "application/json",
+                data: JSON.stringify(user)
+            };
+            $http(req).then(
+                function(response) {
+                    // 请求成功
+                    var data = response.data;
+                    console.info("返回的数据: ", data);
+                    createAndHideAlert({
+                        "message": "用户禁用成功！",
+                        "className": "alert-success"
+                    });
+                    $scope.refresh();
+                },
+                function(response) {
+                    // 请求失败
+                    var data = response.data;
+                    createAndHideAlert({
+                        "message": "用户禁用失败！",
+                        "className": "alert-danger"
+                    });
+                });
+        }();
     };
     $scope.cancelCreate = function() {
         $scope.userName = '';
@@ -62,6 +102,7 @@ userCtrl.controller('userInfoController', function($scope, $http, $route) {
         $(".userNameCheckplaceholder").attr("placeholder", "");
         $(".userPasswordplaceholder").attr("placeholder", "");
         $(".userPasswordAgainplaceholder").attr("placeholder", "");
+        $(".userNameCheckplaceholder").attr("disabled", false);
     };
     $scope.deleteProjects = function() {
         var projects = [];
@@ -98,71 +139,96 @@ userCtrl.controller('userInfoController', function($scope, $http, $route) {
             url: config["host"] + "/v1.0/admin/delete/user/" + id + "?token=" + window.localStorage.token,
             success: function(data) {
                 createAndHideAlert({
-                    "message": "项目删除成功！",
+                    "message": "删除用户成功！",
                     "className": "alert-danger"
                 });
                 $scope.refresh();
             },
             error: function(data) {
                 createAndHideAlert({
-                    "message": "项目删除失败！",
+                    "message": "删除用户失败！",
                     "className": "alert-danger"
                 });
             }
         });
     };
     $scope.createProjectOK = function() {
-        if ($scope.userName.trim().length == 0 || $scope.userPassword.trim().length == 0 || $scope.userPasswordAgain.trim().length == 0) {
-            if ($scope.userName.trim().length == 0) {
-                $(".userNameCheck").addClass("has-error");
-                $(".userNameCheckplaceholder").attr("placeholder", "必填");
+        //是否是修改密码
+        if ($scope.updatePassword) {
+            //是否是创建
+            if ($scope.updataOrCreate) {
+                if ($scope.userName.trim().length == 0 || $scope.userPassword.trim().length == 0 || $scope.userPasswordAgain.trim().length == 0) {
+                    if ($scope.userName.trim().length == 0) {
+                        $(".userNameCheck").addClass("has-error");
+                        $(".userNameCheckplaceholder").attr("placeholder", "必填");
+                    }
+                    if ($scope.userPassword.trim().length == 0) {
+                        $(".userPasswordCheck").addClass("has-error");
+                        $(".userPasswordplaceholder").attr("placeholder", "必填");
+                    }
+                    if ($scope.userPasswordAgain.trim().length == 0) {
+                        $(".userPasswordAgainCheck").addClass("has-error");
+                        $(".userPasswordAgainplaceholder").attr("placeholder", "必填");
+                    }
+                    return;
+                }
+                if ($scope.userPassword != $scope.userPasswordAgain) {
+                    $(".userPasswordAgainCheck").addClass("has-error");
+                    $(".userPasswordAgainplaceholder").val("");
+                    $(".userPasswordAgainplaceholder").attr("placeholder", "两次密码不一致");
+                    return;
+                }
+                var user = {
+                    "user": {
+                        "email": $scope.userEmail,
+                        "password": $scope.userPassword,
+                        "enabled": true,
+                        "name": $scope.userName,
+                        "tenantId": $(".projectSelect").val()
+                    }
+                };
+            } else {
+                //更新
+                if ($scope.userName.trim().length == 0) {
+                    $(".userNameCheck").addClass("has-error");
+                    $(".userNameCheckplaceholder").attr("placeholder", "必填");
+                    return;
+                }
+                var user = {
+                    "user": {
+                        "email": $scope.userEmail,
+                        "name": $scope.userName,
+                        "tenantId": $(".projectSelect").val()
+                    }
+                };
             }
-            if ($scope.userPassword.trim().length == 0) {
-                $(".userPasswordCheck").addClass("has-error");
-                $(".userPasswordplaceholder").attr("placeholder", "必填");
-            }
-            if ($scope.userPasswordAgain.trim().length == 0) {
+        } else {
+            if ($scope.userPassword != $scope.userPasswordAgain) {
                 $(".userPasswordAgainCheck").addClass("has-error");
-                $(".userPasswordAgainplaceholder").attr("placeholder", "必填");
+                $(".userPasswordAgainplaceholder").val("");
+                $(".userPasswordAgainplaceholder").attr("placeholder", "两次密码不一致");
+                return;
             }
-            return;
+            var user = {
+                "user": {
+                    "password": $scope.userPassword
+                }
+            };
         }
-        if ($scope.userPassword != $scope.userPasswordAgain) {
-            $(".userPasswordAgainCheck").addClass("has-error");
-            $(".userPasswordAgainplaceholder").val("");
-            $(".userPasswordAgainplaceholder").attr("placeholder", "两次密码不一致");
-            return;
-        }
+
         $('#createProject').modal('hide');
         $('.modal-backdrop').removeClass("modal-backdrop");
-        var tenant = {
-            "tenant": {
-                "name": $scope.projectName,
-                "description": $scope.projectDesc,
-                "enabled": $scope.projectCreateStatus
-            }
-        }
-        $('#createProject').modal('hide');
-        $('.modal-backdrop').removeClass("modal-backdrop");
-        var user = {
-            "user": {
-                "email": $scope.userEmail,
-                "password": $scope.userPassword,
-                "enabled": true,
-                "name": $scope.userName,
-                "tenantId": $(".projectSelect").val()
-            }
-        };
+
         $scope.cancelCreate();
-        var login = function() {
-            var url = $scope.updataOrCreate ? "/v1.0/admin/update/user/" + $scope.tenant_id : "/v1.0/admin/create/user";
-            console.log(url, user)
+        var userEdite = function() {
+            if ($scope.updatePassword)
+                var url = $scope.updataOrCreate ? "/v1.0/admin/create/user" : "/v1.0/admin/update/user/" + $scope.userId;
+            else
+                var url = "/v1.0/admin/update/user/" + $scope.userId;
             var req = {
                 method: 'POST',
                 url: config["host"] + url + "?token=" + window.localStorage.token,
-                headers: {
-                    'Content-Type': "application/json",
-                },
+                ContentType: "application/json",
                 data: JSON.stringify(user)
             };
             $http(req).then(
@@ -171,7 +237,7 @@ userCtrl.controller('userInfoController', function($scope, $http, $route) {
                     var data = response.data;
                     console.info("返回的数据: ", data);
                     createAndHideAlert({
-                        "message": "用户创建成功！",
+                        "message": "操作成功！",
                         "className": "alert-success"
                     });
                     $scope.refresh();
@@ -180,18 +246,38 @@ userCtrl.controller('userInfoController', function($scope, $http, $route) {
                     // 请求失败
                     var data = response.data;
                     createAndHideAlert({
-                        "message": "用户创建失败！",
+                        "message": "操作失败！",
                         "className": "alert-danger"
                     });
                 });
         }();
     };
-    //编辑项目
-    $scope.editProject = function(id, name, desc, enabled) {
+    //编辑密码
+    $scope.editPassword = function(info) {
         $scope.updataOrCreate = true;
-        $scope.projectName = name;
-        $scope.projectDesc = desc;
-        $scope.tenant_id = id;
+        $scope.updatePassword = false;
+        $scope.userId = info.id;
+        $scope.userName = info.name;
+        $(".userNameCheckplaceholder").attr("disabled", true);
+    };
+    $scope.editUser = function(info) {
+        $scope.updatePassword = true;
+        $scope.userId = info.id;
+        $scope.updataOrCreate = false;
+        $scope.userName = info.name;
+        if (info.email != undefined)
+            $scope.userEmail = info.email;
+        else
+            $scope.userEmail = "";
+        $(".projectSelect").val(info.tenantId);
+        // for (var i = 0; i < $scope.projects.length; i++) {
+        //     var arr = $scope.projects[i];
+        //     if (arr.id == info.tenantId) {
+        //         $scope.projects.splice(0, 0, arr);
+        //         $scope.projects.splice(i, 1);
+        //     }
+        // }
+        // console.log($scope.projects);
     };
     // 获取项目列表
     var getProjectsList = function() {
