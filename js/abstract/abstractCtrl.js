@@ -6,12 +6,6 @@ abstractCtrl.controller('abstractController', function($scope, $http, $route) {
         "color": "#fff",
         "background-color": "#428bca"
     });
-    $("#lagout").click(function() {
-        $('#myModal').modal('toggle')
-        window.localStorage.clear();
-        // location.href = "#/";
-        location.reload();
-    });
     $scope.refresh = function() {
         $route.reload();
     }
