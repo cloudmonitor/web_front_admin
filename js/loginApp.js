@@ -15,7 +15,7 @@ function formValidCtrl($scope, $http) {
         var password = $scope.passWord;
         // 登陆请求
         var login = function() {
-            var url = config["host"] + "v1.0/admin/login";
+            var url = config["host"] + "/v1.0/admin/login";
             var req = {
                 method: 'POST',
                 url: url,

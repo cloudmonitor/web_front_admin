@@ -13,6 +13,17 @@ $(function() {
         }, 10 * 60 * 1000);
     });
 });
+
+//----分页
+function setColor(pagenum) {
+    $("li a[flag='project']").attr("style", { "display": "none" });
+    $("#page" + pagenum).css({
+        "color": "white",
+        "background-color": "#428BCA",
+        "font-weight": "bold"
+    });
+}
+
 //------侧边栏状态start
 $(".nav-sidebar li a").unbind("click").on("click", function() {
     var curr_url = $(this).attr("href");
@@ -21,10 +32,17 @@ $(".nav-sidebar li a").unbind("click").on("click", function() {
 });
 
 var curr_url = '#' + window.location.href.split("#")[1];
-$(".nav-sidebar a[href='" + curr_url + "']").css({
-    "color": "#fff",
-    "background-color": "#428bca"
-})
+if (curr_url == "#/") {
+    $(".nav-sidebar a[href!='#/abstract/abstract']").css({
+        "color": "#337ab7",
+        "background-color": "transparent"
+    });
+} else {
+    $(".nav-sidebar a[href='" + curr_url + "']").css({
+        "color": "#fff",
+        "background-color": "#428bca"
+    });
+}
 
 function setSideBarColor(curr_url) {
     $(".nav-sidebar li a [href='" + curr_url + "']").click();

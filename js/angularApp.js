@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute', 'abstractCtrl', 'projectsCtrl']);
+var myApp = angular.module('myApp', ['ngRoute', 'abstractCtrl', 'projectsCtrl','userCtrl']);
 
 // 路由跳转
 var router_all;
@@ -13,10 +13,10 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/identity/projects.html',
             controller: 'projectsController'
         })
-        // .when('/identity/userInfo', {
-        //     templateUrl: 'pages/identity/userInfo.html',
-        //     controller: 'userInfoController'
-        // })
+        .when('/identity/userInfo', {
+            templateUrl: 'pages/identity/userInfo.html',
+            controller: 'userInfoController'
+        })
         .otherwise({
             redirectTo: '/'
         });

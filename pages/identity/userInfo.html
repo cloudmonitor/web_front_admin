@@ -1,0 +1,180 @@
+<!-- 内容显示界面 -->
+<!-- <div id="loading_monitor"><img src="./icon/preloader.gif" alt="loading.." /></div> -->
+<!-- <div id="background_monitor" class="background"></div> -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 ">
+    <!-- 实例 -->
+    <div class="subHeader">用户</div>
+    <form class="form-inline form-btn">
+        <div class="input-group">
+            <input type="text" class="form-control input-md searchProjects" placeholder="Filter" ng-model="search"><span class="input-group-addon btn btn-primary"><i class='fa fa-search'></i></span>
+        </div>
+        <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
+        <button class="btn btn-primary " data-toggle="modal" data-target="#createProject" ng-click="setFlag()" type="button"><span class="fa fa-plus"></span>&nbsp;<span class="">创建用户</span></button>
+        <button type="button" class="btn btn-primary btn-danger deleteProject" disabled ng-click="deleteProjects()"><i class="fa fa-remove"></i>删除用户</button>
+        &nbsp;
+    </form>
+    <br>
+    <br>
+    <div class="">
+        <table class="table table-striped instance_info table-bordered ">
+            <thead>
+                <tr>
+                    <th>
+                        <input type="checkbox" class="all_check">
+                    </th>
+                    <th ng-click="sortType = 'name'; sortReverse_name = !sortReverse_name;sortReverse=sortReverse_name">
+                        用户名
+                        <span ng-show="sortType == 'name' && sortReverse_name" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'name' && !sortReverse_name" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                    <th ng-click="sortType = 'description'; sortReverse_desc = !sortReverse_desc;sortReverse=sortReverse_desc">
+                        邮箱
+                        <span ng-show="sortType == 'description' && sortReverse_desc" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'description' && !sortReverse_desc" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                    <th ng-click="sortType = 'id'; sortReverse_proId = !sortReverse_proId;sortReverse=sortReverse_proId">
+                        用户ID
+                        <span ng-show="sortType == 'id' && sortReverse_proId" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'id' && !sortReverse_proId" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                    <th ng-click="sortType = 'enabled'; sortReverse_enabled = !sortReverse_enabled;sortReverse=sortReverse_enabled">
+                        激活
+                        <span ng-show="sortType == 'enabled' && sortReverse_enabled" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'enabled' && !sortReverse_enabled" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="info in qiandaoInfos | orderBy:sortType:sortReverse">
+                <tr ng-if="$even" class="active">
+                    <td>
+                        <input type='checkbox' class='project_checks' id="{{info.id}}">
+                    </td>
+                    <td><a href="#/{{info.id}}" style="cursor: pointer;">{{info.username}}</a></td>
+                    <td>{{info.email}}</td>
+                    <td>{{info.id}}</td>
+                    <td>{{info.enabled}}</td>
+                    <td>
+                        <div class='btn-group'>
+                            <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="editUser()">编辑</button>
+                            <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
+                                <span class='caret'></span>
+                            </button>
+                            <ul class='dropdown-menu' role='menu' style='z-index:1000'>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="editProject(info.id,info.name,info.description,info.enabled)">修改密码</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">禁用用户</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteProject(info.id)"><span style="color:red">删除用户</span></a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                <tr ng-if="$odd">
+                    <td>
+                        <input type='checkbox' class='project_checks' id="{{info.id}}">
+                    </td>
+                    <td><a href="#/{{info.id}}" style="cursor: pointer;">{{info.name}}</a></td>
+                    <td>{{info.email}}</td>
+                    <td>{{info.id}}</td>
+                    <td>{{info.enabled}}</td>
+                    <td>
+                        <div class='btn-group'>
+                            <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="editUser()">编辑</button>
+                            <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
+                                <span class='caret'></span>
+                            </button>
+                            <ul class='dropdown-menu' role='menu' style='z-index:1000'>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="editProject(info.id,info.name,info.description,info.enabled)">修改密码</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">禁用用户</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteProject(info.id)"><span style="color:red">删除用户</span></a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr ng-if="!simplePageCount">
+                    <td class="text-center" colspan="6">没有可显示的项目</td>
+                </tr>
+                <tr ng-if="simplePageCount" class="active tfoot-dsp">
+                    <td colspan="6">Displaying {{ simplePageCount }} items / {{item_count}} items</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<div align="center">
+    <nav ng-show="pageBarShow">
+        <ul class="pagination">
+            <li><a href="javascript:void(0)" ng-click="nextPage(curr_page,'-')" disabled="curr_page==1">&laquo;</a></li>
+            <li ng-repeat="pagebar in pageNumArray">
+                <a href="javascript:void(0)" ng-if="pagebar==1" flag='project' id="page{{pagebar}}" ng-click="changePage(pagebar)" style="  color: #436EEE;background-color: #EDEDED;font-weight: bold">{{pagebar}}</a>
+                <a href="javascript:void(0)" ng-if="pagebar!=1" flag='project' id="page{{pagebar}}" ng-click="changePage(pagebar)">{{pagebar}}</a>
+            </li>
+            <li><a href="javascript:void(0)" ng-click="nextPage(curr_page,'+')" disabled="curr_page==AllPageNum">&raquo;</a></li>
+        </ul>
+    </nav>
+</div>
+<!-- 模态框 创建项目 -->
+<div id="createProject" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog" style="width:50%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" ng-click="cancelCreate()">&times;</span></button>
+                <h4 class="modal-title">创建用户</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <form>
+                            <div>
+                                <div class="form-group userNameCheck">
+                                    <label class="control-label">用户名<span class="span-stand"> *</span></label>
+                                    <input class="form-control userNameCheckplaceholder" ng-model="userName">
+                                </div>
+                                <div class="form-group ">
+                                    <label class="control-label">邮箱</label>
+                                    <input class="form-control emailplaceholder" ng-model="userEmail">
+                                </div>
+                                <div class="form-group  has-feedback userPasswordCheck">
+                                    <label class="control-label" for="inputSuccess2">密码<span class="span-stand"> *</span></label>
+                                    <input type="text" class="form-control  userPasswordplaceholder" id="inputSuccess2" ng-model="userPassword">
+                                    <span class="fa fa-eye-slash form-control-feedback" style="margin-top:3%"></span>
+                                </div>
+                                <div class="form-group has-feedback userPasswordAgainCheck">
+                                    <label class="control-label">确认密码<span class="span-stand"> *</span></label>
+                                    <input class="form-control projectNameplaceholder userPasswordAgainplaceholder" ng-model="userPasswordAgain">
+                                    <span class="fa fa-eye form-control-feedback" style="margin-top:3%"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">主项目<span class="span-stand"> *</span></label>
+                                    <div class="input-group">
+                                        <select class="form-control projectSelect">
+                                            <option ng-repeat="pro in projects" value="{{pro.id}}">{{pro.name}}</option>
+                                        </select>
+                                        <span class="input-group-addon"><i class="fa fa-plus"></i></span>
+                                    </div>
+                                    <!-- <div class="form-group has-feedback">
+    <label class="control-label">角色<span class="span-stand"> *</span></label>
+    <input class="form-control projectNameplaceholder" ng-model="userRole">
+    <span class="fa fa-sort-down form-control-feedback" style="margin-top:3%"></span>
+</div>
+ -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-6">
+                        <H3>说明：</H3>创建一个新用户，并设置相关的属性，例如该用户的主项目和角色。
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelCreate()">取消</button>
+                    <button type="button" class="btn btn-primary" ng-click="createProjectOK()">创建用户</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</div>

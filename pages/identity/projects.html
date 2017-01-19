@@ -1,368 +1,333 @@
 <!-- 内容显示界面 -->
 <!-- <div id="loading_monitor"><img src="./icon/preloader.gif" alt="loading.." /></div> -->
 <!-- <div id="background_monitor" class="background"></div> -->
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 ">
     <!-- 实例 -->
-    <div class="desc">实例</div>
+    <div class="subHeader">项目</div>
     <form class="form-inline form-btn">
         <div class="input-group">
-            <input type="text" class="form-control input-md" placeholder="Filter"><span class="input-group-addon btn btn-primary"><i class='fa fa-search'></i></span>
+            <input type="text" class="form-control input-md searchProjects" placeholder="Filter" ng-model="search"><span class="input-group-addon btn btn-primary"><i class='fa fa-search'></i></span>
         </div>
         <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
-        <button class="btn btn-primary " data-toggle="modal" data-target="#" type="button"><span class="fa fa-plus"></span>&nbsp;<span class="">创建项目</span></button>
-        <button type="button" class="btn btn-primary btn-danger" disabled><i class="fa fa-remove"></i>删除项目</button>
+        <button class="btn btn-primary " data-toggle="modal" data-target="#createProject" ng-click="setFlag()" type="button"><span class="fa fa-plus"></span>&nbsp;<span class="">创建项目</span></button>
+        <button type="button" class="btn btn-primary btn-danger deleteProject" disabled ng-click="deleteProjects()"><i class="fa fa-remove"></i>删除项目</button>
         &nbsp;
     </form>
     <br>
     <br>
-    <table class="table table-striped instance_info table-bordered">
+    <table class="table table-striped instance_info table-bordered ">
         <thead>
             <tr>
                 <th>
                     <input type="checkbox" class="all_check">
                 </th>
-                <th>名称</th>
-                <th>描述</th>
-                <th>项目ID</th>
-                <th>激活</th>
+                <th ng-click="sortType = 'name'; sortReverse_name = !sortReverse_name;sortReverse=sortReverse_name">
+                    名称
+                    <span ng-show="sortType == 'name' && sortReverse_name" class="fa fa-caret-up" style="float:right"></span>
+                    <span ng-show="sortType == 'name' && !sortReverse_name" class="fa fa-caret-down" style="float:right"></span>
+                </th>
+                <th ng-click="sortType = 'description'; sortReverse_desc = !sortReverse_desc;sortReverse=sortReverse_desc">
+                    描述
+                    <span ng-show="sortType == 'description' && sortReverse_desc" class="fa fa-caret-up" style="float:right"></span>
+                    <span ng-show="sortType == 'description' && !sortReverse_desc" class="fa fa-caret-down" style="float:right"></span>
+                </th>
+                <th ng-click="sortType = 'id'; sortReverse_proId = !sortReverse_proId;sortReverse=sortReverse_proId">
+                    项目ID
+                    <span ng-show="sortType == 'id' && sortReverse_proId" class="fa fa-caret-up" style="float:right"></span>
+                    <span ng-show="sortType == 'id' && !sortReverse_proId" class="fa fa-caret-down" style="float:right"></span>
+                </th>
+                <th ng-click="sortType = 'enabled'; sortReverse_enabled = !sortReverse_enabled;sortReverse=sortReverse_enabled">
+                    激活
+                    <span ng-show="sortType == 'enabled' && sortReverse_enabled" class="fa fa-caret-up" style="float:right"></span>
+                    <span ng-show="sortType == 'enabled' && !sortReverse_enabled" class="fa fa-caret-down" style="float:right"></span>
+                </th>
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody ng-repeat="info in qiandaoInfos">
+        <tbody ng-repeat="info in qiandaoInfos | orderBy:sortType:sortReverse">
             <tr ng-if="$even" class="active">
                 <td>
-                    <input type='checkbox' class='instance_checks' id={{info[0]}}>
+                    <input type='checkbox' class='project_checks' id="{{info.id}}">
                 </td>
-                <td>{{info[1]}}</td>
-                <td>{{info[2]}}</td>
-                <td>{{info[3]}}</td>
-                <td>{{info[4]}}</td>
+                <td><a href="#/{{info.id}}" style="cursor: pointer;">{{info.name}}</a></td>
+                <td>{{info.description}}</td>
+                <td>{{info.id}}</td>
+                <td>{{info.enabled}}</td>
                 <td>
-                    <div class="dropdown">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-                            Dropdown
-                            <span class="caret"></span>
-                            <span class='sr-only'>ASD</span>
+                    <div class='btn-group'>
+                        <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="manageMember()">管理成员</button>
+                        <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
+                            <span class='caret'></span>
                         </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                        <ul class='dropdown-menu' role='menu' style='z-index:1000'>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="editProject(info.id,info.name,info.description,info.enabled)">编辑项目</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">查看使用情况</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="updateQuota()">修改配额</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteProject(info.id)"><span style="color:red">删除项目</span></a></li>
                         </ul>
                     </div>
                 </td>
             </tr>
             <tr ng-if="$odd">
                 <td>
-                    <input type='checkbox' class='instance_checks' id={{info[0]}}>
+                    <input type='checkbox' class='project_checks' id="{{info.id}}">
                 </td>
-                <td>{{info[1]}}</td>
-                <td>{{info[2]}}</td>
-                <td>{{info[3]}}</td>
-                <td>{{info[4]}}</td>
+                <td><a href="#/{{info.id}}" style="cursor: pointer;">{{info.name}}</a></td>
+                <td>{{info.description}}</td>
+                <td>{{info.id}}</td>
+                <td>{{info.enabled}}</td>
                 <td>
                     <div class='btn-group'>
-                        <button type='button' class='btn btn-default btn-sm' disabled>主机操作</button>
+                        <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="manageMember()">管理成员</button>
                         <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
                             <span class='caret'></span>
                         </button>
                         <ul class='dropdown-menu' role='menu' style='z-index:1000'>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="editProject(info.id,info.name,info.description,info.enabled)">编辑项目</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">查看使用情况</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="updateQuota()">修改配额</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteProject(info.id)"><span style="color:red">删除项目</span></a></li>
                         </ul>
                     </div>
                 </td>
             </tr>
         </tbody>
-        <tfoot class="instance_footer">
+        <tfoot>
+            <tr ng-if="!simplePageCount">
+                <td class="text-center" colspan="6">没有可显示的项目</td>
+            </tr>
+            <tr ng-if="simplePageCount" class="active tfoot-dsp">
+                <td colspan="6">Displaying {{ simplePageCount }} / {{item_count}} items</td>
+            </tr>
         </tfoot>
     </table>
 </div>
-<!-- 模态框 绑定浮动IP -->
-<div id="bind_floatingIP" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content modal-size">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title modal-center" id="myModalLabel"><span class="show_info0">管理浮动IP的关联</span></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row tab-pane in active floatIP_Div" id="add_strategy">
-                    <!-- 增加策略 -->
-                    <form role="form">
-                        <div class="col-md-6 form-group">
-                            <label class="control-lable show_info1">IP地址<span class="span-stand"> *</span></label>
-                            <select class="form-control IP_select">
-                            </select>
-                        </div>
-                    </form>
-                    <div class="col-md-6">
-                        <p class="show_info2">请为选中的云主机或端口选择要绑定的IP地址。</p>
-                    </div>
-                </div>
-                <div class="modal-footer modal-center">
-                    <button type="button" class="btn btn-default cancel_IP" data-dismiss="modal">取消
-                    </button>
-                    <button type="button" class="btn btn-primary add_IP" data-dismiss="modal">
-                        确定
-                    </button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal -->
-    </div>
+<div align="center">
+    <nav ng-show="pageBarShow">
+        <ul class="pagination">
+            <li><a href="javascript:void(0)" ng-click="nextPage(curr_page,'-')" disabled="curr_page==1">&laquo;</a></li>
+            <li ng-repeat="pagebar in pageNumArray">
+                <a href="javascript:void(0)" ng-if="pagebar==1" flag='project' id="page{{pagebar}}" ng-click="changePage(pagebar)" style="color: white;background-color: #428BCA;font-weight: bold">{{pagebar}}</a>
+                <a href="javascript:void(0)" ng-if="pagebar!=1" flag='project' id="page{{pagebar}}" ng-click="changePage(pagebar)">{{pagebar}}</a>
+            </li>
+            <li><a href="javascript:void(0)" ng-click="nextPage(curr_page,'+')" disabled="curr_page==AllPageNum">&raquo;</a></li>
+        </ul>
+    </nav>
 </div>
-<!-- 模态框 ：　编辑云主机-->
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="instance_security" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<!-- 模态框 创建项目 -->
+<div id="createProject" class="modal fade" aria-hidden="true">
+    <div class="modal-dialog" style="width:54%">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title">编辑云主机</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true" ng-click="cancelCreate()">&times;</span></button>
+                <h4 class="modal-title">创建项目</h4>
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs">
-                    <li class="dealInfo_li">
-                        <a data-target="#detailInfo" data-toggle="tab">基本信息<span class="span-stand"> *</span> </a>
-                    </li>
-                    <li class="security_li"><a data-target="#securitys" data-toggle="tab">安全组</a></li>
+                    <li class=""><a data-toggle="tab" data-target="#home" style="cursor: pointer;" id="proInfo">项目信息</a></li>
+                    <li><a data-toggle="tab" data-target="#member" style="cursor: pointer;" id="proMember">项目成员</a></li>
+                    <li><a data-toggle="tab" data-target="#profile" style="cursor: pointer;" id="proQuota">配额</a></li>
                 </ul>
                 <div class="tab-content">
-                    <!-- 详情 -->
-                    <div class="tab-pane fade " id="detailInfo">
-                        <div class="row">
-                            <form role="form" class="col-md-6">
-                                <p></p>
-                                <div class="form-group">
-                                    <label class="control-lable">云主机名称<span class="span-stand"> *</span></label>
-                                    <input class="form-control edit_instance_name">
+                    <div class="tab-pane " id="home">
+                        <br/>
+                        <form class="form-horizontal">
+                            <div class="form-group projectName">
+                                <label class="col-sm-3 control-label">名称<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control projectNameplaceholder" ng-model="projectName">
                                 </div>
-                            </form>
-                            <div class="col-md-6">
-                                <h4>说明</h4> 编辑实例详细信息
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">描述</label>
+                                <div class="col-sm-8">
+                                    <textarea class="form-control" rows="3" ng-model="projectDesc"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">激活</label>
+                                <div class="checkbox col-sm-1">
+                                    <label>
+                                        <input type="checkbox" ng-checked="projectCreateStatus" ng-click="changeStatus()">
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="member">
+                        <br/>
+                        <div class="row">
+                            <div class="col-sm-6 " style="border:1px solid #DDDDDD;padding:0px;margin-left:2%">
+                                <form class="form-horizontal">
+                                    <div class="form-group" style="margin-bottom: 0px;">
+                                        <label class="col-sm-4 control-label" style="margin-top:2%;padding:auto;text-align:center">全部用户</label>
+                                        <div class="col-sm-3 col-sm-offset-4">
+                                            <div class="form-group has-feedback" style="margin-top:12%;">
+                                                <input type="text" class="form-control" ng-model="searchUser" placeholder="Filter">
+                                                <span class="fa fa-search form-control-feedback" style="margin-top:6%;margin-right:-12%"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <ul class="nav nav-pills nav-stacked" ng-repeat="user in users | filter:searchUser">
+                                    <li ng-if="$even" style="background:#F7F7F7">
+                                        <a href="javascript:void(0)" style="position: absolute;">{{user.name}}</a>
+                                        <button type="button" class="btn btn-primary btn-sm" style="width:8%;height:2%;position:relative;z-index='100';margin-top:2%;margin-bottom:2%;margin-left:90%" ng-click="selectUser(user.id)"><span align="center">+</span></button>
+                                    </li>
+                                    <li ng-if="$odd">
+                                        <a href="javascript:void(0)" style="position: absolute;">{{user.name}}</a>
+                                        <button type="button" class="btn btn-primary btn-sm" style="width:8%;height:2%;position:relative;z-index='100';margin-top:2%;margin-bottom:2%;margin-left:90%" ng-click="selectUser(user.id)"><span align="center">+</span></button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-5 " style="border:1px solid #DDDDDD;padding:0px;margin-left:3%">
+                                <form class="form-horizontal">
+                                    <div class="form-group" style="margin-bottom: 0px;">
+                                        <label class="col-sm-4 control-label" style="margin-top:2%;padding:auto;text-align:center">项目成员</label>
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <div class="form-group has-feedback" style="margin-top:12%;">
+                                                <input type="text" class="form-control" ng-model="searchSelectedUser" placeholder="Filter">
+                                                <span class="fa fa-search form-control-feedback" style="margin-top:6%;margin-right:-12%"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <ul class="nav nav-pills nav-stacked" ng-repeat="user in selectedUsers | filter:searchSelectedUser">
+                                    <li ng-if="$even" style="background:#F7F7F7">
+                                        <a href="javascript:void(0)" style="position: absolute;display:inline-block">{{user.name}}</a>
+                                        <div style="position:relative;left:67%">
+                                            <select style="position:relative;z-index:10;width:20%;">
+                                                <option ng-repeat="role in roles" id="{{role.id}}">{{role.name}}</option>
+                                            </select>
+                                            <button type="button" class="btn btn-primary btn-sm" style="position:relative;margin-top:1%" ng-click="removeUser(user.id)"><span align="center">-</span></button>
+                                        </div>
+                                    </li>
+                                    <li ng-if="$odd">
+                                        <a href="javascript:void(0)" style="position: absolute;">{{user.name}}</a>
+                                        <div style="position:relative;left:67%">
+                                            <select style="position:relative;z-index:10;width:20%;">
+                                                <option ng-repeat="role in roles" id="{{role.id}}">{{role.name}}</option>
+                                            </select>
+                                            <button type="button" class="btn btn-primary btn-sm" style="position:relative;margin-top:1%" ng-click="removeUser(user.id)"><span align="center">-</span></button>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <span ng-show="selectedUsers.length==0">
+                                   <ul class="nav nav-pills" role="tablist" style="background:#F7F7F7">
+                                     <li><a href="javascript:void(0)">没有用户</a></li>
+                                     </ul>
+                                  </span>
                             </div>
                         </div>
                     </div>
-                    <!-- 安全组 -->
-                    <div class="tab-pane fade " id="securitys">
-                        <div class="row">
-                            <h5>&nbsp;&nbsp;&nbsp;<span style="background:#F8F8FF">从可用的安全组中增加和删除</span></h5></div>
-                        <div class="row">
-                            <div class="col-md-6" style="border-left:1px solid;background:#F8F8FF">
-                                <h5><B>全部安全组</B></h5>
-                                <p class="all_securities" id="all_securities" style="background:#E0EEEE">
-                                </p>
+                    <div class="tab-pane fade" id="profile">
+                        <form class="form-horizontal">
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">元数据条目<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_metadata_items">
+                                </div>
                             </div>
-                            <div class="col-md-1"></div>
-                            <div class="col-md-5" style="border-right:1px solid;background:#F8F8FF">
-                                <h5><B>云主机安全组</B></h5>
-                                <p class="usedinstance_security" id="usedinstance_security" style="background:#E0EEEE">
-                                </p>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">虚拟内核<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_cores">
+                                </div>
                             </div>
-                        </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">实例<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_instances">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">注入的文件<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_injected_files">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">已注入文件内容(Bytes)<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_injected_file_content_bytes">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">内存 (MB)<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_ram">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">安全组<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_security_groups">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">安全组规则<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_security_group_rules">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">浮动IP<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_floating_ips">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">网络<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">端口<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">路由<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_">
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0px;">
+                                <br/>
+                                <label class="col-sm-3 control-label">子网<span class="span-stand"> *</span></label>
+                                <div class="col-sm-8">
+                                    <input class="form-control" ng-model="pro_">
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default sg_cancel" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary sg_keep">保存</button>
+            <div class="modal-footer" ng-show="createPro_ManageInfo">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelCreate()">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="createProjectOK()">创建项目</button>
+            </div>
+            <div class="modal-footer" ng-show="!createPro_ManageInfo">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelUpdateMemProfile()">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="updateMemProfileOK()">保存</button>
             </div>
         </div>
         <!-- /.modal-content -->
     </div>
-    <!-- /.modal -->
+    <!-- /.modal-dialog -->
 </div>
-<!-- 模态框 ：　启动云主机-->
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="start-host" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title">启动云主机</h4>
-            </div>
-            <div class="modal-body">
-                <ul class="nav nav-tabs">
-                    <li class="active">
-                        <a data-target="#detail" data-toggle="tab">详情<span class="span-stand"> *</span> </a>
-                    </li>
-                    <li><a data-target="#security-access" data-toggle="tab">访问 ＆ 安全</a></li>
-                    <li>
-                        <a data-target="#network" data-toggle="tab">网络<span class="span-stand"> *</span></a>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <!-- 详情 -->
-                    <div class="tab-pane fade in active" id="detail">
-                        <div class="row">
-                            <form role="form" class="col-md-6">
-                                <p></p>
-                                <div class="form-group">
-                                    <label class="control-lable">可用域<span class="span-stand"> *</span></label>
-                                    <select class="form-control instance_domanfree">
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-lable">云主机名称<span class="span-stand"> *</span></label>
-                                    <input class="form-control instance_name">
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-lable">云主机类型<span class="span-stand"> *</span></label>
-                                    <select class="form-control instance_typeselect">
-                                    </select>
-                                </div>
-                                <label class="control-lable">云主机数量<span class="span-stand"> *</span></label>
-                                <div class="form-group form-inline">
-                                    <input class="form-control instance_num" value="1" style="width:98%">
-                                    <label for="search-input" class="control-label input-addon"><i class="fa fa-sort-asc up_num" style="height:10px;display:block;margin:0px"></i><i class="fa fa-sort-desc desc_num" style="height:10px;margin:0px"></i></label>
-                                </div>
-                                <div class="form-group">
-                                    <label class="control-lable">云主机启动源
-                                        <span class="span-stand"> *</span>
-                                    </label>
-                                    <select class="form-control instance_startOriginSelect">
-                                        <option value="test">选择源</option>
-                                        <option value="image">从镜像启动</option>
-                                        <option value="snap">从快照启动</option>
-                                    </select>
-                                </div>
-                                <div class="form-group imageDiv" hidden>
-                                    <label class="control-lable">镜像名称
-                                        <span class="span-stand"> *</span>
-                                    </label>
-                                    <select class="form-control instance_imageSelect">
-                                    </select>
-                                </div>
-                                <div class="form-group snapDiv" hidden>
-                                    <label class="control-lable">云主机快照
-                                        <span class="span-stand"> *</span>
-                                    </label>
-                                    <select class="form-control instance_snapSelect">
-                                        <option>选择云主机快照</option>
-                                    </select>
-                                </div>
-                            </form>
-                            <div class="col-md-6">
-                                <h5>指定创建云主机的详细信息</h5>
-                                <p>详细说明启动云书记的情况，下面的图表显示此项目所使用的资源和关联的项目配额</p>
-                                <table>
-                                    <caption>说明</caption>
-                                    <tr>
-                                        <th class="table-td-left">名称</th>
-                                        <td class="table-td-right flavor_name"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-td-left">虚拟内核</th>
-                                        <td class="table-td-right flavor_core"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-td-left">根磁盘</th>
-                                        <td class="table-td-right flavor_rootdisk"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-td-left">临时磁盘</th>
-                                        <td class="table-td-right flavor_tempdisk"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-td-left">磁盘总计</th>
-                                        <td class="table-td-right flavor_disktotal"></td>
-                                    </tr>
-                                    <tr>
-                                        <th class="table-td-left">内存</th>
-                                        <td class="table-td-right flavor_ram"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <h4>项目限制</h4>
-                                <small><strong>云主机数量</strong><span class="modal-right flavor_num"></span></small>
-                                <div class="progress progress-striped active">
-                                    <div class="progress-bar progress-bar-info flavor_usednum" role="progressbar" aria-valuenow="４" aria-valuemin="0" aria-valuemax="48" style="width: 10%;" id="unused-ip">
-                                        <span class="sr-only">已使用</span>
-                                    </div>
-                                    <div class="progress-bar progress-bar-success flavor_free" role="progressbar" aria-valuenow="２" aria-valuemin="0" aria-valuemax="48" style="width: 5%;" id="used-ip">
-                                        <span class="sr-only">预分配</span>
-                                    </div>
-                                </div>
-                                <!-- 分割线 -->
-                                <small><strong>虚拟CPU数量</strong><span class="modal-right virtual_cpunum"></span></small>
-                                <div class="progress progress-striped active">
-                                    <div class="progress-bar progress-bar-info virtual_usednum" role="progressbar" aria-valuenow="４" aria-valuemin="0" aria-valuemax="48" style="width: 10%;" id="unused-ip">
-                                        <span class="sr-only">已使用</span>
-                                    </div>
-                                    <div class="progress-bar progress-bar-success virtual_free" role="progressbar" aria-valuenow="２" aria-valuemin="0" aria-valuemax="48" style="width: 5%;" id="used-ip">
-                                        <span class="sr-only">预分配</span>
-                                    </div>
-                                </div>
-                                <!-- 分割线 -->
-                                <small><strong>内存总计</strong><span class="modal-right ram_num"></span></small>
-                                <div class="progress progress-striped active">
-                                    <div class="progress-bar progress-bar-info ram_usednum" role="progressbar" aria-valuenow="４" aria-valuemin="0" aria-valuemax="48" style="width: 10%;" id="unused-ip">
-                                        <span class="sr-only">已使用</span>
-                                    </div>
-                                    <div class="progress-bar progress-bar-success ram_free" role="progressbar" aria-valuenow="２" aria-valuemin="0" aria-valuemax="48" style="width: 5%;" id="used-ip">
-                                        <span class="sr-only">预分配</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 访问　＆　安全 -->
-                    <div class="tab-pane fade" id="security-access">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p>
-                                    <h5><lable　for="key-value">值对</lable></h5>
-                                    <select class="form-control key_select">
-                                    </select>
-                                </p>
-                                <p>
-                                    <h5>安全组</h5>
-                                    <ul class="security_ul">
-                                    </ul>
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <h5>通过密钥对、防火墙、和其它机制控制你的云主机权限</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 网络 -->
-                    <div class="tab-pane fade" id="network">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p>
-                                    <h5>已选择的网络</h5>
-                                    <div class="alert alert-info selected_subnet" id="selected_subnet" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                                </p>
-                                <h5>可用网络</h5>
-                                <p class="free_netsInfo">
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <p></p>
-                                <p>请选择要添加的网络，可以通过按钮添加也可以拖动添加，你还可以拖动已经添加的网络来改变其顺序。</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default instance_cancel" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary instance_run">运行</button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal -->
-</div>
+<!-- /.modal -->
