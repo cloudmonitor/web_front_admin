@@ -89,6 +89,7 @@ angular.module('myApp')
                     defered.resolve(response);
                 }, function(response) {
                     // 请求失败
+                    console.error('请求失败');
                     defered.reject(response);
                 });
 

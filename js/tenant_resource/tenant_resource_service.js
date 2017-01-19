@@ -172,12 +172,96 @@ angular.module('myApp')
                     // 请求失败
                     defered.reject(response);
                 })
+
+                return defered.promise;
             }
+
+            // 获取特定租户的网络信息
+            var getNetInfo = function(url) {
+                var defered = $q.defer(),
+                    req = {
+                        url: url,
+                        method: 'GET',
+                        params: {
+                            token: localStorage.token
+                        }
+                    };
+
+                $http(req).then(function(response) {
+                    // 请求成功
+                    var data = response.data.networks,
+                        result = [];
+
+                    data.forEach(function(element, index, array) {
+                        var network = {
+                            name: element.name,
+                            status: (element.status == 'ACTIVE') ? '运行中' : '关闭',
+                            subnet: [],
+                            adminState: (element.admin_state_up) ? '上' : '下',
+                        };
+
+                        element.subnets.forEach(function(item) {
+                            network.subnet.push({
+                                name: item.name,
+                                cidr: item.cidr
+                            });
+                        });
+                        result.push(network);
+                    });
+
+                    response.data = result;
+                    defered.resolve(response);
+                }, function(response) {
+                    // 请求失败
+                    defered.reject(response);
+                });
+
+                return defered.promise;
+            };
+
+            // 获取特定租户的路由
+            var getRoutes = function(url) {
+                var defered = $q.defer(),
+                    req = {
+                        url: url,
+                        method: 'GET',
+                        params: {
+                            token: localStorage.token
+                        }
+                    };
+
+                $http(req).then(function(response) {
+                    // 请求成功
+                    var data = response.data.routers,
+                        result = [];
+
+                    data.forEach(function(element, index, array) {
+                        var network = {
+                            name: element.name,
+                            status: (element.status == 'ACTIVE') ? '运行中' : '关闭',
+                            extName: '外部网络',
+                            adminState: (element.admin_state_up) ? '上' : '下',
+                        };
+                        result.push(network);
+                    });
+
+                    response.data = result;
+                    defered.resolve(response);
+                }, function(response) {
+                    // 请求失败
+                    defered.reject(response);
+                });
+
+                return defered.promise;
+            };
 
             return {
                 getTenantList: getTenantList,
                 drawEchartPie: drawEchartPie,
-                getResourceSummary: getResourceSummary
+                getResourceSummary: getResourceSummary,
+                getCloudList: CloudService.getCloudList,
+                getNetInfo: getNetInfo,
+                getRoutes: getRoutes
             };
         }
     ]);
