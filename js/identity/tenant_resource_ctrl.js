@@ -39,10 +39,10 @@ angular.module('myApp')
                         center: ['50%', '50%'],
                         data: [{
                             value: 0,
-                            name: '已使用'
+                            name: '已用'
                         }, {
                             value: 0,
-                            name: '未使用'
+                            name: '可用'
                         }],
                         label: {
                             normal: {
@@ -67,7 +67,7 @@ angular.module('myApp')
                     legend: {
                         orient: 'vertical',
                         left: 'left',
-                        data: ['已使用', '未使用']
+                        data: ['已用', '可用']
                     },
                     series: [{
                         type: 'pie',
@@ -75,10 +75,10 @@ angular.module('myApp')
                         center: ['0%', '0%'],
                         data: [{
                             value: 0,
-                            name: '已使用'
+                            name: '已用'
                         }, {
                             value: 0,
-                            name: '未使用'
+                            name: '可用'
                         }],
                         label: {
                             normal: {
@@ -128,7 +128,7 @@ angular.module('myApp')
                     // 请求成功
                     console.info('请求成功', response.data);
 
-                    // 以下三个数组分别表示已使用资源名字， 资源总数名字， 资源中文名字以及饼图中已使用资源名称
+                    // 以下三个数组分别表示已用资源名字， 资源总数名字， 资源中文名字以及饼图中已用资源名称
                     // 相同下标处有相同的含义
                     var usedArray = ['floatingips_used', 'instance_num', 'networks_used', 'security_groups_rule_used',
                             'routers_used', 'memory_mb', 'vcpus', 'subnets_used', 'ports_used', 'security_groups_used'

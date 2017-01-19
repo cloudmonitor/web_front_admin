@@ -14,15 +14,15 @@ myApp.config(function($routeProvider) {
             controller: 'projectsController'
         })
         .when('/cloud-hosts', {
-            templateUrl: 'pages/identity/cloud_hosts.html',
+            templateUrl: 'pages/cloud_hosts/cloud_hosts.html',
             controller: 'CloudHostsCtrl'
         })
         .when('/cloud-hosts-detail', {
-            templateUrl: 'pages/identity/cloud_hosts_detail.html',
+            templateUrl: 'pages/cloud_hosts/cloud_hosts_detail.html',
             controller: 'CloudHostsDetailCtrl'
         })
         .when('/tenant/resource', {
-            templateUrl: 'pages/identity/tenant_resource.html',
+            templateUrl: 'pages/tenant_resource/tenant_resource.html',
             controller: 'TenantResourceCtrl'
         })
         .otherwise({
