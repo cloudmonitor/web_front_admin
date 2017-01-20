@@ -23,6 +23,8 @@ angular.module('myApp')
             // 初始化
             $scope.itemPerPage = 4;
             $scope.currentPage = 1;
+            $scope.sortType = 'name';
+            $scope.sortReverse = false;
 
             var url = config['host'] + '/v1.0/admin/all_instances';
 
