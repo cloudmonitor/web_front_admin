@@ -80,32 +80,68 @@
                         <th>
                             <input type="checkbox">
                         </th>
-                        <th>云主机名</th>
-                        <th>物理主机名</th>
-                        <th>租户名</th>
+                        <th>
+                            <a ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                        云主机名
+                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'hypervisorHostname'; sortReverse = !sortReverse">
+                        物理主机名
+                        <span ng-show="sortType == 'hypervisorHostname' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'hypervisorHostname' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'tenantName'; sortReverse = !sortReverse">
+                        租户名
+                        <span ng-show="sortType == 'tenantName' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'tenantName' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                        </th>
                         <th>IP地址</th>
-                        <th>镜像</th>
-                        <th>配置</th>
-                        <th>可用域</th>
-                        <th>状态</th>
+                        <th>
+                            <a ng-click="sortType = 'image'; sortReverse = !sortReverse">
+                        镜像
+                        <span ng-show="sortType == 'image' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'image' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'configure'; sortReverse = !sortReverse">
+                        配置
+                        <span ng-show="sortType == 'configure' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'configure' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'availableScope'; sortReverse = !sortReverse">
+                        可用域
+                        <span ng-show="sortType == 'availableScope' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'availableScope' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'availableScope'; sortReverse = !sortReverse">
+                        状态
+                        <span ng-show="sortType == 'availableScope' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'availableScope' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                        </th>
                         <th>从创建以来</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr dir-paginate="vm in vms | cloudHostsFilter: search | itemsPerPage: itemPerPage as result track by $index " current-page="currentPage">
+                    <tr dir-paginate="vm in vms | orderBy:sortType:sortReverse | cloudHostsFilter: search | itemsPerPage: itemPerPage as result track by $index " current-page="currentPage">
                         <td>
                             <input type="checkbox">
                         </td>
-                        <td>
-                            <a href="" ng-bind="vm.name"></a>
-                        </td>
-                        <td>
-                            <a href="" ng-bind="vm.hypervisorHostname"></a>
-                        </td>
-                        <td>
-                            <a href="" ng-bind="vm.tenantName"></a>
-                        </td>
+                        <td ng-bind="vm.name"></td>
+                        <td ng-bind="vm.hypervisorHostname"></td>
+                        <td ng-bind="vm.tenantName"></td>
                         <td><span ng-repeat="ip in vm.ipAddr"><b>{{ip.name}}</b>:<br><ins><i>{{ip.fixedIP}},{{ip.floatingIP}}</i></ins><br></span></td>
                         <td ng-bind="vm.image"></td>
                         <td ng-bind="vm.configure"></td>
@@ -146,8 +182,20 @@
                             <th>
                                 <input type="checkbox" class="all_check1">
                             </th>
-                            <th>网络名称</th>
-                            <th>网络状态</th>
+                            <th>
+                                <a ng-click="sortNetType = 'name'; sorNetReverse = !sorNetReverse">
+                                    网络名称
+                                    <span ng-show="sortNetType == 'name' && !sorNetReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortNetType == 'name' && sorNetReverse" class="fa fa-caret-up"></span>
+                               </a>
+                            </th>
+                            <th>
+                                <a ng-click="sortNetType = 'status'; sorNetReverse = !sorNetReverse">
+                                    网络状态
+                                    <span ng-show="sortNetType == 'status' && !sorNetReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortNetType == 'status' && sorNetReverse" class="fa fa-caret-up"></span>
+                               </a>
+                            </th>
                             <th>连接的子网</th>
                             <th>管理员状态</th>
                             <th>Actions</th>
@@ -193,9 +241,27 @@
                             <th>
                                 <input type="checkbox" class="all_check1">
                             </th>
-                            <th>路由器名称</th>
-                            <th>路由器状态</th>
-                            <th>外部网络</th>
+                            <th>
+                                <a ng-click="sortRouteType = 'name'; sortRouteReverse = !sortRouteReverse">
+                                    路由器名称
+                                    <span ng-show="sortRouteType == 'name' && !sortRouteReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortRouteType == 'name' && sortRouteReverse" class="fa fa-caret-up"></span>
+                               </a>
+                            </th>
+                            <th>
+                                <a ng-click="sortRouteType = 'status'; sortRouteReverse = !sortRouteReverse">
+                                    路由器状态
+                                    <span ng-show="sortRouteType == 'status' && !sortRouteReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortRouteType == 'status' && sortRouteReverse" class="fa fa-caret-up"></span>
+                               </a>
+                            </th>
+                            <th>
+                                <a ng-click="sortRouteType = 'extName'; sortRouteReverse = !sortRouteReverse">
+                                    外部网络
+                                    <span ng-show="sortRouteType == 'extName' && !sortRouteReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortRouteType == 'extName' && sortRouteReverse" class="fa fa-caret-up"></span>
+                               </a>
+                            </th>
                             <th>管理员状态</th>
                             <th>Actions</th>
                         </tr>

@@ -32,10 +32,16 @@ angular.module('myApp')
                 // 租户资源
                 $scope.resource = [];
                 // 云主机
+                $scope.sortType = 'name';
+                $scope.sortReverse = false;
                 $scope.vms = [];
                 // 网络
+                $scope.sortNetType = 'name';
+                $scope.sorNetReverse = false;
                 $scope.networks = [];
                 // 路由
+                $scope.sortRouteType = 'name';
+                $scope.sortRouteReverse = false;
                 $scope.routers = [];
             };
 
@@ -88,7 +94,6 @@ angular.module('myApp')
                         break;
                 }
             };
-
 
             // 选择特定租户
             $scope.getSelectTenant = function(tenantID) {
