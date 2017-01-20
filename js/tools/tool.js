@@ -13,7 +13,13 @@ $(function() {
         }, 10 * 60 * 1000);
     });
 });
-
+$("#lagout").click(function() {
+    alert(123);
+    $('#myModal').modal('toggle')
+    window.localStorage.clear();
+    // location.href = "#/";
+    location.reload();
+});
 //----分页
 function setColor(pagenum) {
     $("li a[flag='project']").attr("style", { "display": "none" });

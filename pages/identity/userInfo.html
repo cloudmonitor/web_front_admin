@@ -56,13 +56,14 @@
                     <td>{{info.enabled}}</td>
                     <td>
                         <div class='btn-group'>
-                            <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="editUser()">编辑</button>
+                            <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="editUser(info)">编辑</button>
                             <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
                                 <span class='caret'></span>
                             </button>
                             <ul class='dropdown-menu' role='menu' style='z-index:1000'>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="editProject(info.id,info.name,info.description,info.enabled)">修改密码</a></li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">禁用用户</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="editPassword(info)">修改密码</a></li>
+                                <li role="presentation" ng-show="info.enabled"><a role="menuitem" tabindex="-1" ng-click="disabledUser(info)">禁用用户</a></li>
+                                <li role="presentation" ng-show="!info.enabled"><a role="menuitem" tabindex="-1" ng-click="disabledUser(info)">激活用户</a></li>
                                 <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteProject(info.id)"><span style="color:red">删除用户</span></a></li>
                             </ul>
                         </div>
@@ -78,13 +79,14 @@
                     <td>{{info.enabled}}</td>
                     <td>
                         <div class='btn-group'>
-                            <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="editUser()">编辑</button>
+                            <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="editUser(info)">编辑</button>
                             <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
                                 <span class='caret'></span>
                             </button>
                             <ul class='dropdown-menu' role='menu' style='z-index:1000'>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="editProject(info.id,info.name,info.description,info.enabled)">修改密码</a></li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">禁用用户</a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="editPassword(info)">修改密码</a></li>
+                                <li role="presentation" ng-show="info.enabled"><a role="menuitem" tabindex="-1" ng-click="disabledUser(info)">禁用用户</a></li>
+                                <li role="presentation" ng-show="!info.enabled"><a role="menuitem" tabindex="-1" ng-click="disabledUser(info)">激活用户</a></li>
                                 <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteProject(info.id)"><span style="color:red">删除用户</span></a></li>
                             </ul>
                         </div>
@@ -127,25 +129,25 @@
                     <div class="col-sm-6">
                         <form>
                             <div>
-                                <div class="form-group userNameCheck">
+                                <div class="form-group userNameCheck ">
                                     <label class="control-label">用户名<span class="span-stand"> *</span></label>
-                                    <input class="form-control userNameCheckplaceholder" ng-model="userName">
+                                    <input class="form-control userNameCheckplaceholder " ng-model="userName">
                                 </div>
-                                <div class="form-group ">
+                                <div class="form-group " ng-show="updatePassword">
                                     <label class="control-label">邮箱</label>
-                                    <input class="form-control emailplaceholder" ng-model="userEmail">
+                                    <input type="email" class="form-control emailplaceholder" ng-model="userEmail">
                                 </div>
-                                <div class="form-group  has-feedback userPasswordCheck">
+                                <div class="form-group  has-feedback userPasswordCheck" ng-show="updataOrCreate">
                                     <label class="control-label" for="inputSuccess2">密码<span class="span-stand"> *</span></label>
                                     <input type="text" class="form-control  userPasswordplaceholder" id="inputSuccess2" ng-model="userPassword">
                                     <span class="fa fa-eye-slash form-control-feedback" style="margin-top:3%"></span>
                                 </div>
-                                <div class="form-group has-feedback userPasswordAgainCheck">
+                                <div class="form-group has-feedback userPasswordAgainCheck" ng-show="updataOrCreate">
                                     <label class="control-label">确认密码<span class="span-stand"> *</span></label>
                                     <input class="form-control projectNameplaceholder userPasswordAgainplaceholder" ng-model="userPasswordAgain">
                                     <span class="fa fa-eye form-control-feedback" style="margin-top:3%"></span>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" ng-show="updatePassword">
                                     <label class="control-label">主项目<span class="span-stand"> *</span></label>
                                     <div class="input-group">
                                         <select class="form-control projectSelect">
@@ -153,12 +155,6 @@
                                         </select>
                                         <span class="input-group-addon"><i class="fa fa-plus"></i></span>
                                     </div>
-                                    <!-- <div class="form-group has-feedback">
-    <label class="control-label">角色<span class="span-stand"> *</span></label>
-    <input class="form-control projectNameplaceholder" ng-model="userRole">
-    <span class="fa fa-sort-down form-control-feedback" style="margin-top:3%"></span>
-</div>
- -->
                                 </div>
                             </div>
                         </form>
@@ -167,9 +163,13 @@
                         <H3>说明：</H3>创建一个新用户，并设置相关的属性，例如该用户的主项目和角色。
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" ng-show="updataOrCreate&&updatePassword">
                     <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelCreate()">取消</button>
                     <button type="button" class="btn btn-primary" ng-click="createProjectOK()">创建用户</button>
+                </div>
+                <div class="modal-footer" ng-show="!updataOrCreate || !updatePassword">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelCreate()">取消</button>
+                    <button type="button" class="btn btn-primary" ng-click="createProjectOK()">保存</button>
                 </div>
             </div>
             <!-- /.modal-content -->
