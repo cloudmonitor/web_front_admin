@@ -14,61 +14,68 @@ abstractCtrl.controller('abstractController', function($scope, $http, $route) {
     $scope.$parent.loadScript('js/config.js');
     // $scope.$parent.loadScript('js/index.js');
     $scope.$parent.loadScript('js/tools/tool.js');
+    Date.prototype.Format = function(fmt) { //author: meizz 
+        var o = {
+            "M+": this.getMonth() + 1, //月份 
+            "d+": this.getDate(), //日 
+            "h+": this.getHours(), //小时 
+            "m+": this.getMinutes(), //分 
+            "s+": this.getSeconds(), //秒 
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+            "S": this.getMilliseconds() //毫秒 
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+    $scope.startTime = "2017-01-01";
+    $scope.endTime = new Date().Format("yyyy-MM-dd");
+    $('#datetimepicker').datetimepicker({
+        format: 'yyyy-mm-dd',
+        sweekStart: 0,
+        autoclose: true,
+        startView: 2,
+        minView: 2,
+        startDate: $scope.startTime,
+        maxView: new Date(),
+        endDate: new Date()
+    });
+    $('#datetimepicker1').datetimepicker({
+        format: 'yyyy-mm-dd',
+        sweekStart: 0,
+        autoclose: true,
+        startView: 2,
+        minView: 2,
+        startDate: $scope.startTime,
+        endDate: new Date(),
+        maxView: new Date()
+    });
 
-    var chart_data;
+    $scope.usages = [];
+    $scope.numInfos = [];
+    var queryInfo = function() {
+        var startTime = (new Date($scope.startTime) > new Date($scope.endTime) ? $scope.endTime : $scope.startTime) + " 00:00:00.000000";
+        var endTime = (new Date($scope.startTime) < new Date($scope.endTime) ? $scope.endTime : $scope.startTime) + " 00:00:00.000000";
+        console.log(startTime, endTime);
+        $.ajax({
+            type: "GET",
+            url: config['host'] + "/v1.0/admin/abstract?token=" + window.localStorage.token + "&start_time=" + startTime + "&end_time=" + endTime,
+            success: function(data) {
+                console.log(data);
+                $scope.usages = JSON.parse(data).tenant_usages;
+                // console.log($scope.usages);
+                $scope.numInfos = JSON.parse(data).num_info;
+                // console.log($scope.numInfos);
+                $scope.simplePageCount = $scope.usages.length;
+            },
+            error: function() {
+                createAndHideAlert({
+                    "message": "操作失败！",
+                    "className": "alert-danger"
+                });
+            }
+        });
+    }();
 
-    // // 获取资源配额
-    // var getResList = function() {
-    //     // 资源名称
-    //     var nameHybid = {
-    //         "nameUS": ["subnet", "network", "floatingip", "ram", "security_group_rule", "instances", "cores", "security_group", "router", "port"],
-    //         "nameZH": ["子网", "网络", "浮动IP", "内存", "安全组规则", "云主机数", "虚拟内核", "安全组", "路由", "端口"]
-    //     };
-    //     // console.info("名字对象", nameHybid);
-    //     // var userID = JSON.parse(localStorage.token).tenant.id;
-    //     // console.info("用户ID:", userID);
-    //     // var url = config.monitor + "/tenant_quota?token=" + window.localStorage.token;
-    //     var url = config.host + "/tenant_used_quota?token=" + window.localStorage.token;
-    //     // var url = "abstract.txt";
-    //     // 请求资源总额
-    //     var resTotal = {};
-    //     var resUsed = {};
-    //     $http.get(url).then(
-    //         function(response) {
-    //             // 请求成功
-    //             var data = response.data;
-    //             resTotal = data.total;
-    //             resUsed = data.used;
-    //             // console.info("资源总额:", resTotal);
-    //             // console.info("资源使用:", resUsed);
-    //             var resQuota = [];
-    //             for (var i = 0, len = nameHybid.nameZH.length; i < len; i++) {
-    //                 var ele = [];
-    //                 var name = nameHybid.nameUS[i];
-    //                 // 存放名称
-    //                 ele[0] = nameHybid.nameZH[i];
-    //                 // 存放已使用
-    //                 ele[1] = resUsed[name];
-    //                 // 存放总的数额
-    //                 ele[2] = resTotal[name];
-    //                 // 存放百分比
-    //                 ele[3] = ((ele[2] != 0) ? (Math.round(ele[1] / ele[2] * 100) + "%") : 0);
-    //                 resQuota.push(ele);
-    //             }
-    //             // console.info("资源配额:", resQuota);
-    //             $scope.resList = resQuota;
-    //         },
-    //         function(response) {
-    //             // 请求失败
-    //             console.error("资源总额请求失败");
-    //             $scope.resList = [];
-    //         }
-    //     );
-    // };
-    // if (index_flag == 0) {
-    //     setTimeout(getResList, 1200);
-    //     index_flag++;
-    // } else{
-    //     getResList();
-    // }
 });

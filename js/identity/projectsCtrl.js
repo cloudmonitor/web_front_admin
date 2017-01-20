@@ -391,4 +391,7 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
             $(".deleteProject").attr("disabled", true);
         }
     });
+}).controller('projectsDetailController', function($scope, $routeParams) {
+    var info = $routeParams.projectInfo;
+    $scope.projectName = info.name;
 });

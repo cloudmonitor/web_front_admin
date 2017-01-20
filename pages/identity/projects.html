@@ -49,7 +49,7 @@
                 <td>
                     <input type='checkbox' class='project_checks' id="{{info.id}}">
                 </td>
-                <td><a href="#/{{info.id}}" style="cursor: pointer;">{{info.name}}</a></td>
+                <td><a href="#/identity/projects/detail/{{info}}" style="cursor: pointer;">{{info.name}}</a></td>
                 <td>{{info.description}}</td>
                 <td>{{info.id}}</td>
                 <td>{{info.enabled}}</td>
@@ -72,7 +72,7 @@
                 <td>
                     <input type='checkbox' class='project_checks' id="{{info.id}}">
                 </td>
-                <td><a href="#/{{info.id}}" style="cursor: pointer;">{{info.name}}</a></td>
+                <td><a href="#/identity/projects/detail/{{info}}" style="cursor: pointer;">{{info.name}}</a></td>
                 <td>{{info.description}}</td>
                 <td>{{info.id}}</td>
                 <td>{{info.enabled}}</td>
@@ -93,7 +93,7 @@
             </tr>
         </tbody>
         <tfoot>
-            <tr ng-if="!simplePageCount">
+            <tr ng-if="!simplePageCount" class="active tfoot-dsp">
                 <td class="text-center" colspan="6">没有可显示的项目</td>
             </tr>
             <tr ng-if="simplePageCount" class="active tfoot-dsp">

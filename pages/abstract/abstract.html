@@ -1,12 +1,128 @@
 <!-- 内容显示界面 -->
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <div class="desc">概况</div>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 ">
+    <div class="subHeader">概况</div>
     <div class="form-group" style="float:right">
         <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
     </div>
     <div class="row">
-        <div id="main1" class="col-md-2 echart-dsp"></div>
-
+        <div class="col-lg-9 col-md-10">
+            <div class="col-lg-3 col-md-6" ng-repeat="numInfo in numInfos">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-comments fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">
+                                    <h3>{{numInfo.number}}</h3></div>
+                                <div>{{numInfo.name}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#">
+                        <div class="panel-footer">
+                            <span class="pull-left">View Details</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-
+    <div class="row">
+        <h3>&nbsp;&nbsp;&nbsp;Select a period of time to query its usage:</h3>
+    </div>
+    <form class="form-horizontal">
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">From：</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="startTime" id="datetimepicker">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">To：</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" ng-model="endTime" id="datetimepicker1">
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-click="queryInfo()">Submit</button>
+                <label>The date should be in YYYY-mm-dd format.</label>
+            </div>
+        </div>
+    </form>
+    <div class="row"></div>
+    <div class="row">
+        <div style="margin-left:2%">
+            <h4>用量</h4></div>
+    </div>
+    <div class="row col-sm-12">
+        <table class="table table-striped instance_info table-bordered ">
+            <thead>
+                <tr>
+                    <th ng-click="sortType = 'name'; sortReverse_name = !sortReverse_name;sortReverse=sortReverse_name">
+                        项目名称
+                        <span ng-show="sortType == 'name' && sortReverse_name" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'name' && !sortReverse_name" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                    <th ng-click="sortType = 'description'; sortReverse_desc = !sortReverse_desc;sortReverse=sortReverse_desc">
+                        虚拟内核
+                        <span ng-show="sortType == 'description' && sortReverse_desc" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'description' && !sortReverse_desc" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                    <th ng-click="sortType = 'id'; sortReverse_proId = !sortReverse_proId;sortReverse=sortReverse_proId">
+                        磁盘
+                        <span ng-show="sortType == 'id' && sortReverse_proId" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'id' && !sortReverse_proId" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                    <th ng-click="sortType = 'enabled'; sortReverse_enabled = !sortReverse_enabled;sortReverse=sortReverse_enabled">
+                        内存
+                        <span ng-show="sortType == 'enabled' && sortReverse_enabled" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'enabled' && !sortReverse_enabled" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                    <th ng-click="sortType = 'enabled'; sortReverse_corehours = !sortReverse_corehours;sortReverse=sortReverse_corehours">
+                        虚拟内核小时数
+                        <span ng-show="sortType == 'enabled' && sortReverse_corehours" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'enabled' && !sortReverse_corehours" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                    <th ng-click="sortType = 'enabled'; sortReverse_diskGB = !sortReverse_diskGB;sortReverse=sortReverse_diskGB">
+                        磁盘GB小时数
+                        <span ng-show="sortType == 'enabled' && sortReverse_diskGB" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'enabled' && !sortReverse_diskGB" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                    <th ng-click="sortType = 'enabled'; sortReverse_memGB = !sortReverse_memGB;sortReverse=sortReverse_memGB">
+                        内存MB小时
+                        <span ng-show="sortType == 'enabled' && sortReverse_memGB" class="fa fa-caret-up" style="float:right"></span>
+                        <span ng-show="sortType == 'enabled' && !sortReverse_memGB" class="fa fa-caret-down" style="float:right"></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="usage in usages | orderBy:sortType:sortReverse">
+                    <td>{{usage.tenant_name}}</td>
+                    <td>{{usage.vcpus}}</td>
+                    <td>{{usage.local_gb}}</td>
+                    <td>{{usage.memory_mb}}</td>
+                    <td>{{usage.total_vcpus_usage}}</td>
+                    <td>{{usage.total_local_gb_usage}}</td>
+                    <td>{{usage.total_memory_mb_usage}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr ng-if="!simplePageCount" class="active tfoot-dsp">
+                    <td class="text-center" colspan="7">没有可显示的项目</td>
+                </tr>
+                <tr ng-if="simplePageCount" class="active tfoot-dsp">
+                    <td colspan="7">Displaying {{ simplePageCount }} / {{item_count}} items</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </div>

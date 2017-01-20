@@ -9,6 +9,10 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/abstract/abstract.html',
             controller: 'abstractController'
         })
+        .when('/identity/projects/detail/:projectInfo', {
+            templateUrl: 'pages/identity/projects_detail.html',
+            controller: 'projectsDetailController'
+        })
         .when('/identity/projects', {
             templateUrl: 'pages/identity/projects.html',
             controller: 'projectsController'
