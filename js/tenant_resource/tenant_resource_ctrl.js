@@ -2,6 +2,7 @@
 angular.module('myApp')
     .controller('TenantResourceCtrl', ['$scope', '$http', 'TenantService',
         function($scope, $http, TenantService) {
+            $scope.$parent.loadScript('js/tools/tool.js');
             // 获取租户列表
             var url = config['host'] + '/v1.0/admin/tenants',
                 tabLoaded = [false, false, false, false],
