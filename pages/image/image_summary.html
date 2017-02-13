@@ -1,0 +1,78 @@
+<!-- 镜像界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <!-- 物理主机资源使用 -->
+    <div class="desc">镜像</div>
+    <table class="table table-striped table-bordered">
+        <caption>镜像列表</caption>
+        <thead>
+            <tr>
+                <!-- <th>
+                    <input type="checkbox">
+                </th> -->
+                <th>
+                    <a ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                        镜像名称
+                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th>
+                    <a ng-click="sortType = 'status'; sortReverse = !sortReverse">
+                        状态
+                        <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th>
+                    <a ng-click="sortType = 'visibility'; sortReverse = !sortReverse">
+                        公有
+                        <span ng-show="sortType == 'visibility' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'visibility' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th>
+                    <a ng-click="sortType = 'protected'; sortReverse = !sortReverse">
+                        受保护的
+                        <span ng-show="sortType == 'protected' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'protected' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th>
+                    <a ng-click="sortType = 'disk_format'; sortReverse = !sortReverse">
+                        镜像格式
+                        <span ng-show="sortType == 'disk_format' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'disk_format' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+                <th>
+                    <a ng-click="sortType = 'size'; sortReverse = !sortReverse">
+                        配置
+                        <span ng-show="sortType == 'size' && !sortReverse" class="fa fa-caret-down"></span>
+                        <span ng-show="sortType == 'size' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr dir-paginate="image in images | orderBy:sortType:sortReverse | itemsPerPage: itemPerPage as result track by $index " current-page="currentPage">
+                <!-- <td>
+                    <input type="checkbox">
+                </td> -->
+                <td ng-bind="image.name"></td>
+                <td ng-bind="image.status"></td>
+                <td ng-bind="image.visibility"></td>
+                <td ng-bind="image.protected"></td>
+                <td ng-bind="image.disk_format"></td>
+                <td ng-bind="image.size"></td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="active tfoot-dsp">
+                <td colspan="11">Displaying {{ result.length }} </td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="text-center">
+        <dir-pagination-controls boundary-links="true" template-url="pages/cloud_hosts/dirPagination.tpl.html"></dir-pagination-controls>
+    </div>
+</div>
