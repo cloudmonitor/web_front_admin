@@ -28,12 +28,27 @@ angular.module('myApp')
             $scope.sortReverse = false;
 
             var url = config['host'] + '/v1.0/admin/all_instances';
-
+            
             CloudService.getCloudList(url)
                 .then(function(response) {
                     $scope.vms = response.data;
                 }, function(response) {
                     console.error('请求错误');
                 });
+
+            // 编辑云主机
+            $scope.editCloudHost = function(index) {
+                $scope.tenant = {
+                    name: $scope.vms[index].tenantName,
+                    index: index
+                }
+            };
+
+            $scope.saveChange = function(tenant) {
+                if (tenant.name !== $scope.vms[tenant.index].tenantName) {
+                    console.log('名称已改变');
+                }
+                $('#editHostModal').modal('hide');
+            };
         }
     ]);
