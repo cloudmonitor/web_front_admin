@@ -104,7 +104,6 @@ angular.module('myApp')
                 getTabIndexContent();
             };
 
-
             $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
                 // 获取已激活的标签页的名称
                 var activeTab = $(e.target).text();
