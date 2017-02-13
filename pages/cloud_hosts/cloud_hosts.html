@@ -23,9 +23,9 @@
         <br>
         <thead>
             <tr>
-                <th>
+<!--                 <th>
                     <input type="checkbox">
-                </th>
+                </th> -->
                 <th>
                     <a ng-click="sortType = 'name'; sortReverse = !sortReverse">
                         云主机名
@@ -77,14 +77,14 @@
                     </a>
                 </th>
                 <th>从创建以来</th>
-                <th>Actions</th>
+                <!-- <th>Actions</th> -->
             </tr>
         </thead>
         <tbody>
             <tr dir-paginate="vm in vms | orderBy:sortType:sortReverse | cloudHostsFilter: search | itemsPerPage: itemPerPage as result track by $index " current-page="currentPage">
-                <td>
+<!--                 <td>
                     <input type="checkbox">
-                </td>
+                </td> -->
                 <td ng-bind="vm.name"></td>
                 <td ng-bind="vm.hypervisorHostname"></td>
                 <td ng-bind="vm.tenantName"></td>
@@ -94,7 +94,7 @@
                 <td ng-bind="vm.availableScope"></td>
                 <td ng-bind="vm.status"></td>
                 <td ng-bind="vm.lastTime"></td>
-                <td>
+<!--                 <td>
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editHostModal" ng-click="editCloudHost($index)">编辑云主机</button>
                         <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -104,7 +104,7 @@
                             <li><a href="">控制台</a></li>
                         </ul>
                     </div>
-                </td>
+                </td> -->
             </tr>
         </tbody>
         <tfoot>

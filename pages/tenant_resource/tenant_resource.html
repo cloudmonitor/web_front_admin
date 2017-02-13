@@ -77,9 +77,9 @@
                 <br>
                 <thead>
                     <tr>
-                        <th>
+                        <!-- <th>
                             <input type="checkbox">
-                        </th>
+                        </th> -->
                         <th>
                             <a ng-click="sortType = 'name'; sortReverse = !sortReverse">
                         云主机名
@@ -136,9 +136,9 @@
                 </thead>
                 <tbody>
                     <tr dir-paginate="vm in vms | orderBy:sortType:sortReverse | cloudHostsFilter: search | itemsPerPage: itemPerPage as result track by $index " current-page="currentPage">
-                        <td>
+                        <!-- <td>
                             <input type="checkbox">
-                        </td>
+                        </td> -->
                         <td ng-bind="vm.name"></td>
                         <td ng-bind="vm.hypervisorHostname"></td>
                         <td ng-bind="vm.tenantName"></td>
@@ -179,9 +179,9 @@
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>
+<!--                             <th>
                                 <input type="checkbox" class="all_check1">
-                            </th>
+                            </th> -->
                             <th>
                                 <a ng-click="sortNetType = 'name'; sorNetReverse = !sorNetReverse">
                                     网络名称
@@ -203,9 +203,9 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="net in networks">
-                            <td>
+                            <!-- <td>
                                 <input type="checkbox">
-                            </td>
+                            </td> -->
                             <td ng-bind="net.name"></td>
                             <td ng-bind="net.status"></td>
                             <td ng-if="net.subnet.length"><span ng-repeat="sub in net.subnet"><b>{{sub.name}}:</b>
@@ -238,9 +238,9 @@
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>
+<!--                             <th>
                                 <input type="checkbox" class="all_check1">
-                            </th>
+                            </th> -->
                             <th>
                                 <a ng-click="sortRouteType = 'name'; sortRouteReverse = !sortRouteReverse">
                                     路由器名称
@@ -268,9 +268,9 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="route in routes">
-                            <td>
+                            <!-- <td>
                                 <input type="checkbox">
-                            </td>
+                            </td> -->
                             <td ng-bind="route.name"></td>
                             <td ng-bind="route.status"></td>
                             <td ng-bind="route.extName"></td>

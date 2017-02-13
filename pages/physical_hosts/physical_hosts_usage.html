@@ -6,9 +6,9 @@
         <caption>资源使用情况</caption>
         <thead>
             <tr>
-                <th>
+                <!-- <th>
                     <input type="checkbox">
-                </th>
+                </th> -->
                 <th>
                     <a ng-click="sortType = 'hypervisor_hostname'; sortReverse = !sortReverse">
                         物理主机
@@ -76,9 +76,9 @@
         </thead>
         <tbody>
             <tr dir-paginate="hypervisor in hypervisors | orderBy:sortType:sortReverse | itemsPerPage: itemPerPage as result track by $index " current-page="currentPage">
-                <td>
+                <!-- <td>
                     <input type="checkbox">
-                </td>
+                </td> -->
                 <td ng-bind="hypervisor.hypervisor_hostname"></td>
                 <td ng-bind="hypervisor.hypervisor_type"></td>
                 <td ng-bind="hypervisor.running_vms"></td>
