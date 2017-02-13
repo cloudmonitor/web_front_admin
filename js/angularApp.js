@@ -53,6 +53,10 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/monitor/tenant_traffic.html',
             controller: 'TenantTrafficCtrl'
         })
+        .when('/tenant/resource/:tenantId', {
+            templateUrl: 'pages/tenant_resource/tenant_resource.html',
+            controller: 'TenantResourceCtrl'
+        })
         .otherwise({
             redirectTo: '/'
         });
