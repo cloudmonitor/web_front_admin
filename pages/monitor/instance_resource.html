@@ -1,0 +1,50 @@
+<div id="loading_monitor">数据加载中，请稍等...<img src="./icon/preloader.gif" alt="loading.." /></div>
+<div id="background_monitor" class="background" style="display: none;"></div>
+<!-- 内容显示界面 -->
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main content_wj">
+    <div class="desc">
+        云主机监控
+        <span class="select_device">云主机</span>
+        <select class="form-control monitor-device monitors_wj" style="width:140px">
+        </select>
+        <!-- 按钮选项 -->
+        <div class="btn-group form-btn ">
+            <label class="btn btn-primary btn-sm active" id="option1">
+                按分钟
+            </label>
+            <label class="btn btn-primary btn-sm" id="option2">
+                按小时
+            </label>
+            <label class="btn btn-primary btn-sm" id="option3">
+                按 天
+            </label>
+        </div>
+    </div>
+    <div class="form-group row" style="float:right">
+        <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
+    </div>
+    <!--     <input type="button" name="temp1" id="temp1">
+<input type="hidden" name="temp2" id="temp2">
+<input type="hidden" name="temp3" id="temp3"> -->
+    <div class="row">
+        <div id="chart1" class="col-md-12 monitor-chart"></div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <div id="chart2" class="col-md-12 monitor-chart"></div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <div id="chart3" class="col-md-12 monitor-chart"></div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <div id="chart4" class="col-md-12 monitor-chart"></div>
+    </div>
+    <br>
+    <br>
+</div>

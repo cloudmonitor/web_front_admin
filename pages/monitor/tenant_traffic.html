@@ -1,0 +1,49 @@
+<div id="loading_monitor">数据加载中，请稍等...<img src="./icon/preloader.gif" alt="loading.." /></div>
+<div id="background_monitor" class="background" style="display: none;"></div>
+<!-- 内容显示界面 -->
+<!-- 内容显示界面 -->
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main tenant_traffic">
+    <div class="desc">
+        租户流量监控
+        <span class="select_device">租户</span>
+        <select class="form-control monitor-device monitor_tenant_traffic" style="width:140px">
+        </select>
+        <!-- 按钮选项 -->
+        <div class="btn-group form-btn ">
+            <label class="btn btn-primary btn-sm active" id="option1">
+                最近10分钟
+            </label>
+            <label class="btn btn-primary btn-sm" id="option2">
+                最近10小时
+            </label>
+            <label class="btn btn-primary btn-sm" id="option3">
+                最近10天
+            </label>
+        </div>
+    </div>
+    <div class="row">
+    <div class="form-group" style="float:right">
+        <button type="button" class="btn btn-primary" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
+    </div>
+    </div>
+    <!--     <input type="button" name="temp1" id="temp1">
+<input type="hidden" name="temp2" id="temp2">
+<input type="hidden" name="temp3" id="temp3"> -->
+    <div class="row">
+        <div id="tenant_top_instance" class="col-md-6 monitor-chart"></div>
+        <div id="tenant_top_protocol_port" class="col-md-6 monitor-chart"></div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div id="tenant_top_ip" class="col-md-6 monitor-chart"></div>
+        <div id="tenant_top_ip_link" class="col-md-6 monitor-chart"></div>
+    </div>
+    <br />
+    <br />
+    <div class="row">
+        <div id="tenant_top_session" class="col-md-12 monitor-chart" style="height: 500px;"></div>
+    </div>
+    <br />
+    <br />
+</div>
