@@ -87,7 +87,7 @@
                 </td> -->
                 <td ng-bind="vm.name"></td>
                 <td ng-bind="vm.hypervisorHostname"></td>
-                <td ng-bind="vm.tenantName"></td>
+                <td><a href="#/tenant/resource/{{vm.tenantId}}">{{vm.tenantName}}</a></td>
                 <td><span ng-repeat="ip in vm.ipAddr"><b>{{ip.name}}</b>:<br><ins><i>{{ip.fixedIP}},{{ip.floatingIP}}</i></ins><br></span></td>
                 <td ng-bind="vm.image"></td>
                 <td ng-bind="vm.configure"></td>

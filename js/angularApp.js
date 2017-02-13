@@ -41,6 +41,10 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/tenant_resource/tenant_resource.html',
             controller: 'TenantResourceCtrl'
         })
+        .when('/tenant/resource/:tenantId', {
+            templateUrl: 'pages/tenant_resource/tenant_resource.html',
+            controller: 'TenantResourceCtrl'
+        })
         .otherwise({
             redirectTo: '/'
         });

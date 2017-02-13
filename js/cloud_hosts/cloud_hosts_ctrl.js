@@ -17,7 +17,7 @@ angular.module('myApp')
 
             return result
         };
-    })
+    }) 
     .controller('CloudHostsCtrl', ['$scope', '$http', 'CloudService',
         function($scope, $http, CloudService) {
             $scope.$parent.loadScript('js/tools/tool.js');
@@ -29,8 +29,10 @@ angular.module('myApp')
 
             var url = config['host'] + '/v1.0/admin/all_instances';
             
+            // 获取云主机列表
             CloudService.getCloudList(url)
                 .then(function(response) {
+                    console.log('请求结果: ', response.data);
                     $scope.vms = response.data;
                 }, function(response) {
                     console.error('请求错误');
@@ -44,6 +46,7 @@ angular.module('myApp')
                 }
             };
 
+            // 提交更改
             $scope.saveChange = function(tenant) {
                 if (tenant.name !== $scope.vms[tenant.index].tenantName) {
                     console.log('名称已改变');

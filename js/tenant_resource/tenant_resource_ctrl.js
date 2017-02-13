@@ -1,7 +1,7 @@
 // 租户资源 -- 控制器
 angular.module('myApp')
-    .controller('TenantResourceCtrl', ['$scope', '$http', 'TenantService',
-        function($scope, $http, TenantService) {
+    .controller('TenantResourceCtrl', ['$routeParams', '$scope', '$http', 'TenantService',
+        function($routeParams, $scope, $http, TenantService) {
             $scope.$parent.loadScript('js/tools/tool.js');
             // 获取租户列表
             var url = config['host'] + '/v1.0/admin/tenants',
@@ -20,6 +20,13 @@ angular.module('myApp')
             TenantService.getTenantList(url)
                 .then(function(response) {
                     $scope.tenants = response.data;
+                    // 跳转自云主机界面
+                    if (!!$routeParams.tenantId) {
+                        $scope.selected = $routeParams.tenantId;
+                    } else {
+                        $scope.selected = response.data[0].id;
+                    }
+                    getTabIndexContent();
                 }, function(response) {
                     // 请求失败
                     console.error('请求失败', response.data);
@@ -48,7 +55,7 @@ angular.module('myApp')
 
             // 获取某分页的内容
             var getTabIndexContent = function() {
-                if (tabLoaded[INDEX] || $scope.tenant.id == 'Null') {
+                if (tabLoaded[INDEX] || $scope.selected == 'Null') {
                     // 如果该分页内容已经加载
                     return;
                 }
@@ -56,7 +63,7 @@ angular.module('myApp')
                 switch (INDEX) {
                     case 0:
                         // 获取特定租户的资源使用概览
-                        var url = config['host'] + '/v1.0/admin/tenant/usage_abstract/' + $scope.tenant.id;
+                        var url = config['host'] + '/v1.0/admin/tenant/usage_abstract/' + $scope.selected;
                         TenantService.getResourceSummary(url)
                             .then(function(response) {
                                 $scope.resource = response.data;
@@ -67,7 +74,7 @@ angular.module('myApp')
                         break;
                     case 1:
                         // 加载特定用户云主机列表
-                        var url = config['host'] + '/v1.0/admin/tenant/instances/' + $scope.tenant.id;
+                        var url = config['host'] + '/v1.0/admin/tenant/instances/' + $scope.selected;
                         TenantService.getCloudList(url)
                             .then(function(response) {
                                 $scope.vms = response.data;
@@ -76,7 +83,7 @@ angular.module('myApp')
                         break;
                     case 2:
                         // 加载特定租户的网络信息
-                        var url = config['host'] + '/v1.0/admin/tenant/networks/' + $scope.tenant.id;
+                        var url = config['host'] + '/v1.0/admin/tenant/networks/' + $scope.selected;
                         TenantService.getNetInfo(url)
                             .then(function(response) {
                                 $scope.networks = response.data;
@@ -84,7 +91,7 @@ angular.module('myApp')
                         break;
                     case 3:
                         // 加载特定用户的路由器
-                        var url = config['host'] + '/v1.0/admin/tenant/routers/' + $scope.tenant.id;
+                        var url = config['host'] + '/v1.0/admin/tenant/routers/' + $scope.selected;
                         TenantService.getRoutes(url)
                             .then(function(response) {
                                 $scope.routes = response.data;
