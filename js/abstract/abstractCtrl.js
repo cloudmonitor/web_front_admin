@@ -54,7 +54,7 @@ abstractCtrl.controller('abstractController', function($scope, $http, $route) {
 
     $scope.usages = [];
     $scope.numInfos = [];
-    var queryInfo = function() {
+    $scope.queryInfo = function() {
         var startTime = (new Date($scope.startTime) > new Date($scope.endTime) ? $scope.endTime : $scope.startTime) + " 00:00:00.000000";
         var endTime = (new Date($scope.startTime) < new Date($scope.endTime) ? $scope.endTime : $scope.startTime) + " 00:00:00.000000";
         console.log(startTime, endTime);

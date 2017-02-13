@@ -14,10 +14,8 @@ $(function() {
     });
 });
 $("#lagout").click(function() {
-    alert(123);
     $('#myModal').modal('toggle')
     window.localStorage.clear();
-    // location.href = "#/";
     location.reload();
 });
 //----分页
@@ -34,7 +32,6 @@ function setColor(pagenum) {
 $(".nav-sidebar li a").unbind("click").on("click", function() {
     var curr_url = $(this).attr("href");
     setSideBarColor(curr_url);
-
 });
 
 var curr_url = '#' + window.location.href.split("#")[1];
@@ -52,17 +49,17 @@ if (curr_url == "#/") {
 
 function setSideBarColor(curr_url) {
     $(".nav-sidebar li a [href='" + curr_url + "']").click();
-    var linkEle = $(".nav-sidebar li  a[href!='" + curr_url + "']");
-    linkEle.css({
-        "color": "#337ab7",
-        "background-color": "transparent"
-    })
     $(".nav-sidebar a[href='" + curr_url + "']").click(function() {
         $(".nav-sidebar  a[href='" + curr_url + "']").css({
             "color": "#fff",
             "background-color": "#428bca"
         })
     });
+    var linkEle = $(".nav-sidebar li  a[href!='" + curr_url + "']");
+    linkEle.css({
+        "color": "#337ab7",
+        "background-color": "transparent"
+    })
 }
 //------侧边栏状态end
 function pretty_adrr(addrs_temp) {
