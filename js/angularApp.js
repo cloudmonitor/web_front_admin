@@ -33,6 +33,10 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/physical_hosts/physical_hosts_usage.html',
             controller: 'physicalHostsUsageCtrl'
         })
+        .when('/image/summary', {
+            templateUrl: 'pages/image/image_summary.html',
+            controller: 'imageSummaryCtrl'
+        })
         .when('/tenant/resource', {
             templateUrl: 'pages/tenant_resource/tenant_resource.html',
             controller: 'TenantResourceCtrl'
