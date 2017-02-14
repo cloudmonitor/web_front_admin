@@ -32,6 +32,7 @@ angular.module('myApp')
                     value.protected = value.protected ? 'True' : 'False';
                     value.disk_format = value.disk_format.toUpperCase();
                     value.size = getReadableSize(value.size);
+                    value.image_type = !!value.image_type ? '快照': '镜像';
                 });
                 response.data = response.data.images;
                 defered.resolve(response);

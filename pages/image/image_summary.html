@@ -14,6 +14,11 @@
                     <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down pull-right"></span>
                     <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
+                <th ng-click="sortType = 'image_type'; sortReverse = !sortReverse">
+                    类型
+                    <span ng-show="sortType == 'image_type' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'image_type' && sortReverse" class="fa fa-caret-up pull-right"></span>
+                </th>
                 <th ng-click="sortType = 'status'; sortReverse = !sortReverse">
                     状态
                     <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down pull-right"></span>
@@ -47,6 +52,7 @@
                     <input type="checkbox">
                 </td> -->
                 <td ng-bind="image.name"></td>
+                <td ng-bind="image.image_type"></td>
                 <td ng-bind="image.status"></td>
                 <td ng-bind="image.visibility"></td>
                 <td ng-bind="image.protected"></td>
