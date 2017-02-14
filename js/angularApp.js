@@ -41,6 +41,18 @@ myApp.config(function($routeProvider) {
             templateUrl: 'pages/tenant_resource/tenant_resource.html',
             controller: 'TenantResourceCtrl'
         })
+        .when('/monitor/instance_resource', {
+            templateUrl: 'pages/monitor/instance_resource.html',
+            controller: 'InstanceResourceCtrl'
+        })
+        .when('/monitor/instance_traffic', {
+            templateUrl: 'pages/monitor/instance_traffic.html',
+            controller: 'InstanceTrafficCtrl'
+        })
+        .when('/monitor/tenant_traffic', {
+            templateUrl: 'pages/monitor/tenant_traffic.html',
+            controller: 'TenantTrafficCtrl'
+        })
         .when('/tenant/resource/:tenantId', {
             templateUrl: 'pages/tenant_resource/tenant_resource.html',
             controller: 'TenantResourceCtrl'
