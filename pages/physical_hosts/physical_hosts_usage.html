@@ -1,4 +1,4 @@
-<!-- 云主机界面 -->
+<!-- 物理主机界面 -->
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <!-- 物理主机资源使用 -->
     <div class="desc">物理主机</div>
@@ -9,68 +9,50 @@
                 <!-- <th>
                     <input type="checkbox">
                 </th> -->
-                <th>
-                    <a ng-click="sortType = 'hypervisor_hostname'; sortReverse = !sortReverse">
-                        物理主机
-                        <span ng-show="sortType == 'hypervisor_hostname' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'hypervisor_hostname' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'hypervisor_hostname'; sortReverse = !sortReverse">
+                    物理主机
+                    <span ng-show="sortType == 'hypervisor_hostname' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'hypervisor_hostname' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'hypervisor_type'; sortReverse = !sortReverse">
-                        虚拟化类型
-                        <span ng-show="sortType == 'hypervisor_type' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'hypervisor_type' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'hypervisor_type'; sortReverse = !sortReverse">
+                    虚拟化类型
+                    <span ng-show="sortType == 'hypervisor_type' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'hypervisor_type' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'running_vms'; sortReverse = !sortReverse">
-                        云主机
-                        <span ng-show="sortType == 'running_vms' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'running_vms' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'running_vms'; sortReverse = !sortReverse">
+                    云主机
+                    <span ng-show="sortType == 'running_vms' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'running_vms' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'vcpus'; sortReverse = !sortReverse">
-                        vcpu
-                        <span ng-show="sortType == 'vcpus' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'vcpus' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'vcpus'; sortReverse = !sortReverse">
+                    vcpu
+                    <span ng-show="sortType == 'vcpus' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'vcpus' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'vcpus_used'; sortReverse = !sortReverse">
-                        已用vcpu
-                        <span ng-show="sortType == 'vcpus_used' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'vcpus_used' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'vcpus_used'; sortReverse = !sortReverse">
+                    已用vcpu
+                    <span ng-show="sortType == 'vcpus_used' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'vcpus_used' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'tenantName'; sortReverse = !sortReverse">
-                        总内存(mb)
-                        <span ng-show="sortType == 'tenantName' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'tenantName' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'tenantName'; sortReverse = !sortReverse">
+                    总内存(mb)
+                    <span ng-show="sortType == 'tenantName' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'tenantName' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'memory_mb'; sortReverse = !sortReverse">
-                        已用内存(mb)
-                        <span ng-show="sortType == 'memory_mb' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'memory_mb' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'memory_mb'; sortReverse = !sortReverse">
+                    已用内存(mb)
+                    <span ng-show="sortType == 'memory_mb' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'memory_mb' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'local_gb'; sortReverse = !sortReverse">
-                        硬盘容量(gb)
-                        <span ng-show="sortType == 'local_gb' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'local_gb' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'local_gb'; sortReverse = !sortReverse">
+                    硬盘容量(gb)
+                    <span ng-show="sortType == 'local_gb' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'local_gb' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'local_gb_used'; sortReverse = !sortReverse">
-                        已使用硬盘(gb)
-                        <span ng-show="sortType == 'local_gb_used' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'local_gb_used' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'local_gb_used'; sortReverse = !sortReverse">
+                    已使用硬盘(gb)
+                    <span ng-show="sortType == 'local_gb_used' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'local_gb_used' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
             </tr>
         </thead>

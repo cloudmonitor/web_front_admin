@@ -52,6 +52,7 @@ angular.module('myApp')
                             name: data[i].name,
                             hypervisorHostname: data[i]['OS-EXT-SRV-ATTR:hypervisor_hostname'],
                             tenantName: data[i].tenant_name,
+                            tenantId: data[i].tenant_id,
                             ipAddr: [],
                             image: data[i].image.image_name,
                             configure: data[i].flavor.flavor_name,

@@ -23,78 +23,76 @@
         <br>
         <thead>
             <tr>
-<!--                 <th>
+                <!--                 <th>
                     <input type="checkbox">
                 </th> -->
-                <th>
-                    <a ng-click="sortType = 'name'; sortReverse = !sortReverse">
-                        云主机名
-                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                    云主机名
+                    <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'hypervisorHostname'; sortReverse = !sortReverse">
-                        物理主机名
-                        <span ng-show="sortType == 'hypervisorHostname' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'hypervisorHostname' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'hypervisorHostname'; sortReverse = !sortReverse">
+                    物理主机名
+                    <span ng-show="sortType == 'hypervisorHostname' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'hypervisorHostname' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'tenantName'; sortReverse = !sortReverse">
-                        租户名
-                        <span ng-show="sortType == 'tenantName' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'tenantName' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'tenantName'; sortReverse = !sortReverse">
+                    租户名
+                    <span ng-show="sortType == 'tenantName' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'tenantName' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
                 <th>IP地址</th>
-                <th>
-                    <a ng-click="sortType = 'image'; sortReverse = !sortReverse">
-                        镜像
-                        <span ng-show="sortType == 'image' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'image' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'image'; sortReverse = !sortReverse">
+                    镜像
+                    <span ng-show="sortType == 'image' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'image' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'configure'; sortReverse = !sortReverse">
-                        配置
-                        <span ng-show="sortType == 'configure' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'configure' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'configure'; sortReverse = !sortReverse">
+                    配置
+                    <span ng-show="sortType == 'configure' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'configure' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'availableScope'; sortReverse = !sortReverse">
-                        可用域
-                        <span ng-show="sortType == 'availableScope' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'availableScope' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'availableScope'; sortReverse = !sortReverse">
+                    可用域
+                    <span ng-show="sortType == 'availableScope' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'availableScope' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'availableScope'; sortReverse = !sortReverse">
-                        状态
-                        <span ng-show="sortType == 'availableScope' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'availableScope' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'availableScope'; sortReverse = !sortReverse">
+                    状态
+                    <span ng-show="sortType == 'availableScope' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'availableScope' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
                 <th>从创建以来</th>
-                <!-- <th>Actions</th> -->
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr dir-paginate="vm in vms | orderBy:sortType:sortReverse | cloudHostsFilter: search | itemsPerPage: itemPerPage as result track by $index " current-page="currentPage">
-<!--                 <td>
+                <!--                 <td>
                     <input type="checkbox">
                 </td> -->
                 <td ng-bind="vm.name"></td>
                 <td ng-bind="vm.hypervisorHostname"></td>
-                <td ng-bind="vm.tenantName"></td>
+                <td><a href="#/tenant/resource/{{vm.tenantId}}">{{vm.tenantName}}</a></td>
                 <td><span ng-repeat="ip in vm.ipAddr"><b>{{ip.name}}</b>:<br><ins><i>{{ip.fixedIP}},{{ip.floatingIP}}</i></ins><br></span></td>
                 <td ng-bind="vm.image"></td>
                 <td ng-bind="vm.configure"></td>
                 <td ng-bind="vm.availableScope"></td>
                 <td ng-bind="vm.status"></td>
                 <td ng-bind="vm.lastTime"></td>
-<!--                 <td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm">跳转</button>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="">资源监控</a></li>
+                            <li><a href="">流量监控</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <!--                 <td>
                     <div class="btn-group">
                         <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editHostModal" ng-click="editCloudHost($index)">编辑云主机</button>
                         <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
