@@ -16,13 +16,15 @@ abstractCtrl.controller('abstractController', function($scope, $http, $route) {
 
     $scope.usages = [];
     var curr_url = '#' + window.location.href.split("#")[1];
-    $scope.numInfos = [{ number: "0", name: "user_num", desc: "用户", color: "panel-info", photo: "fa-users", hrefURL: "#/identity/userInfo" },
-        { number: "0", name: "tenant_num", desc: "租户", color: "panel-warning", photo: "fa-tasks", hrefURL: "#/tenant/resource" },
-        { number: "0", name: "physical_num", desc: "物理主机", color: "panel-danger", photo: "fa-tasks", hrefURL: "#/physicalHosts/usage" },
-        { number: "0", name: "server_num", desc: "云主机", color: "panel-success", photo: "fa-desktop", hrefURL: "#/cloudHosts" },
-        { number: "0", name: "network_num", desc: "网络", color: "panel-primary", photo: "fa-internet-explorer", hrefURL: "#/tenant/resource" },
-        { number: "0", name: "subnet_num", desc: "子网", color: "panel-primary", photo: "fa-cogs", hrefURL: "#/tenant/resource" },
-        { number: "0", name: "router_num", desc: "路由器", color: "panel-primary", photo: "fa-paper-plane-o", hrefURL: "#/tenant/resource" }
+    $scope.numInfos = [
+        { number: "0", name: "user_num", desc: "用户", color: "panel-primary", photo: "fa fa-users", hrefURL: "#/identity/userInfo" },
+        { number: "0", name: "tenant_num", desc: "租户", color: "panel-green", photo: "fa fa-building", hrefURL: "#/tenant/resource" },
+        { number: "0", name: "image_num", desc: "镜像", color: "panel-yellow", photo: "fa fa-bars", hrefURL: "#/image/summary" },
+        { number: "0", name: "physical_num", desc: "物理主机", color: "panel-red", photo: "fa fa-server", hrefURL: "#/physicalHosts/usage" },
+        { number: "0", name: "server_num", desc: "云主机", color: "panel-red", photo: "fa fa-desktop", hrefURL: "#/cloudHosts" },
+        { number: "0", name: "network_num", desc: "网络", color: "panel-yellow", photo: "fa fa-wifi", hrefURL: "#/tenant/resource" },
+        { number: "0", name: "subnet_num", desc: "子网", color: "panel-green", photo: "fa fa-share-alt", hrefURL: "#/tenant/resource" },
+        { number: "0", name: "router_num", desc: "路由器", color: "panel-primary", photo: "fa fa-paper-plane-o", hrefURL: "#/tenant/resource" }
     ];
     var url = config['host'] + "/v1.0/admin/abstract?token=" + window.localStorage.token;
     $http.get(url).then(function(response) {
@@ -30,7 +32,7 @@ abstractCtrl.controller('abstractController', function($scope, $http, $route) {
         // console.log($scope.usages);
         var num_infos = response.data.num_info;
         var numInfoTemp = $scope.numInfos;
-        for (var i = 0; i < 7; i++) {
+        for (var i = 0; i < $scope.numInfos.length; i++) {
             var name = numInfoTemp[i].name;
             numInfoTemp[i].number = num_infos[name];
         }

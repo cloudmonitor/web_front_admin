@@ -653,14 +653,12 @@ tfoot .tfoot-dsp {
 /* ：设备多选列表 */
 
 .main .desc .select_device {
-    margin-left: 25%;
+    margin-left: 20%;
     font-size: 18px;
     display: inline;
 }
 
 .main .desc .monitor-device {
-    margin-top: -15px;
-    width: 8%;
     display: inline;
 }
 
@@ -853,4 +851,25 @@ top: -43px; */
     cursor: pointer
 }
 
+.panel-green > .panel-heading {
+    border-color: #5cb85c;
+    color: white;
+    background-color: #5cb85c;
+}
+
+.panel-yellow > .panel-heading {
+    border-color: #f0ad4e;
+    color: white;
+    background-color: #f0ad4e;
+}
+
+.panel-red > .panel-heading {
+    border-color: #d9534f;
+    color: white;
+    background-color: #d9534f;
+}
+
+.huge {
+    font-size: 40px;
+}
 

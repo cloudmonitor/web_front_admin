@@ -28,9 +28,7 @@ $(function () {
                 }
                 pre_set_tenant_traffic(curr_tenant_id, curr_type);
             } else {
-                $('.monitor_tenant_traffic').css("display", "none");
-                var show_info = '<div id="content" class="col-md-5 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:400px;top:2px;z-index:9999">当前没有租户^.^!</div>';
-                $(".monitor_tenant_traffic").html(show_info);
+                createAndHideAlert("当前没有租户^.^！");
             }
         },
         error: function(data) {

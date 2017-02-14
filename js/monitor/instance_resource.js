@@ -8,45 +8,100 @@ var instance_resource_timer_arr = [0, 0, 0, 0];
 
 $(function() {
     $('#option1').click();
-    var monitor_id = window.location.href.split('?')[1];
+    var monitor_tenant_id = window.location.href.split('?')[1];
+    var monitor_server_id = window.location.href.split('?')[2];
     var curr_type = "minute";
-    var cur_id;
-    //主机的获取
+    var curr_tenant_id;
+    var curr_server_id;
     $.ajax({
         type: "GET",
-        url: config["host"] + "/instances?token=" + window.localStorage.token,
+        url: config["host"] + "/v1.0/admin/tenants?token=" + window.localStorage.token,
         success: function(data) {
-            // console.log(data);
-            var arr = [0, 0, 0, 0];
-            var servers = JSON.parse(data)['servers'];
-            if (servers.length != 0) {
-                for (var i = 0; i < servers.length; i++)
-                    $(".monitors_wj").append('<option value="' + servers[i].id + '">' + servers[i].name + '</option>');
-                cur_id = servers[0].id;
-                if (monitor_id != 'undefined' && monitor_id != undefined) {
-                    cur_id = monitor_id;
-                    $(".monitors_wj option[value='" + cur_id + "']").attr("selected", true);
+            var tenants = JSON.parse(data)['tenants'];
+            if (tenants.length != 0) {
+                for (var i = 0; i < tenants.length; i++)
+                    $(".monitor_rsc_tenant").append('<option value="' + tenants[i].id + '">' + tenants[i].name + '</option>');
+                curr_tenant_id = tenants[0].id;
+                if (monitor_tenant_id != 'undefined' && monitor_tenant_id != undefined) {
+                    curr_tenant_id = monitor_tenant_id;
+                    $(".monitor_rsc_tenant option[value='" + curr_tenant_id + "']").attr("selected", true);
                 }
-                preSetAjax(cur_id, curr_type, arr);
             } else {
-                $('.monitors_wj').css("display", "none");
-                var show_info = '<div id="content" class="col-md-5 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:400px;top:2px;z-index:9999">该租户当前没有虚拟机^.^!</div>';
-                $(".content_wj").html(show_info);
+                createAndHideAlert("当前没有租户^.^!");
             }
-        },
+            //主机的获取
+            $.ajax({
+                type: "GET",
+                url: config["host"] + "/v1.0/admin/tenant/instances/" + curr_tenant_id + "?token=" + window.localStorage.token,
+                success: function(data) {
+                    // console.log(data);
+                    var arr = [0, 0, 0, 0];
+                    var servers = JSON.parse(data)['servers'];
+                    if (servers.length != 0) {
+                        for (var i = 0; i < servers.length; i++)
+                            $(".monitor_rsc_cloud_host").append('<option value="' + servers[i].id + '">' + servers[i].name + '</option>');
+                        curr_server_id = servers[0].id;
+                        if (monitor_server_id != 'undefined' && monitor_server_id != undefined) {
+                            curr_server_id = monitor_server_id;
+                            $(".monitor_rsc_cloud_host option[value='" + curr_server_id + "']").attr("selected", true);
+                        }
+                        preSetAjax(curr_server_id, curr_type, arr);
+                    } else {
+                        createAndHideAlert("该租户当前没有虚拟机^.^!");
+                    }
+                },
+                error: function(data) {
+                    createAndHideAlert("当前没有云主机或云主机信息获取失败！");
+                }
+            })},
         error: function(data) {
-            createAndHideAlert("当前没有主机或主机信息获取失败！");
+            createAndHideAlert("当前没有租户或租户信息获取失败！");
         }
     });
+
     //select事件
-    $('.monitors_wj').change(function() {
+    $('.monitor_rsc_tenant').change(function() {
+        ajaxbg.show();
+        clear_timer_when_switch(instance_resource_timer_arr);
+        var id = $(this).children('option:selected').val();
+        $('.monitor_rsc_cloud_host').empty();
+        curr_tenant_id = id;
+        //主机的获取
+        $.ajax({
+            type: "GET",
+            url: config["host"] + "/v1.0/admin/tenant/instances/" + curr_tenant_id + "?token=" + window.localStorage.token,
+            success: function(data) {
+                var arr = [0, 0, 0, 0];
+                var servers = JSON.parse(data)['servers'];
+                if (servers.length != 0) {
+                    for (var i = 0; i < servers.length; i++)
+                        $(".monitor_rsc_cloud_host").append('<option value="' + servers[i].id + '">' + servers[i].name + '</option>');
+                    curr_server_id = servers[0].id;
+                    if (monitor_server_id != 'undefined' && monitor_server_id != undefined) {
+                        curr_server_id = monitor_server_id;
+                        $(".monitor_rsc_cloud_host option[value='" + curr_server_id + "']").attr("selected", true);
+                    }
+                    preSetAjax(curr_server_id, curr_type, arr);
+                } else {
+                    createAndHideAlert("该租户当前没有虚拟机^.^!");
+                    setTimeout("ajaxbg.hide()", 2000);
+                }
+            },
+            error: function(data) {
+                createAndHideAlert("当前没有云主机或云主机信息获取失败！");
+                setTimeout("ajaxbg.hide()", 2000);
+            }
+        });
+    });
+
+    //select事件
+    $('.monitor_rsc_cloud_host').change(function() {
         ajaxbg.show();
         clear_timer_when_switch(instance_resource_timer_arr);
         var id = $(this).children('option:selected').val();
         var arr = [0, 0, 0, 0];
-        cur_id = id;
-
-        preSetAjax(id, curr_type, arr);
+        curr_server_id = id;
+        preSetAjax(curr_server_id, curr_type, arr);
     });
     //天时分改变
     $('#option1').click(function() {
@@ -54,21 +109,21 @@ $(function() {
         ajaxbg.show();
         curr_type = "minute";
         var arr = [0, 0, 0, 0];
-        preSetAjax(cur_id, curr_type, arr);
+        preSetAjax(curr_server_id, curr_type, arr);
     });
     $('#option2').click(function() {
         changeStatus(this);
         ajaxbg.show();
         curr_type = "hour";
         var arr = [0, 0, 0, 0];
-        preSetAjax(cur_id, curr_type, arr);
+        preSetAjax(curr_server_id, curr_type, arr);
     });
     $('#option3').click(function() {
         changeStatus(this);
         ajaxbg.show();
         curr_type = "day";
         var arr = [0, 0, 0, 0];
-        preSetAjax(cur_id, curr_type, arr);
+        preSetAjax(curr_server_id, curr_type, arr);
     });
 });
 
@@ -79,13 +134,13 @@ function changeStatus(that) {
 }
 
 function preSetAjax(id, curr_type, arr) {
-    setTimeout("ajaxbg.hide()", 2000);
     setAjax(id, curr_type, "cpu_util", arr);
     setAjax(id, curr_type, "memory.usage", arr);
     setAjax(id, curr_type, "disk.read.bytes.rate", arr);
     setAjax(id, curr_type, "disk.write.bytes.rate", arr);
     setAjax(id, curr_type, "network.incoming.bytes.rate", arr);
     setAjax(id, curr_type, "network.outgoing.bytes.rate", arr);
+    setTimeout("ajaxbg.hide()", 2000);
 }
 
 function get_one_meter(id, curr_type, meter_name) {

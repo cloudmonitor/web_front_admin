@@ -5,9 +5,14 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main content_wj">
     <div class="desc">
         云主机监控
-        <span class="select_device">云主机</span>
-        <select class="form-control monitor-device monitors_wj" style="width:140px">
-        </select>
+        <div class="select_device">
+            <span>租户</span>
+            <select class="form-control monitor-device monitor_rsc_tenant" style="width:140px">
+            </select>
+            <span>云主机</span>
+            <select class="form-control monitor-device monitor_rsc_cloud_host" style="width:140px">
+            </select>
+        </div>
         <!-- 按钮选项 -->
         <div class="btn-group form-btn ">
             <label class="btn btn-primary btn-sm active" id="option1">

@@ -7,113 +7,122 @@ setTimeout("ajaxbg.hide()", 2000);
 var instance_traffic_timer_arr = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 $(function() {
     $('#option1').click();
-    var monitor_id = window.location.href.split('?')[1];
+    var monitor_tenant_id = window.location.href.split('?')[1];
+    var monitor_server_id = window.location.href.split('?')[2];
     var curr_type = "minute";
-    var tenant_id = JSON.parse(window.localStorage.token).tenant.id;
-    var cur_id;
-    //主机的获取
+    var curr_tenant_id;
+    var curr_server_id;
+
     $.ajax({
         type: "GET",
-        url: config["host"] + "/instances?token=" + window.localStorage.token,
+        url: config["host"] + "/v1.0/admin/tenants?token=" + window.localStorage.token,
         success: function(data) {
-            var arr = [0, 0];
-            var servers = JSON.parse(data)['servers'];
-            if (servers.length != 0) {
-                for (var i = 0; i < servers.length; i++){
-                    // var addresses = servers[i].addresses;
-                    // var mac_addr = "";
-                    // for(var key in addresses){
-                    //     mac_addr =  addresses[key][0]["OS-EXT-IPS-MAC:mac_addr"].replace(/:/g, "").toUpperCase();
-                    // }
-                    // var id_mac_addr = servers[i].id + " " + mac_addr;
-                    $(".instance_traffic_select").append('<option value="' + servers[i].id  + '">' + servers[i].name + '</option>');
+            var tenants = JSON.parse(data)['tenants'];
+            if (tenants.length != 0) {
+                for (var i = 0; i < tenants.length; i++)
+                    $(".monitor_instance_traffic_tenant").append('<option value="' + tenants[i].id + '">' + tenants[i].name + '</option>');
+                curr_tenant_id = tenants[0].id;
+                if (monitor_tenant_id != 'undefined' && monitor_tenant_id != undefined) {
+                    curr_tenant_id = monitor_tenant_id;
+                    $(".monitor_instance_traffic_tenant option[value='" + curr_tenant_id + "']").attr("selected", true);
                 }
-                cur_id = servers[0].id;
-                if (monitor_id != 'undefined' && monitor_id != undefined) {
-                    cur_id = monitor_id;
-                    $(".instance_traffic_select option[value='" + cur_id + "']").attr("selected", true);
-                }
-                setTimeout("ajaxbg.hide()", 2000);
-                set_host_net_meter(cur_id, "network.incoming.bytes.rate", arr);
-                set_host_net_meter(cur_id, "network.outgoing.bytes.rate", arr);
-                set_host_active_flow(cur_id);
-                set_instance_top_protocol_port(tenant_id, cur_id, curr_type);
-                set_instance_top_ip_link(tenant_id, cur_id, curr_type);
-                set_instance_top_src_ip(tenant_id, cur_id, curr_type);
-                set_instance_top_dst_ip(tenant_id, cur_id, curr_type);
-                set_instance_top_src_port(tenant_id, cur_id, curr_type);
-                set_instance_top_dst_port(tenant_id, cur_id, curr_type);
-                set_instance_top_session(tenant_id, cur_id, curr_type);
-
             } else {
-                $('.instance_traffic_select').css("display", "none");
-                var show_info = '<div id="content" class="col-md-5 monitor-chart" style="background:pink;width:220px;height:40px;text-align:center;padding-top:12px;position:absolute;left:400px;top:2px;z-index:9999">该租户当前没有虚拟机^.^!</div>';
-                $(".instance_traffic").html(show_info);
+                createAndHideAlert("当前没有租户^.^!");
             }
-        },
+            //主机的获取
+            $.ajax({
+                type: "GET",
+                url: config["host"] + "/v1.0/admin/tenant/instances/" + curr_tenant_id + "?token=" + window.localStorage.token,
+                success: function(data) {
+                    var arr = [0, 0];
+                    var servers = JSON.parse(data)['servers'];
+                    if (servers.length != 0) {
+                        for (var i = 0; i < servers.length; i++){
+                            $(".monitor_instance_traffic_cloud_host").append('<option value="' + servers[i].id  + '">' + servers[i].name + '</option>');
+                        }
+                        curr_server_id = servers[0].id;
+                        if (monitor_server_id != 'undefined' && monitor_server_id != undefined) {
+                            curr_server_id = monitor_server_id;
+                            $(".monitor_instance_traffic_cloud_host option[value='" + curr_server_id + "']").attr("selected", true);
+                        }
+                        set_instance_traffic(curr_tenant_id, curr_server_id, curr_type, arr);
+
+                    } else {
+                        createAndHideAlert("该租户当前没有虚拟机^.^！");
+                    }
+                },
+                error: function(data) {
+                    createAndHideAlert("当前没有主机或主机信息获取失败！");
+                }
+            })},
         error: function(data) {
-            createAndHideAlert("当前没有主机或主机信息获取失败！");
+            createAndHideAlert("当前没有租户或租户信息获取失败！");
         }
     });
+
     //select事件
-    $('.instance_traffic_select').change(function() {
+    $('.monitor_instance_traffic_tenant').change(function() {
         ajaxbg.show();
-        // var id_mac = $(this).children('option:selected').val().split(" ");
-        cur_id = $(this).children('option:selected').val();
-        var arr = [0, 0];
-        setTimeout("ajaxbg.hide()", 2000);
         clear_timer_when_switch(instance_traffic_timer_arr);
-        set_host_net_meter(cur_id, "network.incoming.bytes.rate", arr);
-        set_host_net_meter(cur_id, "network.outgoing.bytes.rate", arr);
-        set_host_active_flow(cur_id);
-        set_instance_top_protocol_port(tenant_id, cur_id, curr_type);
-        set_instance_top_ip_link(tenant_id, cur_id, curr_type);
-        set_instance_top_src_ip(tenant_id, cur_id, curr_type);
-        set_instance_top_dst_ip(tenant_id, cur_id, curr_type);
-        set_instance_top_src_port(tenant_id, cur_id, curr_type);
-        set_instance_top_dst_port(tenant_id, cur_id, curr_type);
-        set_instance_top_session(tenant_id, cur_id, curr_type);
+        var id = $(this).children('option:selected').val();
+        $('.monitor_instance_traffic_cloud_host').empty();
+        curr_tenant_id = id;
+        //主机的获取
+        $.ajax({
+            type: "GET",
+            url: config["host"] + "/v1.0/admin/tenant/instances/" + curr_tenant_id + "?token=" + window.localStorage.token,
+            success: function(data) {
+                var arr = [0, 0];
+                var servers = JSON.parse(data)['servers'];
+                if (servers.length != 0) {
+                    for (var i = 0; i < servers.length; i++){
+                        $(".monitor_instance_traffic_cloud_host").append('<option value="' + servers[i].id  + '">' + servers[i].name + '</option>');
+                    }
+                    curr_server_id = servers[0].id;
+                    if (monitor_server_id != 'undefined' && monitor_server_id != undefined) {
+                        curr_server_id = monitor_server_id;
+                        $(".monitor_instance_traffic_cloud_host option[value='" + curr_server_id + "']").attr("selected", true);
+                    }
+                    set_instance_traffic(curr_tenant_id, curr_server_id, curr_type, arr);
+
+                } else {
+                    createAndHideAlert("该租户当前没有虚拟机^.^！");
+                    setTimeout("ajaxbg.hide()", 2000);
+                }
+            },
+            error: function(data) {
+                createAndHideAlert("当前没有主机或主机信息获取失败！");
+                setTimeout("ajaxbg.hide()", 2000);
+            }
+        })
+    });
+
+    //select事件
+    $('.monitor_instance_traffic_cloud_host').change(function() {
+        ajaxbg.show();
+        curr_server_id = $(this).children('option:selected').val();
+        var arr = [0, 0];
+        clear_timer_when_switch(instance_traffic_timer_arr);
+        set_instance_traffic(curr_tenant_id, curr_server_id, curr_type, arr);
     });
     //天时分改变
     $('#option1').click(function() {
         changeStatus(this);
         ajaxbg.show();
         curr_type = "minute";
-        setTimeout("ajaxbg.hide()", 2000);
-        set_instance_top_protocol_port(tenant_id, cur_id, curr_type);
-        set_instance_top_ip_link(tenant_id, cur_id, curr_type);
-        set_instance_top_src_ip(tenant_id, cur_id, curr_type);
-        set_instance_top_dst_ip(tenant_id, cur_id, curr_type);
-        set_instance_top_src_port(tenant_id, cur_id, curr_type);
-        set_instance_top_dst_port(tenant_id, cur_id, curr_type);
-        set_instance_top_session(tenant_id, cur_id, curr_type);
-
+        set_instance_traffic_statistics(curr_tenant_id, curr_server_id, curr_type);
     });
     $('#option2').click(function() {
         changeStatus(this);
         ajaxbg.show();
         curr_type = "hour";
-        setTimeout("ajaxbg.hide()", 2000);
-        set_instance_top_protocol_port(tenant_id, cur_id, curr_type);
-        set_instance_top_ip_link(tenant_id, cur_id, curr_type);
-        set_instance_top_src_ip(tenant_id, cur_id, curr_type);
-        set_instance_top_dst_ip(tenant_id, cur_id, curr_type);
-        set_instance_top_src_port(tenant_id, cur_id, curr_type);
-        set_instance_top_dst_port(tenant_id, cur_id, curr_type);
-        set_instance_top_session(tenant_id, cur_id, curr_type);
+        set_instance_traffic_statistics(curr_tenant_id, curr_server_id, curr_type);
     });
     $('#option3').click(function() {
         changeStatus(this);
         ajaxbg.show();
         curr_type = "day";
-        setTimeout("ajaxbg.hide()", 2000);
-        set_instance_top_protocol_port(tenant_id, cur_id, curr_type);
-        set_instance_top_ip_link(tenant_id, cur_id, curr_type);
-        set_instance_top_src_ip(tenant_id, cur_id, curr_type);
-        set_instance_top_dst_ip(tenant_id, cur_id, curr_type);
-        set_instance_top_src_port(tenant_id, cur_id, curr_type);
-        set_instance_top_dst_port(tenant_id, cur_id, curr_type);
-        set_instance_top_session(tenant_id, cur_id, curr_type);
+        set_instance_traffic_statistics(curr_tenant_id, curr_server_id, curr_type);
     });
 });
 
@@ -122,6 +131,33 @@ function changeStatus(that) {
         $("#option" + i).removeClass("active");
     $(that).addClass("active");
 }
+
+function set_instance_traffic(tenant_id, server_id, curr_type, arr) {
+    setTimeout("ajaxbg.hide()", 2000);
+    set_host_net_meter(server_id, "network.incoming.bytes.rate", arr);
+    set_host_net_meter(server_id, "network.outgoing.bytes.rate", arr);
+    set_host_active_flow(server_id);
+    set_instance_top_protocol_port(tenant_id, server_id, curr_type);
+    set_instance_top_ip_link(tenant_id, server_id, curr_type);
+    set_instance_top_src_ip(tenant_id, server_id, curr_type);
+    set_instance_top_dst_ip(tenant_id, server_id, curr_type);
+    set_instance_top_src_port(tenant_id, server_id, curr_type);
+    set_instance_top_dst_port(tenant_id, server_id, curr_type);
+    set_instance_top_session(tenant_id, server_id, curr_type);
+}
+
+
+function set_instance_traffic_statistics(tenant_id, server_id, curr_type) {
+    setTimeout("ajaxbg.hide()", 2000);
+    set_instance_top_protocol_port(tenant_id, server_id, curr_type);
+    set_instance_top_ip_link(tenant_id, server_id, curr_type);
+    set_instance_top_src_ip(tenant_id, server_id, curr_type);
+    set_instance_top_dst_ip(tenant_id, server_id, curr_type);
+    set_instance_top_src_port(tenant_id, server_id, curr_type);
+    set_instance_top_dst_port(tenant_id, server_id, curr_type);
+    set_instance_top_session(tenant_id, server_id, curr_type);
+}
+
 
 function get_host_net_meter(id, meter_name) {
     if(clear_timer("/monitor/instance_traffic", instance_traffic_timer_arr)){
