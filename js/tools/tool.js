@@ -41,6 +41,11 @@ if (curr_url == "#/") {
         "background-color": "transparent"
     });
 } else {
+    
+    $(".nav-sidebar a[href!='" + curr_url + "']").css({
+        "color": "#337ab7",
+        "background-color": "transparent"
+    });
     $(".nav-sidebar a[href='" + curr_url + "']").css({
         "color": "#fff",
         "background-color": "#428bca"

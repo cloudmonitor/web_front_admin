@@ -7,20 +7,20 @@
     <div class="row">
         <div class="col-lg-12 col-md-10">
             <div class="col-lg-3 col-md-4" ng-repeat="numInfo in numInfos">
-                <div class="panel panel-danger">
+                <div class="panel" ng-class="numInfo.color">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-comments fa-5x"></i>
+                                <i class="fa fa-5x" ng-class="numInfo.photo"></i>
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div class="huge">
                                     <h3>{{numInfo.number}}</h3></div>
-                                <div>{{numInfo.name}}</div>
+                                <div>{{numInfo.desc}}</div>
                             </div>
                         </div>
                     </div>
-                    <a href="javascript:void(0)">
+                    <a href="{{numInfo.hrefURL}}">
                         <div class="panel-footer">
                             <span class="pull-left">View Details</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -31,11 +31,12 @@
             </div>
         </div>
     </div>
+    <br/>
     <div class="row">
         <div style="margin-left:2%">
-            <h4>用量</h4></div>
+            <h4><B>租户使用统计</B></h4></div>
     </div>
-    <div class="row col-sm-12">
+    <div class="row col-sm-12" style="margin-top:1%;padding-left:2%;">
         <table class="table table-striped instance_info table-bordered ">
             <thead>
                 <tr>

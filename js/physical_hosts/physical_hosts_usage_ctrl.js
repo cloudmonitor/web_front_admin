@@ -2,6 +2,7 @@
 angular.module('myApp')
     .controller('physicalHostsUsageCtrl', ['$scope', 'PhysicalHostsService',
         function($scope, PhysicalHostsService) {
+            $scope.$parent.loadScript('js/tools/tool.js');
             // 初始化
             $scope.itemPerPage = 4;
             $scope.currentPage = 1;

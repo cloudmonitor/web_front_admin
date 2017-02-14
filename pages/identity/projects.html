@@ -49,20 +49,21 @@
                 <td>
                     <input type='checkbox' class='project_checks' id="{{info.id}}">
                 </td>
-                <td><a href="#/identity/projects/detail/{{info.id}}" style="cursor: pointer;">{{info.name}}</a></td>
+                <td>{{info.name}}</td>
                 <td>{{info.description}}</td>
                 <td>{{info.id}}</td>
                 <td>{{info.enabled}}</td>
                 <td>
                     <div class='btn-group'>
-                        <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="manageMember()">管理成员</button>
+                        <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="manageMember(info.id)">管理成员</button>
                         <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
                             <span class='caret'></span>
                         </button>
                         <ul class='dropdown-menu' role='menu' style='z-index:1000'>
                             <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="editProject(info.id,info.name,info.description,info.enabled)">编辑项目</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">查看使用情况</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="updateQuota()">修改配额</a></li>
+                            <!--                       <li role="presentation"><a role="menuitem" tabindex="-1" href="#/abstract/abstract">查看使用情况</a></li> -->
+                            <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="updateQuota(info.id)">修改基本配额</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="updateNetworkQuota(info.id)">修改网络配额</a></li>
                             <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteProject(info.id)"><span style="color:red">删除项目</span></a></li>
                         </ul>
                     </div>
@@ -72,20 +73,21 @@
                 <td>
                     <input type='checkbox' class='project_checks' id="{{info.id}}">
                 </td>
-                <td><a href="#/identity/projects/detail/{{info.id}}" style="cursor: pointer;">{{info.name}}</a></td>
+                <td>{{info.name}}</td>
                 <td>{{info.description}}</td>
                 <td>{{info.id}}</td>
                 <td>{{info.enabled}}</td>
                 <td>
                     <div class='btn-group'>
-                        <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="manageMember()">管理成员</button>
+                        <button type='button' class='btn btn-default btn-sm' data-toggle="modal" data-target="#createProject" ng-click="manageMember(info.id)">管理成员</button>
                         <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown'>
                             <span class='caret'></span>
                         </button>
                         <ul class='dropdown-menu' role='menu' style='z-index:1000'>
                             <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="editProject(info.id,info.name,info.description,info.enabled)">编辑项目</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">查看使用情况</a></li>
-                            <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="updateQuota()">修改配额</a></li>
+                            <!--                       <li role="presentation"><a role="menuitem" tabindex="-1" href="#/abstract/abstract">查看使用情况</a></li> -->
+                            <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="updateQuota(info.id)">修改基本配额</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" data-toggle="modal" data-target="#createProject" ng-click="updateNetworkQuota(info.id)">修改网络配额</a></li>
                             <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="deleteProject(info.id)"><span style="color:red">删除项目</span></a></li>
                         </ul>
                     </div>
@@ -195,19 +197,19 @@
                                 <ul class="nav nav-pills nav-stacked" ng-repeat="user in selectedUsers | filter:searchSelectedUser">
                                     <li ng-if="$even" style="background:#F7F7F7">
                                         <a href="javascript:void(0)" style="position: absolute;display:inline-block">{{user.name}}</a>
-                                        <div style="position:relative;left:67%">
-                                            <select style="position:relative;z-index:10;width:20%;">
+                                        <div style="position:relative;left:90%">
+                                            <!--                  <select style="position:relative;z-index:10;width:20%;">
                                                 <option ng-repeat="role in roles" id="{{role.id}}">{{role.name}}</option>
-                                            </select>
+                                            </select> -->
                                             <button type="button" class="btn btn-primary btn-sm" style="position:relative;margin-top:1%" ng-click="removeUser(user.id)"><span align="center">-</span></button>
                                         </div>
                                     </li>
                                     <li ng-if="$odd">
                                         <a href="javascript:void(0)" style="position: absolute;">{{user.name}}</a>
-                                        <div style="position:relative;left:67%">
-                                            <select style="position:relative;z-index:10;width:20%;">
+                                        <div style="position:relative;left:90%">
+                                            <!--          <select style="position:relative;z-index:10;width:20%;">
                                                 <option ng-repeat="role in roles" id="{{role.id}}">{{role.name}}</option>
-                                            </select>
+                                            </select> -->
                                             <button type="button" class="btn btn-primary btn-sm" style="position:relative;margin-top:1%" ng-click="removeUser(user.id)"><span align="center">-</span></button>
                                         </div>
                                     </li>
@@ -222,95 +224,95 @@
                     </div>
                     <div class="tab-pane fade" id="profile">
                         <form class="form-horizontal">
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">元数据条目<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
                                     <input class="form-control" ng-model="pro_metadata_items">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">虚拟内核<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
                                     <input class="form-control" ng-model="pro_cores">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">实例<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
                                     <input class="form-control" ng-model="pro_instances">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">注入的文件<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
                                     <input class="form-control" ng-model="pro_injected_files">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">已注入文件内容(Bytes)<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
                                     <input class="form-control" ng-model="pro_injected_file_content_bytes">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">内存 (MB)<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
                                     <input class="form-control" ng-model="pro_ram">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="!basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">安全组<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
                                     <input class="form-control" ng-model="pro_security_groups">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="!basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">安全组规则<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
                                     <input class="form-control" ng-model="pro_security_group_rules">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="!basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">浮动IP<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
                                     <input class="form-control" ng-model="pro_floating_ips">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="!basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">网络<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" ng-model="pro_">
+                                    <input class="form-control" ng-model="pro_network">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="!basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">端口<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" ng-model="pro_">
+                                    <input class="form-control" ng-model="pro_port">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="!basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">路由<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" ng-model="pro_">
+                                    <input class="form-control" ng-model="pro_router">
                                 </div>
                             </div>
-                            <div class="form-group" style="margin-bottom: 0px;">
+                            <div class="form-group" style="margin-bottom: 0px;" ng-show="!basicOrnetworkQuto">
                                 <br/>
                                 <label class="col-sm-3 control-label">子网<span class="span-stand"> *</span></label>
                                 <div class="col-sm-8">
-                                    <input class="form-control" ng-model="pro_">
+                                    <input class="form-control" ng-model="pro_subNet">
                                 </div>
                             </div>
                         </form>
@@ -319,11 +321,11 @@
             </div>
             <div class="modal-footer" ng-show="createPro_ManageInfo">
                 <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelCreate()">取消</button>
-                <button type="button" class="btn btn-primary" ng-click="createProjectOK()">创建项目</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="createProjectOK()">创建项目</button>
             </div>
             <div class="modal-footer" ng-show="!createPro_ManageInfo">
                 <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancelUpdateMemProfile()">取消</button>
-                <button type="button" class="btn btn-primary" ng-click="updateMemProfileOK()">保存</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="updateMemProfileOK()">保存</button>
             </div>
         </div>
         <!-- /.modal-content -->

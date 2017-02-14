@@ -23,14 +23,18 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
     $scope.pageBarShow = false;
     $scope.projectName = '';
     $scope.projectDesc = '';
-    $scope.projectCreateStatus = false;
+    $scope.projectCreateStatus = true;
     $scope.updataOrCreate = false;
     $scope.tenant_id = 0;
     $scope.roles = [];
     $scope.users = [];
+    $scope.usersAll = [];
     $scope.selectedUsers = [];
+    $scope.originUsers = [];
     $scope.createPro_ManageInfo = true; //打开创建还是修改项目成员或配额
     $scope.manageMem_Profile = true; //修改项目成员还是配额
+    $scope.updataFlag = "";
+    $scope.pro_metadata_items = "";
     //--------------------------------控制变量声明end
     $scope.getUsers = function() {
         $.ajax({
@@ -39,6 +43,7 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
             success: function(data) {
                 var users = JSON.parse(data).users;
                 $scope.users = users;
+                $scope.usersAll = users.concat();
             },
             error: function() {
                 createAndHideAlert({
@@ -73,7 +78,6 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
                 return;
             }
         }
-
     };
     $scope.selectUser = function(id) {
         var freeUsers = $scope.users;
@@ -97,6 +101,7 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
         $("#" + elem).addClass("active").removeClass("fade");
     }
     $scope.setFlag = function() {
+        $scope.projectCreateStatus = true;
         $scope.createPro_ManageInfo = true;
         $scope.updataOrCreate = false;
         $("#proInfo").show();
@@ -104,14 +109,100 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
         $("#proQuota").hide();
         setActive("home", "proInfo");
     };
-    $scope.manageMember = function() {
+    $scope.manageMember = function(tenant_id) {
+        //console.log(">>>>>>>>: ",$scope.usersAll);
+        $scope.users = $scope.usersAll.concat();
+        $scope.tenant_id = tenant_id;
         $scope.manageMem_Profile = true;
         $scope.createPro_ManageInfo = false;
         $("#proInfo").hide();
         $("#proMember").show();
         $("#proQuota").hide();
         setActive("member", "proMember");
+        $scope.updataFlag = 'member';
+        var url = config["host"] + "/v1.0/admin/tenants/" + tenant_id + "/users?token=" + window.localStorage.token;
+        $http.get(url).then(function(response) {
+            // console.log(response.data);
+            $scope.selectedUsers = response.data.users;
+            $scope.originUsers = response.data.users.concat();
+            console.log("...", $scope.originUsers);
+            var data = $scope.selectedUsers;
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < $scope.users.length; j++) {
+                    if (data[i].name == $scope.users[j].name)
+                        $scope.users.splice(j, 1);
+                }
+            }
+        });
     };
+    $scope.manageMemberOK = function() {
+        var users = $scope.selectedUsers;
+        var newUsers = [];
+        var deleteUsers = [];
+        //console.log(users, "...........", $scope.originUsers)
+        //获得新加的用户
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
+            var flag = 0;
+            for (var j = 0; j < $scope.originUsers.length; j++) {
+                if ($scope.originUsers[j].id == user.id)
+                    break;
+                else if ($scope.originUsers[j].id != user.id && j == $scope.originUsers.length - 1) {
+                    newUsers.push(user);
+                }
+            }
+        }
+        console.log("newUsers: ", newUsers);
+        updateMem(newUsers, "add");
+        var oldUser = $scope.users;
+        // console.log(oldUser, ".....", $scope.originUsers);
+        //删除移除的用户
+        for (var i = 0; i < oldUser.length; i++) {
+            var user = oldUser[i];
+            for (var j = 0; j < $scope.originUsers.length; j++) {
+                if ($scope.originUsers[j].id == user.id) {
+                    deleteUsers.push(user);
+                }
+            }
+        }
+        console.log("deleteUsers: ", deleteUsers);
+        updateMem(deleteUsers, "delete");
+
+    };
+
+    function updateMem(users, flag) {
+        for (var i = 0; i < users.length; i++) {
+            var user = users[i];
+            var url;
+            var method;
+            if (flag == 'add') {
+                url = "/v1.0/admin/add/tenants/" + $scope.tenant_id + "/users/" + user.id;
+            } else {
+                url = "/v1.0/admin/del/tenants/" + $scope.tenant_id + "/users/" + user.id;
+            }
+            var url = config["host"] + url + "?token=" + window.localStorage.token;
+            $http.get(url).then(
+                function(response) {
+                    // 请求成功
+                    var data = response.data;
+                    console.info("返回的数据: ", data);
+                    createAndHideAlert({
+                        "message": "操作成功！",
+                        "className": "alert-success"
+                    });
+                    $('.modal-backdrop').removeClass("modal-backdrop");
+                    $scope.refresh();
+                },
+                function(response) {
+                    // 请求失败
+                    var data = response.data;
+                    createAndHideAlert({
+                        "message": "操作失败！",
+                        "className": "alert-danger"
+                    });
+                });
+        }
+    }
     $scope.changeStatus = function() {
         $scope.projectCreateStatus = !$scope.projectCreateStatus;
     };
@@ -206,7 +297,7 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
                     var data = response.data;
                     console.info("返回的数据: ", data);
                     createAndHideAlert({
-                        "message": "项目创建成功！",
+                        "message": "操作成功！",
                         "className": "alert-success"
                     });
                     $scope.refresh();
@@ -214,9 +305,9 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
                 function(response) {
                     // 请求失败
                     var data = response.data;
-                    console.error("创建失败", data.statusText);
+                    console.error("操作失败", data.statusText);
                     createAndHideAlert({
-                        "message": "项目创建失败！",
+                        "message": "操作失败！",
                         "className": "alert-danger"
                     });
                 });
@@ -227,11 +318,24 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
 
     };
     $scope.updateMemProfileOK = function() {
-
+        var flag = $scope.updataFlag;
+        if (flag == "member") {
+            $scope.manageMemberOK();
+        } else if (flag == "project") {
+            $scope.createProjectOK();
+        } else if (flag == "basicQuto") {
+            $scope.updateBasicQutoOK();
+        } else if (flag == "networkQuto") {
+            $scope.updateNetworkQutoOK();
+        }
     };
     //编辑项目
     $scope.editProject = function(id, name, desc, enabled) {
-        $scope.createPro_ManageInfo = true;
+        $scope.updataFlag = 'project';
+        $scope.createPro_ManageInfo = false;
+        $("#proInfo").show();
+        $("#proMember").hide();
+        $("#proQuota").hide();
         setActive("home", "proInfo");
         $scope.updataOrCreate = true;
         $scope.projectName = name;
@@ -239,28 +343,134 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
         $scope.projectCreateStatus = enabled;
         $scope.tenant_id = id;
     };
-    //修改配额
-    $scope.updateQuota = function() {
-            $scope.manageMem_Profile = false;
-            $scope.createPro_ManageInfo = false;
-            setActive("profile", "proQuota");
-            $.ajax({
-                type: "POST",
-                data: JSON.stringify(),
-                contentType: "application/json",
-                url: config["host"] + "?token=" + window.localStorage.token,
-                success: function(data) {
-
-                },
-                error: function(data) {
-                    createAndHideAlert({
-                        "message": "修改配额失败！",
-                        "className": "alert-danger"
-                    });
-                }
-            });
-        }
-        // 获取项目列表
+    //修改基本配额
+    $scope.updateQuota = function(tenant_id) {
+        $scope.tenant_id = tenant_id;
+        $scope.basicOrnetworkQuto = true;
+        $scope.updataFlag = 'basicQuto';
+        $scope.manageMem_Profile = false;
+        $scope.createPro_ManageInfo = false;
+        $("#proInfo").hide();
+        $("#proMember").hide();
+        $("#proQuota").show();
+        setActive("profile", "proQuota");
+        var url = config["host"] + "/v1.0/admin/tenant/" + tenant_id + "/basic_quota?token=" + window.localStorage.token;
+        $http.get(url).then(function(response) {
+            var data = response.data.quota_set;
+            // console.log(data);
+            $scope.pro_metadata_items = data.metadata_items;
+            $scope.pro_cores = data.cores;
+            $scope.pro_instances = data.instances;
+            $scope.pro_injected_files = data.injected_files;
+            $scope.pro_injected_file_content_bytes = data.injected_file_content_bytes;
+            $scope.pro_ram = data.ram;
+        });
+    };
+    $scope.updateBasicQutoOK = function() {
+        var basicQuto = {
+            "quota_set": {
+                "injected_file_content_bytes": $scope.pro_injected_file_content_bytes,
+                "metadata_items": $scope.pro_metadata_items,
+                "ram": $scope.pro_ram,
+                "instances": $scope.pro_instances,
+                "injected_files": $scope.pro_injected_files,
+                "cores": $scope.pro_cores
+            }
+        };
+        var url = "/v1.0/admin/update/tenant/" + $scope.tenant_id + "/basic_quota";
+        var req = {
+            method: 'POST',
+            url: config["host"] + url + "?token=" + window.localStorage.token,
+            ContentType: "application/json",
+            data: JSON.stringify(basicQuto)
+        };
+        $http(req).then(
+            function(response) {
+                // 请求成功
+                var data = response.data;
+                console.info("返回的数据: ", data);
+                createAndHideAlert({
+                    "message": "操作成功！",
+                    "className": "alert-success"
+                });
+                $('.modal-backdrop').removeClass("modal-backdrop");
+            },
+            function(response) {
+                // 请求失败
+                var data = response.data;
+                createAndHideAlert({
+                    "message": "操作失败！",
+                    "className": "alert-danger"
+                });
+            }
+        );
+    };
+    //修改网络配额
+    $scope.updateNetworkQuota = function(tenant_id) {
+        $scope.tenant_id = tenant_id;
+        $scope.basicOrnetworkQuto = false;
+        $scope.updataFlag = 'networkQuto';
+        $scope.manageMem_Profile = false;
+        $scope.createPro_ManageInfo = false;
+        $("#proInfo").hide();
+        $("#proMember").hide();
+        $("#proQuota").show();
+        setActive("profile", "proQuota");
+        var url = config["host"] + "/v1.0/admin/tenant/" + tenant_id + "/neutron_quota?token=" + window.localStorage.token;
+        // console.log(url);
+        $http.get(url).then(function(response) {
+            var data = response.data.quota;
+            console.log(data);
+            $scope.pro_security_groups = data.security_group;
+            $scope.pro_security_group_rules = data.security_group_rule;
+            $scope.pro_floating_ips = data.floatingip;
+            $scope.pro_network = data.network;
+            $scope.pro_port = data.port;
+            $scope.pro_router = data.router;
+            $scope.pro_subNet = data.subnet;
+        });
+    };
+    $scope.updateNetworkQutoOK = function() {
+        var networkQuto = {
+            "quota": {
+                "subnet": $scope.pro_subNet,
+                "network": $scope.pro_network,
+                "floatingip": $scope.pro_floating_ips,
+                "security_group_rule": $scope.pro_security_group_rules,
+                "security_group": $scope.pro_security_groups,
+                "router": $scope.pro_router,
+                "port": $scope.pro_port
+            }
+        };
+        var url = "/v1.0/admin/update/tenant/" + $scope.tenant_id + "/neutron_quota";
+        var req = {
+            method: 'POST',
+            url: config["host"] + url + "?token=" + window.localStorage.token,
+            ContentType: "application/json",
+            data: JSON.stringify(networkQuto)
+        };
+        $http(req).then(
+            function(response) {
+                // 请求成功
+                var data = response.data;
+                console.info("返回的数据: ", data);
+                createAndHideAlert({
+                    "message": "操作成功！",
+                    "className": "alert-success"
+                });
+                $('.modal-backdrop').removeClass("modal-backdrop");
+            },
+            function(response) {
+                // 请求失败
+                var data = response.data;
+                createAndHideAlert({
+                    "message": "操作失败！",
+                    "className": "alert-danger"
+                });
+            }
+        );
+    };
+    // 获取项目列表
     var getProjectsList = function() {
         var url = config.host + "/v1.0/admin/tenants?token=" + window.localStorage.token;
         $http.get(url).then(function(response) {
@@ -400,5 +610,5 @@ projectsCtrl.controller('projectsController', function($scope, $http, $route) {
     var projectId = $routeParams.projectInfo;
 
 
-    
+
 });
