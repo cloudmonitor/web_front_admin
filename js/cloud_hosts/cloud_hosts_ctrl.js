@@ -8,7 +8,7 @@ angular.module('myApp')
             if (!search.input) {
                 return tableItems;
             }
-
+ 
             angular.forEach(tableItems, function(item, index) {
                 if (item[search.name].search(search.input) != -1) {
                     result.push(item)

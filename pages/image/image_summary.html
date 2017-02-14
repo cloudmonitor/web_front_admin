@@ -9,47 +9,35 @@
                 <!-- <th>
                     <input type="checkbox">
                 </th> -->
-                <th>
-                    <a ng-click="sortType = 'name'; sortReverse = !sortReverse">
-                        镜像名称
-                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                    镜像名称
+                    <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'status'; sortReverse = !sortReverse">
-                        状态
-                        <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'status'; sortReverse = !sortReverse">
+                    状态
+                    <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'visibility'; sortReverse = !sortReverse">
-                        公有
-                        <span ng-show="sortType == 'visibility' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'visibility' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'visibility'; sortReverse = !sortReverse">
+                    公有
+                    <span ng-show="sortType == 'visibility' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'visibility' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'protected'; sortReverse = !sortReverse">
-                        受保护的
-                        <span ng-show="sortType == 'protected' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'protected' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'protected'; sortReverse = !sortReverse">
+                    受保护的
+                    <span ng-show="sortType == 'protected' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'protected' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'disk_format'; sortReverse = !sortReverse">
-                        镜像格式
-                        <span ng-show="sortType == 'disk_format' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'disk_format' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'disk_format'; sortReverse = !sortReverse">
+                    镜像格式
+                    <span ng-show="sortType == 'disk_format' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'disk_format' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
-                <th>
-                    <a ng-click="sortType = 'size'; sortReverse = !sortReverse">
-                        配置
-                        <span ng-show="sortType == 'size' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'size' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                <th ng-click="sortType = 'size'; sortReverse = !sortReverse">
+                    配置
+                    <span ng-show="sortType == 'size' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                    <span ng-show="sortType == 'size' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
             </tr>
         </thead>

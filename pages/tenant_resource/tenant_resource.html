@@ -77,55 +77,48 @@
                         <!-- <th>
                             <input type="checkbox">
                         </th> -->
-                        <th>
-                            <a ng-click="sortType = 'name'; sortReverse = !sortReverse">
-                        云主机名
-                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                        <th ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                            云主机名
+                            <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                            <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up pull-right"></span>
+                            </a>
                         </th>
-                        <th>
-                            <a ng-click="sortType = 'hypervisorHostname'; sortReverse = !sortReverse">
-                        物理主机名
-                        <span ng-show="sortType == 'hypervisorHostname' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'hypervisorHostname' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                        <th ng-click="sortType = 'hypervisorHostname'; sortReverse = !sortReverse">
+                            物理主机名
+                            <span ng-show="sortType == 'hypervisorHostname' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                            <span ng-show="sortType == 'hypervisorHostname' && sortReverse" class="fa fa-caret-up pull-right"></span>
+                            </a>
                         </th>
-                        <th>
-                            <a ng-click="sortType = 'tenantName'; sortReverse = !sortReverse">
-                        租户名
-                        <span ng-show="sortType == 'tenantName' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'tenantName' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                        <th ng-click="sortType = 'tenantName'; sortReverse = !sortReverse">
+                            租户名
+                            <span ng-show="sortType == 'tenantName' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                            <span ng-show="sortType == 'tenantName' && sortReverse" class="fa fa-caret-up pull-right"></span>
+                            </a>
                         </th>
                         <th>IP地址</th>
-                        <th>
-                            <a ng-click="sortType = 'image'; sortReverse = !sortReverse">
-                        镜像
-                        <span ng-show="sortType == 'image' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'image' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                        <th ng-click="sortType = 'image'; sortReverse = !sortReverse">
+                            镜像
+                            <span ng-show="sortType == 'image' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                            <span ng-show="sortType == 'image' && sortReverse" class="fa fa-caret-up pull-right"></span>
+                            </a>
                         </th>
-                        <th>
-                            <a ng-click="sortType = 'configure'; sortReverse = !sortReverse">
-                        配置
-                        <span ng-show="sortType == 'configure' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'configure' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                        <th ng-click="sortType = 'configure'; sortReverse = !sortReverse">
+                            配置
+                            <span ng-show="sortType == 'configure' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                            <span ng-show="sortType == 'configure' && sortReverse" class="fa fa-caret-up pull-right"></span>
+                            </a>
                         </th>
-                        <th>
-                            <a ng-click="sortType = 'availableScope'; sortReverse = !sortReverse">
-                        可用域
-                        <span ng-show="sortType == 'availableScope' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'availableScope' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                        <th ng-click="sortType = 'availableScope'; sortReverse = !sortReverse">
+                            可用域
+                            <span ng-show="sortType == 'availableScope' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                            <span ng-show="sortType == 'availableScope' && sortReverse" class="fa fa-caret-up pull-right"></span>
+                            </a>
                         </th>
-                        <th>
-                            <a ng-click="sortType = 'availableScope'; sortReverse = !sortReverse">
-                        状态
-                        <span ng-show="sortType == 'availableScope' && !sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortType == 'availableScope' && sortReverse" class="fa fa-caret-up"></span>
-                    </a>
+                        <th ng-click="sortType = 'availableScope'; sortReverse = !sortReverse">
+                            状态
+                            <span ng-show="sortType == 'availableScope' && !sortReverse" class="fa fa-caret-down pull-right"></span>
+                            <span ng-show="sortType == 'availableScope' && sortReverse" class="fa fa-caret-up pull-right"></span>
+                            </a>
                         </th>
                         <th>从创建以来</th>
                         <!-- <th>Actions</th> -->
@@ -179,19 +172,15 @@
                             <!--                             <th>
                                 <input type="checkbox" class="all_check1">
                             </th> -->
-                            <th>
-                                <a ng-click="sortNetType = 'name'; sorNetReverse = !sorNetReverse">
-                                    网络名称
-                                    <span ng-show="sortNetType == 'name' && !sorNetReverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="sortNetType == 'name' && sorNetReverse" class="fa fa-caret-up"></span>
-                               </a>
+                            <th ng-click="sortNetType = 'name'; sorNetReverse = !sorNetReverse">
+                                网络名称
+                                <span ng-show="sortNetType == 'name' && !sorNetReverse" class="fa fa-caret-down pull-right"></span>
+                                <span ng-show="sortNetType == 'name' && sorNetReverse" class="fa fa-caret-up pull-right"></span>
                             </th>
-                            <th>
-                                <a ng-click="sortNetType = 'status'; sorNetReverse = !sorNetReverse">
-                                    网络状态
-                                    <span ng-show="sortNetType == 'status' && !sorNetReverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="sortNetType == 'status' && sorNetReverse" class="fa fa-caret-up"></span>
-                               </a>
+                            <th ng-click="sortNetType = 'status'; sorNetReverse = !sorNetReverse">
+                                网络状态
+                                <span ng-show="sortNetType == 'status' && !sorNetReverse" class="fa fa-caret-down pull-right"></span>
+                                <span ng-show="sortNetType == 'status' && sorNetReverse" class="fa fa-caret-up pull-right"></span>
                             </th>
                             <th>连接的子网</th>
                             <th>管理员状态</th>
@@ -238,26 +227,20 @@
                             <!--                             <th>
                                 <input type="checkbox" class="all_check1">
                             </th> -->
-                            <th>
-                                <a ng-click="sortRouteType = 'name'; sortRouteReverse = !sortRouteReverse">
-                                    路由器名称
-                                    <span ng-show="sortRouteType == 'name' && !sortRouteReverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="sortRouteType == 'name' && sortRouteReverse" class="fa fa-caret-up"></span>
-                               </a>
+                            <th ng-click="sortRouteType = 'name'; sortRouteReverse = !sortRouteReverse">
+                                路由器名称
+                                <span ng-show="sortRouteType == 'name' && !sortRouteReverse" class="fa fa-caret-down pull-right"></span>
+                                <span ng-show="sortRouteType == 'name' && sortRouteReverse" class="fa fa-caret-up pull-right"></span>
                             </th>
-                            <th>
-                                <a ng-click="sortRouteType = 'status'; sortRouteReverse = !sortRouteReverse">
-                                    路由器状态
-                                    <span ng-show="sortRouteType == 'status' && !sortRouteReverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="sortRouteType == 'status' && sortRouteReverse" class="fa fa-caret-up"></span>
-                               </a>
+                            <th ng-click="sortRouteType = 'status'; sortRouteReverse = !sortRouteReverse">
+                                路由器状态
+                                <span ng-show="sortRouteType == 'status' && !sortRouteReverse" class="fa fa-caret-down pull-right"></span>
+                                <span ng-show="sortRouteType == 'status' && sortRouteReverse" class="fa fa-caret-up pull-right"></span>
                             </th>
-                            <th>
-                                <a ng-click="sortRouteType = 'extName'; sortRouteReverse = !sortRouteReverse">
-                                    外部网络
-                                    <span ng-show="sortRouteType == 'extName' && !sortRouteReverse" class="fa fa-caret-down"></span>
-                                    <span ng-show="sortRouteType == 'extName' && sortRouteReverse" class="fa fa-caret-up"></span>
-                               </a>
+                            <th ng-click="sortRouteType = 'extName'; sortRouteReverse = !sortRouteReverse">
+                                外部网络
+                                <span ng-show="sortRouteType == 'extName' && !sortRouteReverse" class="fa fa-caret-down pull-right"></span>
+                                <span ng-show="sortRouteType == 'extName' && sortRouteReverse" class="fa fa-caret-up pull-right"></span>
                             </th>
                             <th>管理员状态</th>
                             <!-- <th>Actions</th> -->
