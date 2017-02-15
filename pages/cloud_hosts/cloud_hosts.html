@@ -16,7 +16,7 @@
         <div class="inline">
             <input type="text" class="form-control" ng-init="search.input=''" ng-model="search.input">
         </div>
-        <!--         <button class="btn btn-danger" data-toggle="modal" data-target="#delete-confirm" ng-click="confirmDel()" ng-disabled="freeIP"><i class="fa fa-times"></i>终止实例</button> -->
+        <!--         <button class="btn btn-danger" data-toggle="modal" data-target="#delete-confirm" ng-click="confirmDel()" ng-disabled="freeIP"><i class="fa fa-times"></i>删除实例</button> -->
     </div>
     <table class="table table-striped table-bordered">
         <br>
@@ -82,65 +82,153 @@
                 <td ng-bind="vm.lastTime"></td>
                 <td>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm">跳转</button>
+                        <button type="button" class="btn btn-default btn-sm">编辑云主机</button>
                         <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li><a href="">资源监控</a></li>
-                            <li><a href="">流量监控</a></li>
+                            <li><a data-toggle="modal" data-target="#snapshotModal" ng-click="dispName(vm.name, vm.id)">创建快照</a></li>
+                            <li><a ng-click="virtualConsole(vm.id)">虚拟控制台</a></li>
+                            <li><a data-toggle="modal" data-target="#softRebootModal" ng-click="dispName(vm.name, vm.id) ">软重启</a></li>
+                            <li><a data-toggle="modal" data-target="#hardRebootModal" ng-click="dispName(vm.name, vm.id) ">硬重启</a></li>
+                            <li><a data-toggle="modal" data-target="#deleteModal" ng-click="dispName(vm.name, vm.id) ">删除实例</a></li>
+                            <li><a href="#/monitor/instance_resource?{{vm.tenantId}}?{{vm.id}}">资源监控</a></li>
+                            <li><a href="#/monitor/instance_traffic?{{vm.tenantId}}?{{vm.id}}">流量监控</a></li>
                         </ul>
                     </div>
                 </td>
                 <!--                 <td>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editHostModal" ng-click="editCloudHost($index)">编辑云主机</button>
-                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
-                            <span class="caret"></span>
+                    <div class="btn-group ">
+                        <button type="button " class="btn btn-default btn-sm " data-toggle="modal" data-target="#editHostModal" ng-click="editCloudHost($index) ">编辑云主机</button>
+                        <button type="button " class="btn btn-default btn-sm dropdown-toggle " data-toggle="dropdown ">
+                            <span class="caret "></span>
                         </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="">控制台</a></li>
+                        <ul class="dropdown-menu " role="menu ">
+                            <li><a href=" ">控制台</a></li>
                         </ul>
                     </div>
                 </td> -->
             </tr>
         </tbody>
         <tfoot>
-            <tr class="active tfoot-dsp">
-                <td colspan="11">Displaying {{ result.length }} </td>
+            <tr class="active tfoot-dsp ">
+                <td colspan="11 ">Displaying {{ result.length }} </td>
             </tr>
         </tfoot>
     </table>
-    <div class="text-center">
-        <dir-pagination-controls boundary-links="true" template-url="pages/cloud_hosts/dirPagination.tpl.html"></dir-pagination-controls>
+    <div class="text-center ">
+        <dir-pagination-controls boundary-links="true " template-url="pages/cloud_hosts/dirPagination.tpl.html "></dir-pagination-controls>
     </div>
 </div>
-<div class="modal fade" id="editHostModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">编辑云主机</h4>
+<!-- 模态框 编辑云主机-->
+<div class="modal fade " id="editHostModal">
+    <div class="modal-dialog ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <button type="button " class="close " data-dismiss="modal" aria-hidden="true ">&times;</button>
+                <h4 class="modal-title ">编辑云主机</h4>
             </div>
-            <div class="modal-body">
-                <ul id="myTab" class="nav nav-tabs">
-                    <li class="active"><a data-target="#basicInfo" data-toggle="tab">基本信息</a></li>
+            <div class="modal-body ">
+                <ul id="myTab " class="nav nav-tabs ">
+                    <li class="active "><a data-target="#basicInfo " data-toggle="tab ">基本信息</a></li>
                 </ul>
-                <div id="tabContent" class="tab-content">
+                <div id="tabContent " class="tab-content ">
                     <!-- 基本信息 -->
-                    <div class="tab-pane fade in active" id="basicInfo">
-                        <form action="" method="POST" role="form">
-                            <div class="form-group">
-                                <label for="name">名称</label>
-                                <input type="text" class="form-control" id="name" placeholder="Input field" ng-model="tenant.name">
+                    <div class="tab-pane fade in active " id="basicInfo ">
+                        <form action=" " method="POST " role="form ">
+                            <div class="form-group ">
+                                <label for="name ">名称</label>
+                                <input type="text " class="form-control " id="name " placeholder="Input field " ng-model="tenant.name">
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" ng-click="saveChange(tenant)">保存</button>
+            <div class="modal-footer ">
+                <button type="button " class="btn btn-default " data-dismiss="modal">取消</button>
+                <button type="button " class="btn btn-primary " ng-click="saveChange(tenant) ">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框 创建快照 -->
+<div class="modal fade " id="snapshotModal">
+    <div class="modal-dialog " style="width: 50% ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <button type="button " class="close " data-dismiss="modal" aria-hidden="true ">&times;</button>
+                <h4 class="modal-title ">创建快照</h4>
+            </div>
+            <div class="modal-body ">
+                <div class="row ">
+                    <form class="col-sm-6 " role="form ">
+                        <div class="form-group ">
+                            <label for="snapshot ">快照名称</label>
+                            <input type="text " class="form-control " id="snapshot " ng-model="snapshotName ">
+                        </div>
+                    </form>
+                    <div class="col-sm-6 ">
+                        <h3>说明： </h3>快照是保存运行中实例的磁盘状态的一个镜像。
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer ">
+                <button type="button " class="btn btn-default " data-dismiss="modal">取消</button>
+                <button type="button " class="btn btn-primary " ng-disabled="!snapshotName " ng-click="createSnapshot(snapshotName) ">创建快照</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框 软重启 -->
+<div class="modal fade " id="softRebootModal">
+    <div class="modal-dialog " style="width: 50% ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <button type="button " class="close " data-dismiss="modal" aria-hidden="true ">&times;</button>
+                <h4 class="modal-title ">Confirm 软重启实例</h4>
+            </div>
+            <div class="modal-body ">
+                你选择了虚拟机{{cloudHost.name}}.重启实例会丢失所有没存放在永久存储设备上的数据.
+            </div>
+            <div class="modal-footer ">
+                <button type="button " class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button " class="btn btn-primary" ng-click="reboot('soft')">软重启实例</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框 硬重启 -->
+<div class="modal fade " id="hardRebootModal">
+    <div class="modal-dialog " style="width: 50% ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <button type="button " class="close " data-dismiss="modal" aria-hidden="true ">&times;</button>
+                <h4 class="modal-title ">Confirm 硬重启实例</h4>
+            </div>
+            <div class="modal-body ">
+                你选择了虚拟机{{cloudHost.name}}.重启实例会丢失所有没存放在永久存储设备上的数据.
+            </div>
+            <div class="modal-footer ">
+                <button type="button " class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button " class="btn btn-primary" ng-click="reboot('hard')">硬重启实例</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框 删除实例 -->
+<div class="modal fade " id="deleteModal">
+    <div class="modal-dialog " style="width: 50% ">
+        <div class="modal-content ">
+            <div class="modal-header ">
+                <button type="button " class="close " data-dismiss="modal" aria-hidden="true ">&times;</button>
+                <h4 class="modal-title ">Confirm 删除实例</h4>
+            </div>
+            <div class="modal-body ">
+                你选择了虚拟机{{cloudHost.name}}.终止的实例均无法恢复
+            </div>
+            <div class="modal-footer ">
+                <button type="button " class="btn btn-default " data-dismiss="modal">取消</button>
+                <button type="button " class="btn btn-primary " ng-click="deleteInstance(cloudHost.id)">删除实例</button>
             </div>
         </div>
     </div>

@@ -30,8 +30,8 @@ angular.module('myApp')
                 }
             };
 
+            // 请求云主机列表
             var getList = function(url) {
-                // 请求云主机列表
                 var defered = $q.defer(),
                     req = {
                         method: 'GET',
@@ -49,6 +49,7 @@ angular.module('myApp')
 
                     for (var i = 0; i < len; i++) {
                         var vm = {
+                            id: data[i].id,
                             name: data[i].name,
                             hypervisorHostname: data[i]['OS-EXT-SRV-ATTR:hypervisor_hostname'],
                             tenantName: data[i].tenant_name,
@@ -95,10 +96,122 @@ angular.module('myApp')
                 });
 
                 return defered.promise;
-            }
+            };
+
+            // 创建快照
+            var creatSnapshot = function(cloudHost) {
+                var defered = $q.defer(),
+                    req = {
+                        method: 'POST',
+                        url: config['host'] + '/v1.0/admin/create_image/' + cloudHost.id,
+                        data: {
+                            createImage: {
+                                name: cloudHost.name
+                            }
+                        },
+                        params: {
+                            token: localStorage.token
+                        }
+                    };
+
+                $http(req).then(function(response) {
+                    // 请求成功
+                    defered.resolve(response);
+                }, function(response) {
+                    // 请求失败
+                    defered.reject(response);
+                });
+
+                return defered.promise;
+            };
+
+            // 获取虚拟控制台url
+            var virtualConsole = function(id) {
+                var defered = $q.defer(),
+                    req = {
+                        method: 'POST',
+                        url: config['host'] + '/v1.0/admin/get_vnc/' + id,
+                        data: {
+                            'os-getVNCConsole': {
+                                type: 'novnc'
+                            }
+                        },
+                        params: {
+                            token: localStorage.token
+                        }
+                    };
+
+                $http(req).then(function(response) {
+                    // 请求成功
+                    response.data = response.data.console.url.replace('controller', location.host.split(':')[0]);
+                    defered.resolve(response);
+                }, function(response) {
+                    // 请求失败
+                    defered.reject(response);
+                });
+
+                return defered.promise;
+            };
+
+            // 软重启或硬重启
+            var reboot = function(type, id) {
+                var defered = $q.defer(),
+                    req = {
+                        method: 'POST',
+                        url: config['host'] + '/v1.0/admin/admin_reboot/' + id,
+                        data: {
+                            reboot: {
+                                type: type.toUpperCase()
+                            }
+                        },
+                        params: {
+                            token: localStorage.token
+                        }
+                    };
+
+                $http(req).then(function(response) {
+                    // 请求成功
+                    defered.resolve(response);
+                }, function(response) {
+                    // 请求失败
+                    defered.reject(response);
+                });
+
+                return defered.promise;
+            };
+
+            // 终止实例
+            var deleteInstance = function(ids) {
+                // ids 是一个数组
+                var defered = $q.defer(),
+                    req = {
+                        method: 'POST',
+                        url: config['host'] + '/v1.0/admin/admin_delete',
+                        data: {
+                            servers_ids: ids
+                        },
+                        params: {
+                            token: localStorage.token
+                        }
+                    };
+
+                $http(req).then(function(response) {
+                    // 请求成功
+                    defered.resolve(response);
+                }, function(response) {
+                    // 请求失败
+                    defered.reject(response);
+                });
+
+                return defered.promise;
+            };
 
             return {
-                getCloudList: getList
+                getCloudList: getList,
+                creatSnapshot: creatSnapshot,
+                virtualConsole: virtualConsole,
+                reboot: reboot,
+                deleteInstance: deleteInstance
             };
         }
     ]);
