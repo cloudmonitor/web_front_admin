@@ -7,8 +7,8 @@ setTimeout("ajaxbg.hide()", 2000);
 var instance_traffic_timer_arr = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 $(function() {
     $('#option1').click();
-    var monitor_tenant_id = window.location.href.split('?')[1];
-    var monitor_server_id = window.location.href.split('?')[2];
+    var monitor_tenant_id = getQueryString("tenant_id");
+    var monitor_server_id = getQueryString("server_id");
     var curr_type = "minute";
     var curr_tenant_id;
     var curr_server_id;
@@ -22,7 +22,7 @@ $(function() {
                 for (var i = 0; i < tenants.length; i++)
                     $(".monitor_instance_traffic_tenant").append('<option value="' + tenants[i].id + '">' + tenants[i].name + '</option>');
                 curr_tenant_id = tenants[0].id;
-                if (monitor_tenant_id != 'undefined' && monitor_tenant_id != undefined) {
+                if (monitor_tenant_id !=null && monitor_tenant_id.toString().length>1) {
                     curr_tenant_id = monitor_tenant_id;
                     $(".monitor_instance_traffic_tenant option[value='" + curr_tenant_id + "']").attr("selected", true);
                 }
@@ -41,7 +41,7 @@ $(function() {
                             $(".monitor_instance_traffic_cloud_host").append('<option value="' + servers[i].id  + '">' + servers[i].name + '</option>');
                         }
                         curr_server_id = servers[0].id;
-                        if (monitor_server_id != 'undefined' && monitor_server_id != undefined) {
+                        if (monitor_server_id !=null && monitor_server_id.toString().length>1) {
                             curr_server_id = monitor_server_id;
                             $(".monitor_instance_traffic_cloud_host option[value='" + curr_server_id + "']").attr("selected", true);
                         }
@@ -79,7 +79,7 @@ $(function() {
                         $(".monitor_instance_traffic_cloud_host").append('<option value="' + servers[i].id  + '">' + servers[i].name + '</option>');
                     }
                     curr_server_id = servers[0].id;
-                    if (monitor_server_id != 'undefined' && monitor_server_id != undefined) {
+                    if (monitor_server_id !=null && monitor_server_id.toString().length>1) {
                         curr_server_id = monitor_server_id;
                         $(".monitor_instance_traffic_cloud_host option[value='" + curr_server_id + "']").attr("selected", true);
                     }
