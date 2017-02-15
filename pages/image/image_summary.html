@@ -2,8 +2,15 @@
 <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <!-- 物理主机资源使用 -->
     <div class="desc">镜像</div>
+    <div class="row pull-right">
+        <div class="inline">
+            <input type="text" class="form-control" ng-model="search" placeholder="输入镜像名称查找">
+        </div>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#createImageModal"><span class="fa fa-plus"></span>&nbsp;创建镜像</button>
+    </div>
+    <br>
+    <br>
     <table class="table table-striped table-bordered">
-        <caption>镜像列表</caption>
         <thead>
             <tr>
                 <!-- <th>
@@ -44,10 +51,11 @@
                     <span ng-show="sortType == 'size' && !sortReverse" class="fa fa-caret-down pull-right"></span>
                     <span ng-show="sortType == 'size' && sortReverse" class="fa fa-caret-up pull-right"></span>
                 </th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <tr dir-paginate="image in images | orderBy:sortType:sortReverse | itemsPerPage: itemPerPage as result track by $index " current-page="currentPage">
+            <tr dir-paginate="image in images | orderBy:sortType:sortReverse | imageFilter:search | itemsPerPage: itemPerPage as result track by $index" current-page="currentPage">
                 <!-- <td>
                     <input type="checkbox">
                 </td> -->
@@ -58,6 +66,17 @@
                 <td ng-bind="image.protected"></td>
                 <td ng-bind="image.disk_format"></td>
                 <td ng-bind="image.size"></td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#editImageModal" ng-click="edit(image, $index)">编辑镜像</button>
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a data-toggle="modal" data-target="#deleteImageModal" ng-click="delete(image, $index)">删除镜像</a></li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
         </tbody>
         <tfoot>
@@ -68,5 +87,113 @@
     </table>
     <div class="text-center">
         <dir-pagination-controls boundary-links="true" template-url="pages/cloud_hosts/dirPagination.tpl.html"></dir-pagination-controls>
+    </div>
+</div>
+<!-- 模态框 编辑镜像 -->
+<div class="modal fade" id="editImageModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">编辑镜像</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="">名称</label>
+                        <input type="text" class="form-control" id="" ng-change="changed=true" ng-model="mirror.name">
+                    </div>
+                    <div class="form-group">
+                        <label for="">最小磁盘(GB)</label>
+                        <input type="text" class="form-control" id="" ng-change="changed=true" ng-model="mirror.min_disk">
+                    </div>
+                    <div class="form-group">
+                        <label for="">最小内存(MB)</label>
+                        <input type="text" class="form-control" id="" ng-change="changed=true" ng-model="mirror.min_ram">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" ng-change="changed=true" ng-model="mirror.visibility"> 公有
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" ng-change="changed=true" ng-model="mirror.protected"> 受保护的
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="changed=false">取消</button>
+                <button type="button" class="btn btn-primary" ng-disabled="!changed" ng-click="saveChange(mirror, origin)">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框 创建镜像 -->
+<div class="modal fade" id="createImageModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">创建镜像</h4>
+            </div>
+            <div class="modal-body">
+                <form name="newMirrorForm" role="form">
+                    <div class="form-group">
+                        <label for="">名称</label>
+                        <input type="text" class="form-control" ng-init="newMirror.name=''" ng-model="newMirror.name" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="">镜像文件</label>
+                        <input type="file" class="form-control" id="file" name="myfile" ng-model="newMirror.file">
+                    </div>
+                    <div class="form-group">
+                        <label for="">镜像格式</label>
+                        <select class="form-control" ng-init="newMirror.disk_format=false" ng-model="newMirror.disk_format" ng-options="image.value as image.label for image in formats"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="">最小磁盘(GB)</label>
+                        <input type="text" class="form-control" ng-model="newMirror.min_disk" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="">最小内存(MB)</label>
+                        <input type="text" class="form-control" ng-model="newMirror.min_ram" required="">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" ng-init="newMirror.visibility=false" ng-model="newMirror.visibility"> 公有
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" ng-init="newMirror.protected=false" ng-model="newMirror.protected"> 受保护的
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="newMirror={disk_format: false};">取消</button>
+                <button type="button" class="btn btn-primary" ng-disabled="newMirrorForm.$invalid" ng-click="createImage(newMirror)">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框 删除镜像 -->
+<div class="modal fade" id="deleteImageModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">删除镜像</h4>
+            </div>
+            <div class="modal-body">
+                确认删除 {{deleteImage.name}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" ng-click="deleteImageConfirm(deleteImage)">删除</button>
+            </div>
+        </div>
     </div>
 </div>

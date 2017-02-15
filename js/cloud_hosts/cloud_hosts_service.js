@@ -143,7 +143,7 @@ angular.module('myApp')
 
                 $http(req).then(function(response) {
                     // 请求成功
-                    response.data = response.data.console.url.replace('controller', location.host.split(':')[0]);
+                    response.data = response.data.console.url.replace('controller', location.hostname);
                     defered.resolve(response);
                 }, function(response) {
                     // 请求失败
