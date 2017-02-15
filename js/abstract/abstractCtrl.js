@@ -38,6 +38,58 @@ abstractCtrl.controller('abstractController', function($scope, $http, $route) {
         }
         $scope.numInfos = numInfoTemp;
         $scope.simplePageCount = $scope.usages.length;
+        $scope.subnets_used = 0;
+        $scope.subnets_all = 0;
+        $scope.networks_used = 0;
+        $scope.networks_all = 0;
+        $scope.floatingips_used = 0;
+        $scope.floatingips_all = 0;
+        $scope.memory_mb = 0;
+        $scope.memory_all = 0;
+        $scope.security_groups_rule_used = 0;
+        $scope.security_groups_rule_all = 0;
+        $scope.instance_num = 0;
+        $scope.instance_all = 0;
+        $scope.vcpus = 0;
+        $scope.vcpus_all = 0;
+        $scope.security_groups_used = 0;
+        $scope.security_groups_all = 0;
+        $scope.routers_used = 0;
+        $scope.routers_all = 0;
+        $scope.ports_used = 0;
+        $scope.ports_all = 0;
+        for (var i = 0; i < $scope.usages.length; i++) {
+            $scope.subnets_used += $scope.usages[i].subnets_used;
+            $scope.subnets_all += $scope.usages[i].quotas.subnet;
+
+            $scope.networks_used += $scope.usages[i].networks_used;
+            $scope.networks_all += $scope.usages[i].quotas.network;
+
+            $scope.floatingips_used += $scope.usages[i].floatingips_used;
+            $scope.floatingips_all += $scope.usages[i].quotas.floatingip;
+
+            $scope.memory_mb += $scope.usages[i].memory_mb;
+            $scope.memory_all += $scope.usages[i].quotas.ram;
+
+            $scope.security_groups_rule_used += $scope.usages[i].security_groups_rule_used;
+            $scope.security_groups_rule_all += $scope.usages[i].quotas.security_group_rule;
+
+            $scope.instance_num += $scope.usages[i].instance_num;
+            $scope.instance_all += $scope.usages[i].quotas.instances;
+
+            $scope.vcpus += $scope.usages[i].vcpus;
+            $scope.vcpus_all += $scope.usages[i].quotas.cores;
+
+            $scope.security_groups_used += $scope.usages[i].security_groups_used;
+            $scope.security_groups_all += $scope.usages[i].quotas.security_group;
+
+            $scope.routers_used += $scope.usages[i].routers_used;
+            $scope.routers_all += $scope.usages[i].quotas.router;
+
+            $scope.ports_used += $scope.usages[i].ports_used;
+            $scope.ports_all += $scope.usages[i].quotas.port;
+
+        }
     });
 
     // $scope.queryInfo = function() {

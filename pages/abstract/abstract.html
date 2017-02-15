@@ -110,6 +110,19 @@
                     <td>{{usage.routers_used}}/{{usage.quotas.router}}</td>
                     <td>{{usage.ports_used}}/{{usage.quotas.port}}</td>
                 </tr>
+                <tr>
+                    <td><B>总计</B></td>
+                    <td>{{subnets_used}}/{{subnets_all}}</td>
+                    <td>{{networks_used}}/{{networks_all}}</td>
+                    <td>{{floatingips_used}}/{{floatingips_all}}</td>
+                    <td>{{memory_mb}}/{{memory_all}}</td>
+                    <td>{{security_groups_rule_used}}/{{security_groups_rule_all}}</td>
+                    <td>{{instance_num}}/{{instance_all}}</td>
+                    <td>{{vcpus}}/{{vcpus_all}}</td>
+                    <td>{{security_groups_used}}/{{security_groups_all}}</td>
+                    <td>{{routers_used}}/{{routers_all}}</td>
+                    <td>{{ports_used}}/{{ports_all}}</td>
+                </tr>
             </tbody>
             <tfoot>
                 <tr ng-if="!simplePageCount" class="active tfoot-dsp">
