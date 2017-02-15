@@ -543,3 +543,14 @@ function identify_client_server(ip_protocol, ip, port) {
     }
     return ret;
 }
+
+
+function getQueryString(name) {
+    var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+    if (window.location.href.split("?").length>1) {
+        var r = window.location.href.split("?")[1].match(reg);
+        if (r != null)
+            return unescape(r[2]);
+    }
+    return null;
+}
