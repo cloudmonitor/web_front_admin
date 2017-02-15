@@ -120,8 +120,14 @@ angular.module('myApp')
             $scope.deleteInstance = function(id) {
                 CloudService.deleteInstance(new Array(id)).then(function(response) {
                     // 请求成功
-                    console.log(response.data);
+                    if (response.data[id] == '204') {
+                        createAndHideAlert({
+                            message: $scope.cloudHost.name + '删除成功',
+                            className: 'alert-success'
+                        });
+                    }
                 });
+                $('#deleteModal').modal('hide');
             };
         }
     ]);
