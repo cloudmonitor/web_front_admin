@@ -110,6 +110,7 @@ angular.module('myApp')
 
             upload.then(function(response) {
                 // 请求成功
+                tranferFormat(response.data);
                 defered.resolve(response);
             }, function(response) {
                 // 请求失败

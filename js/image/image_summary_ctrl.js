@@ -107,6 +107,8 @@ angular.module('myApp')
                     console.log('返回的数据:', response.data);
                     $scope.images.unshift(response.data);
                 });
+
+                $('#createImageModal').modal('hide');
             };
 
             // 删除镜像
