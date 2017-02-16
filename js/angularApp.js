@@ -1,4 +1,4 @@
-var myApp = angular.module('myApp', ['ngRoute', 'abstractCtrl', 'projectsCtrl', 'userCtrl', 'angularUtils.directives.dirPagination']);
+var myApp = angular.module('myApp', ['ngRoute', 'abstractCtrl', 'projectsCtrl', 'userCtrl', 'angularUtils.directives.dirPagination', 'ngFileUpload']);
 
 // 路由跳转 
 var router_all;

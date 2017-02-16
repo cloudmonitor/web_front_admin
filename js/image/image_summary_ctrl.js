@@ -99,12 +99,13 @@ angular.module('myApp')
 
             // 创建镜像
             $scope.createImage = function(mirror) {
-                mirror.myfile = document.getElementById('file').files[0];
                 mirror.container_format = 'bare';
                 mirror.visibility = mirror.visibility ? 'public' : 'private';
+
                 ImageSummaryService.createImage(mirror).then(function(response) {
                     // 请求成功
                     console.log('返回的数据:', response.data);
+                    $scope.images.unshift(response.data);
                 });
             };
 

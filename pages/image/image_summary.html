@@ -6,7 +6,7 @@
         <div class="inline">
             <input type="text" class="form-control" ng-model="search" placeholder="输入镜像名称查找">
         </div>
-        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#createImageModal"><span class="fa fa-plus"></span>&nbsp;创建镜像</button>
+        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#createImageModal" ng-click="newMirror={disk_format: false, min_disk: 0, min_ram:0};"><span class="fa fa-plus"></span>&nbsp;创建镜像</button>
     </div>
     <br>
     <br>
@@ -146,7 +146,7 @@
                     </div>
                     <div class="form-group">
                         <label for="">镜像文件</label>
-                        <input type="file" class="form-control" id="file" name="myfile" ng-model="newMirror.file">
+                        <input type="file" class="form-control" id="file" name="file" ngf-select="" ng-model="newMirror.myfile">
                     </div>
                     <div class="form-group">
                         <label for="">镜像格式</label>
@@ -154,11 +154,11 @@
                     </div>
                     <div class="form-group">
                         <label for="">最小磁盘(GB)</label>
-                        <input type="text" class="form-control" ng-model="newMirror.min_disk" required="">
+                        <input type="number" class="form-control" min="0" ng-init="newMirror.min_disk=0" ng-model="newMirror.min_disk" required="">
                     </div>
                     <div class="form-group">
                         <label for="">最小内存(MB)</label>
-                        <input type="text" class="form-control" ng-model="newMirror.min_ram" required="">
+                        <input type="number" class="form-control" min="0" ng-init="newMirror.min_ram=0" ng-model="newMirror.min_ram" required="">
                     </div>
                     <div class="form-group">
                         <label>
@@ -173,7 +173,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="newMirror={disk_format: false};">取消</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="newMirror={disk_format: false, min_disk: 0, min_ram:0};">取消</button>
                 <button type="button" class="btn btn-primary" ng-disabled="newMirrorForm.$invalid" ng-click="createImage(newMirror)">保存</button>
             </div>
         </div>

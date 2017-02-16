@@ -1,5 +1,5 @@
 angular.module('myApp')
-    .factory('ImageSummaryService', ['$http', '$q', function($http, $q) {
+    .factory('ImageSummaryService', ['$http', '$q', 'Upload', function($http, $q, Upload) {
         var getReadableSize = function(size) {
             // size 单位 B
             if (size < 1024) {
@@ -12,6 +12,18 @@ angular.module('myApp')
                 size = (size / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
             }
             return size;
+        };
+
+        // 将返回的数据, 进行转化, 方便前台展示
+        var tranferFormat = function(data) {
+            data.visibility = (data.visibility === 'private') ? 'False' : 'True';
+            data.status = (data.status === 'active') ? '可用' : '不可用';
+            data.protected = data.protected ? 'True' : 'False';
+            data.disk_format = data.disk_format.toUpperCase();
+            data.size = getReadableSize(data.size);
+            data.image_type = !!data.image_type ? '快照' : '镜像';
+
+            return data;
         };
 
         // 获取镜像列表
@@ -28,12 +40,7 @@ angular.module('myApp')
             $http(req).then(function(response) {
                 // 请求成功
                 angular.forEach(response.data.images, function(value, key) {
-                    value.visibility = (value.visibility === 'private') ? 'False' : 'True';
-                    value.status = (value.status === 'active') ? '可用' : '不可用';
-                    value.protected = value.protected ? 'True' : 'False';
-                    value.disk_format = value.disk_format.toUpperCase();
-                    value.size = getReadableSize(value.size);
-                    value.image_type = !!value.image_type ? '快照' : '镜像';
+                    tranferFormat(value);
                 });
                 response.data = response.data.images;
                 defered.resolve(response);
@@ -74,14 +81,10 @@ angular.module('myApp')
                         token: localStorage.token
                     }
                 };
+
                 $http(req).then(function(response) {
                     // 请求成功
-                    response.data.visibility = (response.data.visibility === 'private') ? 'False' : 'True';
-                    response.data.status = (response.data.status === 'active') ? '可用' : '不可用';
-                    response.data.protected = response.data.protected ? 'True' : 'False';
-                    response.data.disk_format = response.data.disk_format.toUpperCase();
-                    response.data.size = getReadableSize(response.data.size);
-                    response.data.image_type = !!response.data.image_type ? '快照' : '镜像';
+                    tranferFormat(response.data);
                     defered.resolve(response);
                 }, function(response) {
                     // 请求失败
@@ -97,19 +100,15 @@ angular.module('myApp')
         // 创建镜像
         var createImage = function(mirror) {
             var defered = $q.defer(),
-                req = {
+                upload = Upload.upload({
                     url: config['host'] + '/v1.0/admin/admin_create_image',
                     data: mirror,
-                    method: 'POST',
                     params: {
                         token: localStorage.token
-                    },
-                    // withCredentials: true,
-                    headers: { 'Content-Type': 'multipart/form-data' },
-                    transformRequest: angular.identity
-                };
+                    }
+                });
 
-            $http(req).then(function(response) {
+            upload.then(function(response) {
                 // 请求成功
                 defered.resolve(response);
             }, function(response) {
