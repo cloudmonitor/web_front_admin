@@ -104,8 +104,11 @@ angular.module('myApp')
 
                 ImageSummaryService.createImage(mirror).then(function(response) {
                     // 请求成功
-                    console.log('返回的数据:', response.data);
                     $scope.images.unshift(response.data);
+                    createAndHideAlert({
+                        message: '镜像创建成功',
+                        className: 'alert-success'
+                    });
                 });
 
                 $('#createImageModal').modal('hide');
