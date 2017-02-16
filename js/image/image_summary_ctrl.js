@@ -66,6 +66,15 @@ angular.module('myApp')
                 $scope.images = response.data;
             });
 
+            // 寻找某镜像id在数组中的位置
+            var whereIsImage = function(id) {
+                for (var i = 0, len = $scope.images.length; i < len; i++) {
+                    if (id == $scope.images[i].id) {
+                        return i;
+                    }
+                };
+            };
+
             // 填充编辑列表
             $scope.edit = function(image, index) {
                 $scope.mirror = {
@@ -91,7 +100,8 @@ angular.module('myApp')
                 ImageSummaryService.updateImage(mirror, origin).then(function(response) {
                     // 请求成功
                     // 更新数据
-                    $scope.images[mirror.index] = response.data;
+                    var whereIs = whereIsImage(mirror.image_id);
+                    $scope.images[whereIs] = response.data;
                 });
 
                 $('#editImageModal').modal('hide');
@@ -115,9 +125,8 @@ angular.module('myApp')
             };
 
             // 删除镜像
-            $scope.delete = function(image, index) {
+            $scope.delete = function(image) {
                 $scope.deleteImage = image;
-                $scope.deleteImage.index = index;
             };
 
             // 确认删除
@@ -128,7 +137,8 @@ angular.module('myApp')
                         message: '镜像删除成功',
                         className: 'alert-success'
                     });
-                    $scope.images.splice(image.index, 1);
+                    var whereIs = $scope.images.indexOf(image);
+                    $scope.images.splice(whereIs, 1);
                 });
 
                 $('#deleteImageModal').modal('hide');
