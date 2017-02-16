@@ -116,6 +116,15 @@ angular.module('myApp')
                 $('#hardRebootModal').modal('hide');
             };
 
+            // 寻找某镜像id在数组中的位置
+            var whereIsHost = function(id) {
+                for (var i = 0, len = $scope.vms.length; i < len; i++) {
+                    if (id == $scope.vms[i].id) {
+                        return i;
+                    }
+                };
+            };
+
             // 删除实例
             $scope.deleteInstance = function(id) {
                 CloudService.deleteInstance(new Array(id)).then(function(response) {
@@ -125,6 +134,8 @@ angular.module('myApp')
                             message: $scope.cloudHost.name + '删除成功',
                             className: 'alert-success'
                         });
+                        var whereIs = whereIsHost(id);
+                        $scope.vms.splice(whereIs, 1);
                     }
                 });
                 $('#deleteModal').modal('hide');
