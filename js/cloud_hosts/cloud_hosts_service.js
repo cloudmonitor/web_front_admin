@@ -132,8 +132,8 @@ angular.module('myApp')
                         method: 'POST',
                         url: config['host'] + '/v1.0/admin/get_vnc/' + id,
                         data: {
-                            'os-getVNCConsole': {
-                                type: 'novnc'
+                            'os-getSPICEConsole': {
+                                type: 'spice-html5'
                             }
                         },
                         params: {
