@@ -497,6 +497,8 @@ function identify_protocol_port(ip_protocol, src_port_num, dst_port_num) {
                 ret = "SMTP(25)";
             } else if (src_port == 80 || dst_port == 80) {
                 ret = "HTTP(80)";
+            }else if(src_port==3306 || dst_port==3306){
+                ret = "MYSQL(3306)";
             } else if (src_port == 110 || dst_port == 110) {
                 ret = "POP3(110)";
             } else if (src_port == 443 || dst_port == 443) {

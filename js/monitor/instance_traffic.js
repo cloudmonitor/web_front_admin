@@ -530,7 +530,7 @@ function set_instance_top_ip_link(tenant_id, instance_id, curr_type) {
     var instance_top_ip_link = echarts.init(document.getElementById("instance_top_ip_link"));
     var option_top = {
         title : {
-            text: '流量协议端口--TOP 10',
+            text: '流量源IP-目的IP--TOP 10',
             x:'center'
         },
         tooltip : {
