@@ -4,75 +4,45 @@
 var ajaxbg = $("#loading_monitor,#background_monitor");
 ajaxbg.show();
 setTimeout("ajaxbg.hide()", 2000);
-var tenant_traffic_timer_arr =  [0, 0, 0, 0, 0, 0, 0, 0];
+var cloud_traffic_timer_arr =  [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 $(function () {
     $('#option1').click();
-    var monitor_tenant_id = window.location.href.split('?')[1];
-    var curr_tenant_id;
     var curr_type = "minute";
+    cloud_traffic_statistics(curr_type);
 
-    // 获取所有的租户
-    $.ajax({
-        type: "GET",
-        url: config["host"] + "/v1.0/admin/tenants?token=" + window.localStorage.token,
-        success: function(data) {
-            var tenants = JSON.parse(data)['tenants'];
-            if (tenants.length != 0) {
-                for (var i = 0; i < tenants.length; i++)
-                    $(".monitor_tenant_traffic").append('<option value="' + tenants[i].id + '">' + tenants[i].name + '</option>');
-                curr_tenant_id = tenants[0].id;
-                if (monitor_tenant_id != 'undefined' && monitor_tenant_id != undefined) {
-                    curr_tenant_id = monitor_tenant_id;
-                    $(".monitor_tenant_traffic option[value='" + curr_tenant_id + "']").attr("selected", true);
-                }
-                pre_set_tenant_traffic(curr_tenant_id, curr_type);
-            } else {
-                createAndHideAlert("当前没有租户^.^！");
-            }
-        },
-        error: function(data) {
-            createAndHideAlert("当前没有租户或租户信息获取失败！");
-        }
-    });
-
-    $('.monitor_tenant_traffic').change(function() {
-        clear_timer_when_switch(tenant_traffic_timer_arr);
-        var id = $(this).children('option:selected').val();
-        curr_tenant_id = id;
-        pre_set_tenant_traffic(curr_tenant_id, curr_type)
-    });
 
     //天时分改变
     $('#option1').click(function() {
         changeStatus(this);
         curr_type = "minute";
-        pre_set_tenant_traffic(curr_tenant_id, curr_type)
+        cloud_traffic_statistics(curr_type)
     });
     $('#option2').click(function() {
         changeStatus(this);
         curr_type = "hour";
-        pre_set_tenant_traffic(curr_tenant_id, curr_type)
+        cloud_traffic_statistics(curr_type)
     });
     $('#option3').click(function() {
         changeStatus(this);
         curr_type = "day";
-        pre_set_tenant_traffic(curr_tenant_id, curr_type);
+        cloud_traffic_statistics(curr_type);
     });
 });
 
 
-function pre_set_tenant_traffic(tenant_id, curr_type) {
+function cloud_traffic_statistics(curr_type) {
     ajaxbg.show();
     setTimeout("ajaxbg.hide()", 2000);
-    set_tenant_top_instance(tenant_id, curr_type);
-    set_tenant_top_protocol_port(tenant_id, curr_type);
-    set_tenant_top_ip_link(tenant_id, curr_type);
-    set_tenant_top_src_ip(tenant_id, curr_type);
-    set_tenant_top_dst_ip(tenant_id, curr_type);
-    set_tenant_top_src_port(tenant_id, curr_type);
-    set_tenant_top_dst_port(tenant_id, curr_type);
-    set_tenant_top_session(tenant_id, curr_type);
+    set_cloud_top_tenant(curr_type);
+    set_cloud_top_instance(curr_type);
+    set_cloud_top_protocol_port(curr_type);
+    set_cloud_top_ip_link(curr_type);
+    set_cloud_top_src_ip(curr_type);
+    set_cloud_top_dst_ip(curr_type);
+    set_cloud_top_src_port(curr_type);
+    set_cloud_top_dst_port(curr_type);
+    set_cloud_top_session(curr_type);
 }
 
 function changeStatus(that) {
@@ -81,14 +51,14 @@ function changeStatus(that) {
     $(that).addClass("active");
 }
 
-function get_tenant_statistics_data(tenant_id, data_type, curr_type) {
-    if(clear_timer("/monitor/tenant_traffic", tenant_traffic_timer_arr)){
+function get_cloud_traffic_statistics_data(data_type, curr_type) {
+    if(clear_timer("/monitor/cloud_traffic", cloud_traffic_timer_arr)){
         return;
     }
     var meter_datas = "";
     $.ajax({
         type: "GET",
-        url: config["host"] + "/v1.0/monitor/" + tenant_id + "/" + data_type +"/" + curr_type + "?token=" + window.localStorage.token,
+        url: config["host"] + "/v1.0/monitor/" + data_type +"/" + curr_type + "?token=" + window.localStorage.token,
         async: false,
         success: function (data) {
             meter_datas = data;
@@ -100,9 +70,85 @@ function get_tenant_statistics_data(tenant_id, data_type, curr_type) {
     return JSON.parse(meter_datas);
 }
 
-function set_tenant_top_instance(tenant_id, curr_type) {
-    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_instance", curr_type);
-    var tenant_top_instance = echarts.init(document.getElementById("tenant_top_instance"));
+function set_cloud_top_tenant(curr_type) {
+    var meter_datas = get_cloud_traffic_statistics_data("cloud_top_tenant", curr_type);
+    var cloud_top_tenant = echarts.init(document.getElementById("cloud_top_tenant"));
+    var option_top = {
+        title : {
+            text: '租户流量--TOP 10',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'right',
+            padding: [30, 10, 0, 0],
+            data:
+                (function () {
+                    var res = [];
+                    for(var i=0; i<meter_datas.length; i++){
+                        res.push(meter_datas[i]["_id"]["tenant_name"]);
+                    }
+                    return res;
+                })()
+        },
+        series : [
+            {
+                name: '租户流量',
+                type: 'pie',
+                radius : [15, 90],
+                center: ['40%', '65%'],
+                data:
+                    (function () {
+                        var res = [];
+                        for(var i=0; i<meter_datas.length; i++){
+                            res.push({
+                                name: meter_datas[i]["_id"]["tenant_name"],
+                                value: meter_datas[i]["count"]
+                            });
+                        }
+                        return res;
+                    })()
+                ,
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+    cloud_top_tenant.setOption(option_top);
+    if(curr_type == "minute") {
+        cloud_traffic_timer_arr[0] = setInterval(function () {
+            var last_datas = get_cloud_traffic_statistics_data("cloud_top_tenant", curr_type);
+            var data0 = option_top.series[0].data;
+            var legend0 = option_top.legend.data;
+            data0.splice(0, data0.length);
+            legend0.splice(0, legend0.length);
+            for (var i = 0; i < last_datas.length; i++) {
+                data0.push({
+                    name: last_datas[i]["_id"]["tenant_name"],
+                    value: last_datas[i]["count"]
+                });
+                legend0.push(last_datas[i]["_id"]["tenant_name"]);
+            }
+            cloud_top_tenant.setOption(option_top);
+        }, 5000);
+    }
+    else {
+        clearInterval(cloud_traffic_timer_arr[0]);
+    }
+}
+
+function set_cloud_top_instance(curr_type) {
+    var meter_datas = get_cloud_traffic_statistics_data("cloud_top_instance", curr_type);
+    var cloud_top_instance = echarts.init(document.getElementById("cloud_top_instance"));
     var option_top = {
         title : {
             text: '虚拟机流量--TOP 10',
@@ -153,10 +199,10 @@ function set_tenant_top_instance(tenant_id, curr_type) {
             }
         ]
     };
-    tenant_top_instance.setOption(option_top);
+    cloud_top_instance.setOption(option_top);
     if(curr_type == "minute") {
-        tenant_traffic_timer_arr[0] = setInterval(function () {
-            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_instance", curr_type);
+        cloud_traffic_timer_arr[1] = setInterval(function () {
+            var last_datas = get_cloud_traffic_statistics_data("cloud_top_instance", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
             data0.splice(0, data0.length);
@@ -168,17 +214,17 @@ function set_tenant_top_instance(tenant_id, curr_type) {
                 });
                 legend0.push(last_datas[i]["_id"]["instance_name"]);
             }
-            tenant_top_instance.setOption(option_top);
+            cloud_top_instance.setOption(option_top);
         }, 5000);
     }
     else {
-        clearInterval(tenant_traffic_timer_arr[0]);
+        clearInterval(cloud_traffic_timer_arr[1]);
     }
 }
 
-function set_tenant_top_ip_link(tenant_id, curr_type) {
-    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_ip_link", curr_type);
-    var tenant_top_ip_link = echarts.init(document.getElementById("tenant_top_ip_link"));
+function set_cloud_top_ip_link(curr_type) {
+    var meter_datas = get_cloud_traffic_statistics_data("cloud_top_ip_link", curr_type);
+    var cloud_top_ip_link = echarts.init(document.getElementById("cloud_top_ip_link"));
     var option_top = {
         title : {
             text: '流量源IP-目的IP--TOP 10',
@@ -230,10 +276,10 @@ function set_tenant_top_ip_link(tenant_id, curr_type) {
             }
         ]
     };
-    tenant_top_ip_link.setOption(option_top);
+    cloud_top_ip_link.setOption(option_top);
     if(curr_type == "minute") {
-        tenant_traffic_timer_arr[1] = setInterval(function () {
-            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_ip_link", curr_type);
+        cloud_traffic_timer_arr[2] = setInterval(function () {
+            var last_datas = get_cloud_traffic_statistics_data("cloud_top_ip_link", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
             data0.splice(0, data0.length);
@@ -245,17 +291,17 @@ function set_tenant_top_ip_link(tenant_id, curr_type) {
                 });
                 legend0.push(last_datas[i]["_id"]["ipsource"]+ "--"+last_datas[i]["_id"]["ipdestination"]);
             }
-            tenant_top_ip_link.setOption(option_top);
+            cloud_top_ip_link.setOption(option_top);
         }, 5000);
     }
     else {
-        clearInterval(tenant_traffic_timer_arr[1]);
+        clearInterval(cloud_traffic_timer_arr[2]);
     }
 }
 
-function set_tenant_top_protocol_port(tenant_id, curr_type) {
-    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_protocol_port", curr_type);
-    var tenant_top_protocol_port = echarts.init(document.getElementById("tenant_top_protocol_port"));
+function set_cloud_top_protocol_port(curr_type) {
+    var meter_datas = get_cloud_traffic_statistics_data("cloud_top_protocol_port", curr_type);
+    var cloud_top_protocol_port = echarts.init(document.getElementById("cloud_top_protocol_port"));
     var option_top = {
         title : {
             text: '流量协议-目的端口--TOP 10',
@@ -307,10 +353,10 @@ function set_tenant_top_protocol_port(tenant_id, curr_type) {
             }
         ]
     };
-    tenant_top_protocol_port.setOption(option_top);
+    cloud_top_protocol_port.setOption(option_top);
     if(curr_type == "minute") {
-        tenant_traffic_timer_arr[2] = setInterval(function () {
-            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_protocol_port", curr_type);
+        cloud_traffic_timer_arr[3] = setInterval(function () {
+            var last_datas = get_cloud_traffic_statistics_data("cloud_top_protocol_port", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
             data0.splice(0, data0.length);
@@ -322,17 +368,17 @@ function set_tenant_top_protocol_port(tenant_id, curr_type) {
                 });
                 legend0.push(identify_protocol_port(last_datas[i]["_id"]["ipprotocol"], last_datas[i]["_id"]["dstport_or_icmpcode"]));
             }
-            tenant_top_protocol_port.setOption(option_top);
+            cloud_top_protocol_port.setOption(option_top);
         }, 5000);
     }
     else {
-        clearInterval(tenant_traffic_timer_arr[2]);
+        clearInterval(cloud_traffic_timer_arr[3]);
     }
 }
 
-function set_tenant_top_src_ip(tenant_id, curr_type) {
-    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_src_ip", curr_type);
-    var tenant_top_src_ip = echarts.init(document.getElementById("tenant_top_src_ip"));
+function set_cloud_top_src_ip(curr_type) {
+    var meter_datas = get_cloud_traffic_statistics_data("cloud_top_src_ip", curr_type);
+    var cloud_top_src_ip = echarts.init(document.getElementById("cloud_top_src_ip"));
     var option_top = {
         title : {
             text: '流量源IP分布--TOP 10',
@@ -384,10 +430,10 @@ function set_tenant_top_src_ip(tenant_id, curr_type) {
             }
         ]
     };
-    tenant_top_src_ip.setOption(option_top);
+    cloud_top_src_ip.setOption(option_top);
     if(curr_type == "minute") {
-        tenant_traffic_timer_arr[3] = setInterval(function () {
-            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_src_ip", curr_type);
+        cloud_traffic_timer_arr[4] = setInterval(function () {
+            var last_datas = get_cloud_traffic_statistics_data("cloud_top_src_ip", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
             data0.splice(0, data0.length);
@@ -399,17 +445,17 @@ function set_tenant_top_src_ip(tenant_id, curr_type) {
                 });
                 legend0.push(last_datas[i]["_id"]);
             }
-            tenant_top_src_ip.setOption(option_top);
+            cloud_top_src_ip.setOption(option_top);
         }, 5000);
     }
     else {
-        clearInterval(tenant_traffic_timer_arr[3]);
+        clearInterval(cloud_traffic_timer_arr[4]);
     }
 }
 
-function set_tenant_top_dst_ip(tenant_id, curr_type) {
-    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_dst_ip", curr_type);
-    var tenant_top_dst_ip = echarts.init(document.getElementById("tenant_top_dst_ip"));
+function set_cloud_top_dst_ip(curr_type) {
+    var meter_datas = get_cloud_traffic_statistics_data("cloud_top_dst_ip", curr_type);
+    var cloud_top_dst_ip = echarts.init(document.getElementById("cloud_top_dst_ip"));
     var option_top = {
         title : {
             text: '流量目的IP分布--TOP 10',
@@ -461,10 +507,10 @@ function set_tenant_top_dst_ip(tenant_id, curr_type) {
             }
         ]
     };
-    tenant_top_dst_ip.setOption(option_top);
+    cloud_top_dst_ip.setOption(option_top);
     if(curr_type == "minute") {
-        tenant_traffic_timer_arr[4] = setInterval(function () {
-            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_dst_ip", curr_type);
+        cloud_traffic_timer_arr[5] = setInterval(function () {
+            var last_datas = get_cloud_traffic_statistics_data("cloud_top_dst_ip", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
             data0.splice(0, data0.length);
@@ -476,17 +522,17 @@ function set_tenant_top_dst_ip(tenant_id, curr_type) {
                 });
                 legend0.push(last_datas[i]["_id"]);
             }
-            tenant_top_dst_ip.setOption(option_top);
+            cloud_top_dst_ip.setOption(option_top);
         }, 5000);
     }
     else {
-        clearInterval(tenant_traffic_timer_arr[4]);
+        clearInterval(cloud_traffic_timer_arr[5]);
     }
 }
 
-function set_tenant_top_src_port(tenant_id, curr_type) {
-    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_src_port", curr_type);
-    var tenant_top_src_port = echarts.init(document.getElementById("tenant_top_src_port"));
+function set_cloud_top_src_port(curr_type) {
+    var meter_datas = get_cloud_traffic_statistics_data("cloud_top_src_port", curr_type);
+    var cloud_top_src_port = echarts.init(document.getElementById("cloud_top_src_port"));
     var option_top = {
         title : {
             text: '流量源端口分布--TOP 10',
@@ -538,10 +584,10 @@ function set_tenant_top_src_port(tenant_id, curr_type) {
             }
         ]
     };
-    tenant_top_src_port.setOption(option_top);
+    cloud_top_src_port.setOption(option_top);
     if(curr_type == "minute") {
-        tenant_traffic_timer_arr[5] = setInterval(function () {
-            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_src_port", curr_type);
+        cloud_traffic_timer_arr[6] = setInterval(function () {
+            var last_datas = get_cloud_traffic_statistics_data("cloud_top_src_port", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
             data0.splice(0, data0.length);
@@ -553,17 +599,17 @@ function set_tenant_top_src_port(tenant_id, curr_type) {
                 });
                 legend0.push(last_datas[i]["_id"]);
             }
-            tenant_top_src_port.setOption(option_top);
+            cloud_top_src_port.setOption(option_top);
         }, 5000);
     }
     else {
-        clearInterval(tenant_traffic_timer_arr[5]);
+        clearInterval(cloud_traffic_timer_arr[6]);
     }
 }
 
-function set_tenant_top_dst_port(tenant_id, curr_type) {
-    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_dst_port", curr_type);
-    var tenant_top_dst_port = echarts.init(document.getElementById("tenant_top_dst_port"));
+function set_cloud_top_dst_port(curr_type) {
+    var meter_datas = get_cloud_traffic_statistics_data("cloud_top_dst_port", curr_type);
+    var cloud_top_dst_port = echarts.init(document.getElementById("cloud_top_dst_port"));
     var option_top = {
         title : {
             text: '流量目的端口分布--TOP 10',
@@ -615,10 +661,10 @@ function set_tenant_top_dst_port(tenant_id, curr_type) {
             }
         ]
     };
-    tenant_top_dst_port.setOption(option_top);
+    cloud_top_dst_port.setOption(option_top);
     if(curr_type == "minute") {
-        tenant_traffic_timer_arr[6] = setInterval(function () {
-            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_dst_port", curr_type);
+        cloud_traffic_timer_arr[7] = setInterval(function () {
+            var last_datas = get_cloud_traffic_statistics_data("cloud_top_dst_port", curr_type);
             var data0 = option_top.series[0].data;
             var legend0 = option_top.legend.data;
             data0.splice(0, data0.length);
@@ -630,17 +676,17 @@ function set_tenant_top_dst_port(tenant_id, curr_type) {
                 });
                 legend0.push(last_datas[i]["_id"]);
             }
-            tenant_top_dst_port.setOption(option_top);
+            cloud_top_dst_port.setOption(option_top);
         }, 5000);
     }
     else {
-        clearInterval(tenant_traffic_timer_arr[6]);
+        clearInterval(cloud_traffic_timer_arr[7]);
     }
 }
 
-function set_tenant_top_session(tenant_id, curr_type) {
-    var meter_datas = get_tenant_statistics_data(tenant_id, "tenant_top_session", curr_type);
-    var tenant_top_session = echarts.init(document.getElementById("tenant_top_session"));
+function set_cloud_top_session(curr_type) {
+    var meter_datas = get_cloud_traffic_statistics_data("cloud_top_session", curr_type);
+    var cloud_top_session = echarts.init(document.getElementById("cloud_top_session"));
     var option_top = {
         title : {
             text: '流量协议Session--TOP 10',
@@ -699,10 +745,10 @@ function set_tenant_top_session(tenant_id, curr_type) {
             }
         ]
     };
-    tenant_top_session.setOption(option_top);
+    cloud_top_session.setOption(option_top);
     if(curr_type == "minute") {
-        tenant_traffic_timer_arr[7] = setInterval(function () {
-            var last_datas = get_tenant_statistics_data(tenant_id, "tenant_top_session", curr_type);
+        cloud_traffic_timer_arr[8] = setInterval(function () {
+            var last_datas = get_cloud_traffic_statistics_data("cloud_top_session", curr_type);
             var data0 = option_top.series[0].data;
             var yaxis0 = option_top.yAxis[0].data;
             data0.splice(0, data0.length);
@@ -714,11 +760,11 @@ function set_tenant_top_session(tenant_id, curr_type) {
                         last_datas[i]["_id"]["ipsource"], last_datas[i]["_id"]["srcport_or_icmptype"]) + "--" + identify_client_server(last_datas[i]["_id"]["ipprotocol"],
                         last_datas[i]["_id"]["ipdestination"], last_datas[i]["_id"]["dstport_or_icmpcode"]));
             }
-            tenant_top_session.setOption(option_top);
+            cloud_top_session.setOption(option_top);
         }, 5000);
     }
     else {
-        clearInterval(tenant_traffic_timer_arr[7]);
+        clearInterval(cloud_traffic_timer_arr[8]);
     }
 }
 
