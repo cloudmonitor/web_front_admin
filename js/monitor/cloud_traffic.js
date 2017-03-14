@@ -75,7 +75,7 @@ function set_cloud_top_tenant(curr_type) {
     var cloud_top_tenant = echarts.init(document.getElementById("cloud_top_tenant"));
     var option_top = {
         title : {
-            text: '租户流量--TOP 10',
+            text: '云平台租户流量--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -151,7 +151,7 @@ function set_cloud_top_instance(curr_type) {
     var cloud_top_instance = echarts.init(document.getElementById("cloud_top_instance"));
     var option_top = {
         title : {
-            text: '虚拟机流量--TOP 10',
+            text: '云平台虚拟机流量--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -227,7 +227,7 @@ function set_cloud_top_ip_link(curr_type) {
     var cloud_top_ip_link = echarts.init(document.getElementById("cloud_top_ip_link"));
     var option_top = {
         title : {
-            text: '流量源IP-目的IP--TOP 10',
+            text: '云平台流量源IP-目的IP--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -304,7 +304,7 @@ function set_cloud_top_protocol_port(curr_type) {
     var cloud_top_protocol_port = echarts.init(document.getElementById("cloud_top_protocol_port"));
     var option_top = {
         title : {
-            text: '流量协议-目的端口--TOP 10',
+            text: '云平台流量协议-目的端口--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -381,7 +381,7 @@ function set_cloud_top_src_ip(curr_type) {
     var cloud_top_src_ip = echarts.init(document.getElementById("cloud_top_src_ip"));
     var option_top = {
         title : {
-            text: '流量源IP分布--TOP 10',
+            text: '云平台流量源IP分布--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -458,7 +458,7 @@ function set_cloud_top_dst_ip(curr_type) {
     var cloud_top_dst_ip = echarts.init(document.getElementById("cloud_top_dst_ip"));
     var option_top = {
         title : {
-            text: '流量目的IP分布--TOP 10',
+            text: '云平台流量目的IP分布--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -535,7 +535,7 @@ function set_cloud_top_src_port(curr_type) {
     var cloud_top_src_port = echarts.init(document.getElementById("cloud_top_src_port"));
     var option_top = {
         title : {
-            text: '流量源端口分布--TOP 10',
+            text: '云平台流量源端口分布--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -612,7 +612,7 @@ function set_cloud_top_dst_port(curr_type) {
     var cloud_top_dst_port = echarts.init(document.getElementById("cloud_top_dst_port"));
     var option_top = {
         title : {
-            text: '流量目的端口分布--TOP 10',
+            text: '云平台流量目的端口分布--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -689,7 +689,7 @@ function set_cloud_top_session(curr_type) {
     var cloud_top_session = echarts.init(document.getElementById("cloud_top_session"));
     var option_top = {
         title : {
-            text: '流量协议Session--TOP 10',
+            text: '云平台流量协议Session--TOP 10',
             x:'center'
         },
         barWidth: '80%',

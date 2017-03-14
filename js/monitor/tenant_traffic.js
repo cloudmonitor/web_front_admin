@@ -105,7 +105,7 @@ function set_tenant_top_instance(tenant_id, curr_type) {
     var tenant_top_instance = echarts.init(document.getElementById("tenant_top_instance"));
     var option_top = {
         title : {
-            text: '虚拟机流量--TOP 10',
+            text: '租户虚拟机流量--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -181,7 +181,7 @@ function set_tenant_top_ip_link(tenant_id, curr_type) {
     var tenant_top_ip_link = echarts.init(document.getElementById("tenant_top_ip_link"));
     var option_top = {
         title : {
-            text: '流量源IP-目的IP--TOP 10',
+            text: '租户流量源IP-目的IP--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -258,7 +258,7 @@ function set_tenant_top_protocol_port(tenant_id, curr_type) {
     var tenant_top_protocol_port = echarts.init(document.getElementById("tenant_top_protocol_port"));
     var option_top = {
         title : {
-            text: '流量协议-目的端口--TOP 10',
+            text: '租户流量协议-目的端口--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -335,7 +335,7 @@ function set_tenant_top_src_ip(tenant_id, curr_type) {
     var tenant_top_src_ip = echarts.init(document.getElementById("tenant_top_src_ip"));
     var option_top = {
         title : {
-            text: '流量源IP分布--TOP 10',
+            text: '租户流量源IP分布--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -412,7 +412,7 @@ function set_tenant_top_dst_ip(tenant_id, curr_type) {
     var tenant_top_dst_ip = echarts.init(document.getElementById("tenant_top_dst_ip"));
     var option_top = {
         title : {
-            text: '流量目的IP分布--TOP 10',
+            text: '租户流量目的IP分布--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -489,7 +489,7 @@ function set_tenant_top_src_port(tenant_id, curr_type) {
     var tenant_top_src_port = echarts.init(document.getElementById("tenant_top_src_port"));
     var option_top = {
         title : {
-            text: '流量源端口分布--TOP 10',
+            text: '租户流量源端口分布--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -566,7 +566,7 @@ function set_tenant_top_dst_port(tenant_id, curr_type) {
     var tenant_top_dst_port = echarts.init(document.getElementById("tenant_top_dst_port"));
     var option_top = {
         title : {
-            text: '流量目的端口分布--TOP 10',
+            text: '租户流量目的端口分布--TOP 10',
             x:'center'
         },
         tooltip : {
@@ -643,7 +643,7 @@ function set_tenant_top_session(tenant_id, curr_type) {
     var tenant_top_session = echarts.init(document.getElementById("tenant_top_session"));
     var option_top = {
         title : {
-            text: '流量协议Session--TOP 10',
+            text: '租户流量协议Session--TOP 10',
             x:'center'
         },
         barWidth: '80%',
